@@ -1,0 +1,33 @@
+import { Router } from 'express';
+import { body } from 'express-validator';
+import * as authController from '../controllers/authController';
+import { authenticateToken } from '../middleware/auth';
+import { validate } from '../middleware/validator';
+
+const router = Router();
+
+// Public routes
+router.post(
+  '/register',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    validate,
+  ],
+  authController.register
+);
+
+router.post(
+  '/login',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('password').notEmpty().withMessage('Password is required'),
+    validate,
+  ],
+  authController.login
+);
+
+// Protected routes
+router.get('/profile', authenticateToken, authController.getProfile);
+
+export default router;

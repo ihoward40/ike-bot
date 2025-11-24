@@ -1,16 +1,50 @@
-import express from "express";
-import dotenv from "dotenv";
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import dotenv from 'dotenv';
+import config from './config';
+import routes from './routes';
+import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 
-app.get("/", (_req, res) => {
-  res.json({ ok: true, message: "IKE-BOT running" });
+// Security middleware
+app.use(helmet());
+app.use(cors());
+
+// Body parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Root endpoint
+app.get('/', (_req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'IKE-BOT API running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      webhooks: '/api/webhooks',
+      notion: '/api/notion',
+      filings: '/api/filings',
+      documents: '/api/documents',
+      logs: '/api/logs',
+    },
+  });
 });
 
-const port = Number(process.env.PORT) || 3000;
+// Mount API routes
+app.use('/api', routes);
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
+
+const port = config.port;
 app.listen(port, () => {
-  console.log(`Server listening on http://127.0.0.1:${port}`);
+  console.log(`🚀 IKE-BOT API server listening on http://127.0.0.1:${port}`);
+  console.log(`📝 Environment: ${config.nodeEnv}`);
+  console.log(`🔗 API Base: http://127.0.0.1:${port}/api`);
 });
