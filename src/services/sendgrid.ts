@@ -20,15 +20,15 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
   }
 
   try {
-    const msg: any = {
+    const msg = {
       to: options.to,
       from: config.sendgrid.fromEmail,
       subject: options.subject,
-      text: options.text,
-      html: options.html || options.text,
+      text: options.text || "",
+      html: options.html || options.text || "",
     };
 
-    await sgMail.send(msg);
+    await sgMail.send(msg as any);
     logger.info(`Email sent successfully to ${options.to}`);
   } catch (error: any) {
     logger.error("Failed to send email via SendGrid", error);
@@ -43,15 +43,15 @@ export const sendBulkEmails = async (emails: EmailOptions[]): Promise<void> => {
   }
 
   try {
-    const messages: any[] = emails.map((email) => ({
+    const messages = emails.map((email) => ({
       to: email.to,
       from: config.sendgrid.fromEmail,
       subject: email.subject,
-      text: email.text,
-      html: email.html || email.text,
+      text: email.text || "",
+      html: email.html || email.text || "",
     }));
 
-    await sgMail.send(messages);
+    await sgMail.send(messages as any);
     logger.info(`${emails.length} emails sent successfully`);
   } catch (error: any) {
     logger.error("Failed to send bulk emails via SendGrid", error);

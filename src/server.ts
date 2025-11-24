@@ -14,6 +14,9 @@ import disputesRoutes from "./routes/disputes";
 import billingRoutes from "./routes/billing";
 import webhooksRoutes from "./routes/webhooks";
 
+// Import rate limiters
+import { apiLimiter, authLimiter, webhookLimiter } from "./middleware/rateLimiter";
+
 dotenv.config();
 
 const app = express();
@@ -49,13 +52,13 @@ app.get("/", (_req, res) => {
   });
 });
 
-// Mount API routes
-app.use("/api/auth", authRoutes);
-app.use("/api/beneficiaries", beneficiariesRoutes);
-app.use("/api/notices", noticesRoutes);
-app.use("/api/disputes", disputesRoutes);
-app.use("/api/billing", billingRoutes);
-app.use("/api/webhooks", webhooksRoutes);
+// Mount API routes with rate limiting
+app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/beneficiaries", apiLimiter, beneficiariesRoutes);
+app.use("/api/notices", apiLimiter, noticesRoutes);
+app.use("/api/disputes", apiLimiter, disputesRoutes);
+app.use("/api/billing", apiLimiter, billingRoutes);
+app.use("/api/webhooks", webhookLimiter, webhooksRoutes);
 
 // Catch-all for client-side routing
 app.get("*", (req, res) => {

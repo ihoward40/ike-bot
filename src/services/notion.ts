@@ -62,8 +62,8 @@ export const logToNotion = async (
 
 export const queryNotionDatabase = async (
   databaseId: string,
-  filter?: any
-): Promise<any[]> => {
+  filter?: Record<string, unknown>
+): Promise<unknown[]> => {
   if (!notionClient) {
     logger.warn("Notion API key not configured.");
     return [];
