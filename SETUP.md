@@ -20,8 +20,16 @@ cd ike-bot
 
 ### 2. Clone Trust Navigator API
 
-The Trust Navigator API is a required dependency for the full trust automation system. Clone it alongside the ike-bot repository:
+The Trust Navigator API is a required dependency for the full trust automation system. Clone it alongside the ike-bot repository.
 
+**Recommended directory structure:**
+```
+/your-workspace/
+  ├── ike-bot/
+  └── trust-navigator-api/
+```
+
+**Clone the API:**
 ```bash
 cd ..
 git clone git@gitlab.com:howard-trust-systems/trust-navigator-api.git
@@ -106,7 +114,15 @@ The Node server will start on port 3000 (or the PORT specified in .env).
 
 ## Integration with Trust Navigator API
 
-Ensure the trust-navigator-api is running and accessible. Configure any required API endpoints or authentication tokens in your `.env` file if the trust-navigator-api requires them.
+Ensure the trust-navigator-api is running and accessible. The integration may require additional environment variables in your `.env` file:
+
+```bash
+# Trust Navigator API Configuration (add to .env if needed)
+# TRUST_NAVIGATOR_API_URL=http://localhost:8080
+# TRUST_NAVIGATOR_API_KEY=your_api_key_here
+```
+
+Check the trust-navigator-api documentation for specific configuration requirements and authentication details.
 
 ## Testing the Setup
 
