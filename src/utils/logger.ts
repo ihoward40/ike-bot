@@ -16,10 +16,15 @@ class Logger {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${level}] ${message}`;
 
+    // Use appropriate console method based on log level
+    const logMethod = level === LogLevel.ERROR ? console.error : 
+                     level === LogLevel.WARN ? console.warn : 
+                     console.log;
+
     if (data) {
-      console.log(logMessage, data);
+      logMethod(logMessage, data);
     } else {
-      console.log(logMessage);
+      logMethod(logMessage);
     }
   }
 

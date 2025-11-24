@@ -42,9 +42,11 @@ app.use('/api', routes);
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
+import logger from './utils/logger';
+
 const port = config.port;
 app.listen(port, () => {
-  console.log(`🚀 IKE-BOT API server listening on http://127.0.0.1:${port}`);
-  console.log(`📝 Environment: ${config.nodeEnv}`);
-  console.log(`🔗 API Base: http://127.0.0.1:${port}/api`);
+  logger.info(`IKE-BOT API server listening on http://127.0.0.1:${port}`);
+  logger.info(`Environment: ${config.nodeEnv}`);
+  logger.info(`API Base: http://127.0.0.1:${port}/api`);
 });
