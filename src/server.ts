@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import config from './config';
 import routes from './routes';
 import { errorHandler } from './middleware/errorHandler';
+import { generalLimiter } from './middleware/rateLimiter';
+import logger from './utils/logger';
 
 dotenv.config();
 
@@ -13,6 +15,9 @@ const app = express();
 // Security middleware
 app.use(helmet());
 app.use(cors());
+
+// Rate limiting (applied globally)
+app.use('/api', generalLimiter);
 
 // Body parsing middleware
 app.use(express.json());
@@ -41,8 +46,6 @@ app.use('/api', routes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);
-
-import logger from './utils/logger';
 
 const port = config.port;
 app.listen(port, () => {

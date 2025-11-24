@@ -1,13 +1,15 @@
 import { Router } from 'express';
 import { createCrudController } from '../controllers/crudController';
 import { authenticateToken } from '../middleware/auth';
+import { authenticatedLimiter } from '../middleware/rateLimiter';
 
 export const createCrudRoutes = (tableName: string, requireAuth: boolean = true) => {
   const router = Router();
   const controller = createCrudController(tableName);
 
-  // Apply authentication middleware if required
+  // Apply authentication and rate limiting middleware if required
   if (requireAuth) {
+    router.use(authenticatedLimiter);
     router.use(authenticateToken);
   }
 
