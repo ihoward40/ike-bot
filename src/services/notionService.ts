@@ -1,5 +1,6 @@
 import notion, { NOTION_ACTIVITY_LOG, NOTION_FILINGS_DB } from '../config/notion';
 import { NotionLogEntry } from '../types';
+import logger from '../utils/logger';
 
 export class NotionService {
   async logActivity(entry: NotionLogEntry) {
@@ -44,7 +45,7 @@ export class NotionService {
 
       return response;
     } catch (error) {
-      console.error('Failed to log activity to Notion:', error);
+      logger.error('Failed to log activity to Notion', error);
       throw error;
     }
   }
@@ -87,21 +88,25 @@ export class NotionService {
 
       return response;
     } catch (error) {
-      console.error('Failed to create filing in Notion:', error);
+      logger.error('Failed to create filing in Notion', error);
       throw error;
     }
   }
 
   async getDatabase(databaseId: string) {
     try {
-      // Use the correct method from Notion client
-      const response = await (notion.databases as any).query({
+      // Type assertion for databases.query method which exists but may not be in type definitions
+      type NotionDatabasesWithQuery = typeof notion.databases & {
+        query: (args: { database_id: string }) => Promise<{ results: any[] }>;
+      };
+      
+      const response = await (notion.databases as NotionDatabasesWithQuery).query({
         database_id: databaseId,
       });
 
       return response.results;
     } catch (error) {
-      console.error('Failed to query Notion database:', error);
+      logger.error('Failed to query Notion database', error);
       throw error;
     }
   }
@@ -115,7 +120,7 @@ export class NotionService {
 
       return response;
     } catch (error) {
-      console.error('Failed to update Notion page:', error);
+      logger.error('Failed to update Notion page', error);
       throw error;
     }
   }

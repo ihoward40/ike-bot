@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 import notionService from '../services/notionService';
 import { MakeWebhookPayload } from '../types';
+import logger from '../utils/logger';
 
 export const handleMakeWebhook = asyncHandler(async (req: Request, res: Response) => {
   const payload: MakeWebhookPayload = req.body;
 
-  console.log('Received Make.com webhook:', payload);
+  logger.info('Received Make.com webhook', { event: payload.event });
 
   // Route webhook based on event type
   switch (payload.event) {
@@ -20,7 +21,7 @@ export const handleMakeWebhook = asyncHandler(async (req: Request, res: Response
       await handleActivityLog(payload.data);
       break;
     default:
-      console.log('Unknown webhook event:', payload.event);
+      logger.warn('Unknown webhook event', { event: payload.event });
   }
 
   res.status(200).json({
@@ -30,7 +31,7 @@ export const handleMakeWebhook = asyncHandler(async (req: Request, res: Response
 });
 
 async function handleFilingCreated(data: any) {
-  console.log('Processing filing creation:', data);
+  logger.info('Processing filing creation', { type: data.type });
 
   // Log to Notion
   await notionService.logActivity({
@@ -53,7 +54,7 @@ async function handleFilingCreated(data: any) {
 }
 
 async function handleFilingUpdated(data: any) {
-  console.log('Processing filing update:', data);
+  logger.info('Processing filing update', { id: data.id, type: data.type });
 
   await notionService.logActivity({
     title: `Filing Updated: ${data.type}`,
@@ -65,7 +66,7 @@ async function handleFilingUpdated(data: any) {
 }
 
 async function handleActivityLog(data: any) {
-  console.log('Processing activity log:', data);
+  logger.info('Processing activity log', { title: data.title });
 
   await notionService.logActivity({
     title: data.title || 'Activity',
