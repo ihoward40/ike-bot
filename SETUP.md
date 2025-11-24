@@ -30,9 +30,18 @@ The Trust Navigator API is a required dependency for the full trust automation s
 ```
 
 **Clone the API:**
+
+Using SSH (requires SSH key setup):
 ```bash
 cd ..
 git clone git@gitlab.com:howard-trust-systems/trust-navigator-api.git
+cd trust-navigator-api
+```
+
+Or using HTTPS:
+```bash
+cd ..
+git clone https://gitlab.com/howard-trust-systems/trust-navigator-api.git
 cd trust-navigator-api
 ```
 
@@ -114,15 +123,17 @@ The Node server will start on port 3000 (or the PORT specified in .env).
 
 ## Integration with Trust Navigator API
 
-Ensure the trust-navigator-api is running and accessible. The integration may require additional environment variables in your `.env` file:
+Ensure the trust-navigator-api is running and accessible. If you plan to use the navigator features in the TypeScript components (`src/navigatorBuilder/`), you may need to add the following environment variables to your `.env` file:
 
 ```bash
-# Trust Navigator API Configuration (add to .env if needed)
+# Trust Navigator API Configuration (optional - required only if using navigator features)
 # TRUST_NAVIGATOR_API_URL=http://localhost:8080
 # TRUST_NAVIGATOR_API_KEY=your_api_key_here
 ```
 
-Check the trust-navigator-api documentation for specific configuration requirements and authentication details.
+**Note:** The basic Flask automation features in `main.py` do not require the trust-navigator-api to be running. It's only needed if you're developing or using the TypeScript navigator integration features.
+
+For specific configuration requirements and authentication details, refer to the `README.md` or `SETUP.md` in the trust-navigator-api repository.
 
 ## Testing the Setup
 
