@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKE BOT - Trust Enforcement & Automation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 IKE BOT</h1>
+            <p class="subtitle">Trust Enforcement & Automation API</p>
+        </header>
+
+        <div class="auth-section" id="authSection">
+            <div class="card">
+                <h2>Authentication</h2>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email" class="input">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" class="input">
+                </div>
+                <div class="button-group">
+                    <button onclick="login()" class="btn btn-primary">Login</button>
+                    <button onclick="register()" class="btn btn-secondary">Register</button>
+                </div>
+                <div id="authMessage" class="message"></div>
+            </div>
+        </div>
+
+        <div class="dashboard" id="dashboard" style="display: none;">
+            <div class="nav">
+                <button onclick="showSection('beneficiaries')" class="nav-btn active" data-section="beneficiaries">Beneficiaries</button>
+                <button onclick="showSection('notices')" class="nav-btn" data-section="notices">Trust Notices</button>
+                <button onclick="showSection('disputes')" class="nav-btn" data-section="disputes">Disputes</button>
+                <button onclick="showSection('billing')" class="nav-btn" data-section="billing">Billing Alerts</button>
+                <button onclick="logout()" class="nav-btn logout">Logout</button>
+            </div>
+
+            <div id="beneficiaries" class="section active">
+                <h2>Beneficiaries</h2>
+                <button onclick="showCreateForm('beneficiary')" class="btn btn-primary">Add Beneficiary</button>
+                <div id="beneficiariesList" class="list"></div>
+            </div>
+
+            <div id="notices" class="section" style="display: none;">
+                <h2>Trust Notices</h2>
+                <button onclick="showCreateForm('notice')" class="btn btn-primary">Create Notice</button>
+                <div id="noticesList" class="list"></div>
+            </div>
+
+            <div id="disputes" class="section" style="display: none;">
+                <h2>Disputes</h2>
+                <button onclick="showCreateForm('dispute')" class="btn btn-primary">File Dispute</button>
+                <div id="disputesList" class="list"></div>
+            </div>
+
+            <div id="billing" class="section" style="display: none;">
+                <h2>Billing Alerts</h2>
+                <button onclick="showCreateForm('billing')" class="btn btn-primary">Create Alert</button>
+                <div id="billingList" class="list"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>IKE BOT v1.0.0 | Built with TypeScript, Express, Supabase, Stripe, SendGrid, Notion</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
