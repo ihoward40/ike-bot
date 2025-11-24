@@ -2,7 +2,7 @@
   "name": "ike-bot",
   "version": "0.1.0",
   "private": true,
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
