@@ -260,8 +260,26 @@ Common HTTP status codes:
 
 ## Rate Limiting
 
-Currently no rate limiting is implemented. Consider adding rate limiting for production use.
+Rate limiting is implemented to protect the API from abuse:
+
+- **Authentication endpoints** (`/api/auth/*`): 5 requests per 15 minutes
+- **Authenticated endpoints** (`/api/filings/*`, `/api/documents/*`, `/api/logs/*`, `/api/notion/*`): 50 requests per 15 minutes
+- **Webhook endpoints** (`/api/webhooks/*`): 30 requests per minute
+- **General API** (all `/api/*`): 100 requests per 15 minutes
+
+Rate limit information is included in response headers:
+- `RateLimit-Limit`: Maximum requests allowed
+- `RateLimit-Remaining`: Requests remaining in current window
+- `RateLimit-Reset`: Time until limit resets (seconds)
+
+When rate limit is exceeded, you'll receive a 429 (Too Many Requests) response:
+```json
+{
+  "success": false,
+  "error": "Too many requests from this IP, please try again later."
+}
+```
 
 ## CORS
 
-CORS is enabled for all origins in development. Configure appropriately for production.
+CORS is enabled for all origins in development. Configure appropriately for production by modifying the CORS settings in `src/server.ts`.
