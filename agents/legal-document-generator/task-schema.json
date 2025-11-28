@@ -1,0 +1,119 @@
+{
+  "TASK_SCHEMA": {
+    "document_type": {
+      "type": "string",
+      "description": "Type of document to generate",
+      "enum": [
+        "notice_to_quit_response",
+        "ada_accommodation_request",
+        "ledger_dispute",
+        "emergency_stay_motion",
+        "affidavit_of_truth",
+        "trust_resolution",
+        "proof_of_service",
+        "exhibit_a",
+        "exhibit_b",
+        "exhibit_c",
+        "mail_tampering_exhibit",
+        "full_tenant_protection_packet",
+        "hearing_script",
+        "filing_checklist",
+        "cover_letter"
+      ]
+    },
+    "client": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the client"
+        },
+        "address": {
+          "type": "string",
+          "description": "Client's current address"
+        },
+        "disability_status": {
+          "type": "string",
+          "description": "Description of any disability status for ADA compliance"
+        },
+        "benefits": {
+          "type": "string",
+          "description": "Types of benefits received (e.g., Section 8, SSDI)"
+        },
+        "trust_involved": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the ISIAH TARIK HOWARD TRUST is involved"
+        }
+      },
+      "required": ["name"]
+    },
+    "landlord": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Landlord's name or property management company"
+        },
+        "address": {
+          "type": "string",
+          "description": "Landlord's mailing address"
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "properties": {
+        "docket_number": {
+          "type": "string",
+          "description": "Court docket number (e.g., ESX-LT-017577-25)"
+        },
+        "notice_dates": {
+          "type": "string",
+          "description": "Dates of any notices received"
+        },
+        "trial_date": {
+          "type": "string",
+          "description": "Scheduled trial date (ISO 8601 format)"
+        },
+        "service_issues": {
+          "type": "string",
+          "description": "Any issues with service of process"
+        },
+        "ledger_dispute": {
+          "type": "string",
+          "description": "Details of any ledger or payment disputes"
+        },
+        "ADA_notes": {
+          "type": "string",
+          "description": "Notes related to ADA accommodations or requests"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pdf", "docx"]
+          },
+          "default": ["pdf", "docx"],
+          "description": "Output formats to generate"
+        },
+        "merged": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to merge all documents into a single file"
+        },
+        "header_footer_style": {
+          "type": "string",
+          "enum": ["A", "B"],
+          "default": "B",
+          "description": "Header/footer style. Style B: black header, gold footer"
+        }
+      }
+    }
+  }
+}

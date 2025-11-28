@@ -281,6 +281,49 @@ Available tools:
 - `list_credit_disputes` - List credit disputes
 - `create_credit_dispute` - Create a new credit dispute
 - `run_enforcement_packet` - Create enforcement packet (future implementation)
+- `generate_legal_document` - Generate individual legal documents (PDF/DOCX)
+- `generate_tenant_protection_packet` - Generate complete tenant protection packets
+- `merge_legal_documents` - Merge multiple documents into single PDF
+- `upload_legal_document` - Upload documents to Google Drive
+- `package_legal_documents` - Create ZIP packages of documents
+
+## Legal Document Generator Agent
+
+A specialized agent for generating court-compliant legal documents. Located in `/agents/legal-document-generator/`.
+
+### Supported Document Types
+
+- Notice-to-Quit Response
+- ADA Accommodation Request
+- Ledger Dispute + Demand for Verification
+- Emergency Stay Motion
+- Affidavit of Truth
+- Trust Resolution
+- Proof of Service
+- Exhibits A–C
+- Full Tenant Protection Packet
+- Hearing Script
+- Filing Checklist
+- Cover Letter
+
+### Agent Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `context.md` | Agent role and style rules |
+| `instructions.md` | Processing instructions |
+| `task-schema.json` | Structured data schema |
+| `document-kernel.md` | Auto-generation rules |
+| `deployment-checklist.md` | Deployment guide |
+| `test-prompts.md` | Validation prompts |
+
+### Quick Start
+
+1. Deploy agent to Make.com following `deployment-checklist.md`
+2. Enable MCP servers (IKE-Solutions-Document-Deployment, Sintra-Memory-Multi-Service-Router)
+3. Run test prompts from `test-prompts.md`
+
+See [agents/legal-document-generator/README.md](./agents/legal-document-generator/README.md) for full documentation.
 
 ## Database
 
@@ -326,6 +369,15 @@ X-Correlation-Id: uuid
 ### Project Structure
 ```
 ike-bot/
+├── agents/
+│   └── legal-document-generator/  # Legal document agent config
+│       ├── context.md
+│       ├── instructions.md
+│       ├── task-schema.json
+│       ├── document-kernel.md
+│       ├── deployment-checklist.md
+│       ├── test-prompts.md
+│       └── README.md
 ├── src/
 │   ├── config/          # Configuration (Supabase, logger)
 │   ├── controllers/     # Request handlers
