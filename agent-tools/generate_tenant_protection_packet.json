@@ -1,0 +1,128 @@
+{
+  "type": "function",
+  "function": {
+    "name": "generate_tenant_protection_packet",
+    "description": "Generate a complete Tenant Protection Packet containing all defense documents for eviction cases. Includes Cover Letter, Notice Response, ADA Request, Ledger Dispute, Emergency Stay Motion (if trial < 30 days), Affidavit of Truth, Proof of Service, Exhibits, Court Script, and Filing Checklist. Documents can be merged into a single file and/or packaged as a ZIP.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "client_name": {
+          "type": "string",
+          "description": "Full name of the client"
+        },
+        "client_address": {
+          "type": "string",
+          "description": "Client's current address"
+        },
+        "landlord_name": {
+          "type": "string",
+          "description": "Landlord's name or property management company"
+        },
+        "landlord_address": {
+          "type": "string",
+          "description": "Landlord's mailing address"
+        },
+        "docket_number": {
+          "type": "string",
+          "description": "Court docket number (e.g., ESX-LT-017577-25)"
+        },
+        "trial_date": {
+          "type": "string",
+          "description": "Scheduled trial date in ISO 8601 format (YYYY-MM-DD)"
+        },
+        "disability_status": {
+          "type": "string",
+          "description": "Description of any disability status for ADA compliance"
+        },
+        "benefits": {
+          "type": "string",
+          "description": "Types of benefits received (e.g., Section 8, SSDI)"
+        },
+        "trust_involved": {
+          "type": "boolean",
+          "description": "Whether the ISIAH TARIK HOWARD TRUST is involved (default: true)",
+          "default": true
+        },
+        "ada_notes": {
+          "type": "string",
+          "description": "Notes related to ADA accommodations or requests"
+        },
+        "ledger_dispute_details": {
+          "type": "string",
+          "description": "Details of any ledger or payment disputes"
+        },
+        "service_issues": {
+          "type": "string",
+          "description": "Any issues with service of process"
+        },
+        "mail_tampering": {
+          "type": "boolean",
+          "description": "Whether mail tampering is alleged (generates Exhibit C)",
+          "default": false
+        },
+        "notice_dates": {
+          "type": "string",
+          "description": "Dates of any notices received"
+        },
+        "merged_output": {
+          "type": "boolean",
+          "description": "Whether to merge all documents into a single PDF",
+          "default": true
+        },
+        "include_zip": {
+          "type": "boolean",
+          "description": "Whether to create a ZIP package of all files",
+          "default": true
+        },
+        "output_format": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pdf", "docx"]
+          },
+          "description": "Output formats to generate (default: [\"pdf\", \"docx\"])",
+          "default": ["pdf", "docx"]
+        },
+        "header_footer_style": {
+          "type": "string",
+          "description": "Header/footer style. Style B: black header, gold footer",
+          "enum": ["A", "B"],
+          "default": "B"
+        }
+      },
+      "required": ["client_name"]
+    },
+    "returns": {
+      "type": "object",
+      "properties": {
+        "packet_id": {
+          "type": "string",
+          "description": "Unique identifier for the generated packet"
+        },
+        "documents": {
+          "type": "array",
+          "description": "Array of generated document objects"
+        },
+        "merged_pdf_url": {
+          "type": "string",
+          "description": "URL to the merged PDF (if merged_output=true)"
+        },
+        "zip_url": {
+          "type": "string",
+          "description": "URL to the ZIP package (if include_zip=true)"
+        },
+        "status": {
+          "type": "string",
+          "description": "Generation status"
+        }
+      }
+    },
+    "mcp_tools": [
+      "mcp.pdf.generate",
+      "mcp.docx.generate",
+      "mcp.pdf.merge",
+      "mcp.zip.create"
+    ],
+    "api_endpoint": "POST /api/legal-documents/packet"
+  }
+}
