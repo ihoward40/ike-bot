@@ -240,7 +240,7 @@ Files in the Vault Ledger can have these statuses:
 ### How long does a restoration take?
 - **Average**: 18-30 seconds from detection to completion
 - **Fast path**: 15 seconds (backup found, hash verified)
-- **Slow path**: 45+ seconds (includes manual trigger, Tier 2 snapshot)
+- **Slow path**: 45+ seconds (includes manual trigger or complex scenarios)
 
 ### What happens if no backup is found?
 The system:
