@@ -136,7 +136,9 @@
             }
           },
           "Violation_Types": {
-            "multi_select": "{{map(3.violation_types; \"name\"; value)}}"
+            "multi_select": [
+              "{{map(3.violation_types; 'name'; value)}}"
+            ]
           },
           "Summary": {
             "rich_text": [
@@ -217,7 +219,7 @@
                 "channel": "C0A20NPLY65"
               },
               "mapper": {
-                "text": "🚨 *VERIZON CASE ALERT: Critical Priority Violation Detected* 🚨\n\n⚖️ **Case:** VZN-{{formatDate(now; \"YYYYMMDD-HHmmss\")}} - Isiah T Howard vs. Verizon\n📧 **From:** {{1.from}}\n📋 **Subject:** {{1.subject}}\n🕐 **Received:** {{formatDate(1.date; \"YYYY-MM-DD HH:mm:ss\")}} EST\n\n**Violation Types:**\n{{join(map(3.violation_types; value); \"\\n- \")}}\n\n**Summary:**\n{{3.summary}}\n\n💰 **Estimated Damages:** ${{formatNumber(3.estimated_damages; 0; \",\"; \".\")}}\n📊 **Evidence Strength:** {{3.evidence_strength}}\n\n**Action Required:**\n{{3.action_required}}\n\n🔗 **Evidence:**\n• Notion: {{5.url}}\n• Gmail: https://mail.google.com/mail/u/0/#inbox/{{1.id}}\n• Drive: {{4.webViewLink}}\n\n⚠️ *IMMEDIATE RESPONSE REQUIRED*\n\n<@U0917LJH52L>",
+                "text": "🚨 *VERIZON CASE ALERT: Critical Priority Violation Detected* 🚨\n\n⚖️ **Case:** VZN-{{formatDate(now; \"YYYYMMDD-HHmmss\")}}\n📧 **From:** {{1.from}}\n📋 **Subject:** {{1.subject}}\n🕐 **Received:** {{formatDate(1.date; \"YYYY-MM-DD HH:mm:ss\")}} EST\n\n**Violation Types:**\n{{join(map(3.violation_types; value); \"\\n- \")}}\n\n**Summary:**\n{{3.summary}}\n\n💰 **Estimated Damages:** ${{formatNumber(3.estimated_damages; 0; \",\"; \".\")}}\n📊 **Evidence Strength:** {{3.evidence_strength}}\n\n**Action Required:**\n{{3.action_required}}\n\n🔗 **Evidence:**\n• Notion: {{5.url}}\n• Gmail: https://mail.google.com/mail/u/0/#inbox/{{1.id}}\n• Drive: {{4.webViewLink}}\n\n⚠️ *IMMEDIATE RESPONSE REQUIRED*\n\n<@U0917LJH52L>",
                 "username": "Verizon Guardian",
                 "icon_emoji": ":warning:",
                 "mrkdwn": true
