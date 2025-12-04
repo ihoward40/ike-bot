@@ -55,7 +55,16 @@ Automated backup synchronization:
 - Prevents duplicate processing
 - Notifies team of successful backups
 
-### 3. Supporting Infrastructure
+### 3. VAULT_GUARDIAN_CHECKSUM_WATCHER_v1.1 (Phase 2)
+Proactive integrity monitoring with automated checksum validation:
+- Monitors Notion databases for data integrity
+- Calculates and validates checksums every 15 minutes
+- Detects anomalies and alerts via Slack
+- Auto-generates checksums for new records
+- Logs all validation events to Google Sheets audit trail
+- Triggers AUTO_HEAL for detected corruptions
+
+### 4. Supporting Infrastructure
 - **Notion Databases**: Vault Ledger and Backup Log
 - **Google Drive**: Trust Vault, Archive, and Archive_Backups folders
 - **Slack Channels**: Notifications, alerts, and error reporting
@@ -150,6 +159,26 @@ Automated backup synchronization:
 - Post-activation monitoring plan
 
 **Use this as your final gate** before going live.
+
+---
+
+### Enhancement Guides
+
+#### [07 - CHECKSUM_WATCHER Implementation](./07-CHECKSUM-WATCHER-IMPLEMENTATION.md) ⭐ NEW
+**Purpose**: Phase 2 enhancement - Proactive integrity monitoring  
+**Time Required**: 1-2 hours setup  
+**Prerequisites**: AUTO_HEAL and BACKUP_SYNC operational
+
+**What's Covered**:
+- Ready-to-deploy Make.com scenario blueprint (JSON)
+- 8-module configuration with routers
+- Checksum calculation and validation logic
+- Slack alerting for anomalies
+- Google Sheets audit logging
+- Integration with AUTO_HEAL for automatic remediation
+- Complete deployment checklist
+
+**Deploy this** after Phase 1 scenarios are stable for enhanced protection.
 
 ---
 
