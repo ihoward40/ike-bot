@@ -392,7 +392,10 @@ The Vault Guardian system provides automated monitoring, backup synchronization,
 - [AUTO_HEAL Configuration](./docs/vault-guardian/02-VAULT-GUARDIAN-AUTO-HEAL.md)
 - [BACKUP_SYNC Configuration](./docs/vault-guardian/03-VAULT-GUARDIAN-BACKUP-SYNC.md)
 - [CHECKSUM_WATCHER Implementation](./docs/vault-guardian/07-CHECKSUM-WATCHER-IMPLEMENTATION.md) ⭐ NEW
+- [Test Scenarios & Examples](./docs/vault-guardian/08-TEST-SCENARIOS-EXAMPLES.md) ⭐ NEW
+- [Implementation Details & Best Practices](./docs/vault-guardian/09-IMPLEMENTATION-DETAILS.md) ⭐ NEW
 - [Test Plan](./docs/vault-guardian/04-TEST-PLAN.md)
+- [Ready-to-Deploy JSON Blueprints](./docs/vault-guardian/scenarios/) ⭐ NEW
 - [Phase Four Planning](./docs/vault-guardian/06-PHASE-FOUR-PLANNING.md)
 
 ## Future Enhancements

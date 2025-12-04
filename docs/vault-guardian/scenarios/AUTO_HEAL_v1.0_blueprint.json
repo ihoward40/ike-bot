@@ -1,0 +1,429 @@
+{
+  "name": "VAULT_GUARDIAN_AUTO_HEAL_v1.0",
+  "flow": [
+    {
+      "id": 1,
+      "module": "notion:watchDatabaseItems",
+      "version": 1,
+      "parameters": {
+        "databaseId": "YOUR_VAULT_LEDGER_DB_ID",
+        "filter": {
+          "and": [
+            {
+              "property": "Status",
+              "select": {
+                "equals": "corrupted"
+              }
+            },
+            {
+              "property": "Auto-heal",
+              "checkbox": {
+                "equals": true
+              }
+            }
+          ]
+        }
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "databaseId": {
+              "label": "Vault Ledger Database"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-drive:searchFiles",
+      "version": 1,
+      "parameters": {
+        "drive": "my",
+        "folderId": "YOUR_ARCHIVE_BACKUPS_FOLDER_ID",
+        "searchInSubfolders": true
+      },
+      "mapper": {
+        "q": "name='{{1.properties.file_name.title[0].plain_text}}'"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "folderId": {
+              "label": "Archive_Backups Folder"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 4,
+              "module": "builtin:SetVariables",
+              "version": 1,
+              "parameters": {},
+              "mapper": {
+                "variables": [
+                  {
+                    "name": "original_hash",
+                    "value": "{{1.properties.file_hash.rich_text[0].plain_text}}"
+                  },
+                  {
+                    "name": "backup_hash",
+                    "value": "{{2.md5Checksum}}"
+                  },
+                  {
+                    "name": "hash_match",
+                    "value": "{{if(1.properties.file_hash.rich_text[0].plain_text = 2.md5Checksum; \"true\"; \"false\")}}"
+                  }
+                ]
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": -150
+                }
+              }
+            }
+          ],
+          "filter": {
+            "name": "Backup Found",
+            "conditions": [
+              [
+                {
+                  "a": "{{2.id}}",
+                  "o": "exist"
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "slack:createMessage",
+              "version": 1,
+              "parameters": {
+                "channel": "#vault-guardian-alerts"
+              },
+              "mapper": {
+                "text": "🚨 *VAULT GUARDIAN: MANUAL INTERVENTION REQUIRED* 🚨\\n\\n**File**: {{1.properties.file_name.title[0].plain_text}}\\n**Status**: {{1.properties.status.select.name}}\\n**Issue**: No backup found in Archive_Backups\\n\\n**File Details**:\\n- File ID: `{{1.id}}`\\n- Expected Path: `{{1.properties.file_path.rich_text[0].plain_text}}`\\n- Last Known Hash: `{{1.properties.file_hash.rich_text[0].plain_text}}`\\n\\n**Action Required**:\\n1. Locate backup manually\\n2. Upload to Archive_Backups folder\\n3. Trigger manual heal\\n4. Or mark as permanent loss\\n\\n**Priority**: HIGH\\n**Timestamp**: {{formatDate(now; \"YYYY-MM-DD HH:mm:ss\")}}",
+                "username": "Vault Guardian",
+                "icon_emoji": ":rotating_light:",
+                "mrkdwn": true
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 150
+                }
+              }
+            },
+            {
+              "id": 16,
+              "module": "notion:updateDatabaseItem",
+              "version": 1,
+              "parameters": {
+                "pageId": "{{1.id}}"
+              },
+              "mapper": {
+                "properties": {
+                  "Status": {
+                    "select": {
+                      "name": "escalated"
+                    }
+                  },
+                  "Escalated At": {
+                    "date": {
+                      "start": "{{now}}"
+                    }
+                  },
+                  "Notes": {
+                    "rich_text": [
+                      {
+                        "text": {
+                          "content": "No backup found - manual intervention required"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": 150
+                }
+              }
+            }
+          ],
+          "filter": {
+            "name": "No Backup",
+            "conditions": [
+              [
+                {
+                  "a": "{{2.id}}",
+                  "o": "notExist"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": -150
+        },
+        "restore": {}
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 7,
+              "module": "google-drive:copyFile",
+              "version": 1,
+              "parameters": {
+                "fileId": "{{2.id}}"
+              },
+              "mapper": {
+                "name": "{{1.properties.file_name.title[0].plain_text}}",
+                "parents": [
+                  "YOUR_TRUST_VAULT_FOLDER_ID"
+                ]
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": -300
+                }
+              }
+            },
+            {
+              "id": 8,
+              "module": "notion:updateDatabaseItem",
+              "version": 1,
+              "parameters": {
+                "pageId": "{{1.id}}"
+              },
+              "mapper": {
+                "properties": {
+                  "Status": {
+                    "select": {
+                      "name": "restored"
+                    }
+                  },
+                  "Restored At": {
+                    "date": {
+                      "start": "{{now}}"
+                    }
+                  },
+                  "File Hash": {
+                    "rich_text": [
+                      {
+                        "text": {
+                          "content": "{{2.md5Checksum}}"
+                        }
+                      }
+                    ]
+                  },
+                  "Auto-heal": {
+                    "checkbox": false
+                  },
+                  "Notes": {
+                    "rich_text": [
+                      {
+                        "text": {
+                          "content": "Auto-restored from backup on {{formatDate(now; \"YYYY-MM-DD HH:mm\")}}"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1800,
+                  "y": -300
+                }
+              }
+            },
+            {
+              "id": 9,
+              "module": "slack:createMessage",
+              "version": 1,
+              "parameters": {
+                "channel": "#vault-guardian-notifications"
+              },
+              "mapper": {
+                "text": "✅ *VAULT GUARDIAN: AUTO-HEAL SUCCESSFUL* ✅\\n\\n**File Restored**: {{1.properties.file_name.title[0].plain_text}}\\n**Restored From**: Archive_Backups\\n**Timestamp**: {{formatDate(now; \"YYYY-MM-DD HH:mm:ss\")}}\\n\\n**Details**:\\n- Original Hash: `{{4.original_hash}}`\\n- Backup Hash: `{{4.backup_hash}}`\\n- File ID: `{{7.id}}`\\n- Backup Source: {{2.webContentLink}}\\n\\n**Status**: Vault integrity restored automatically",
+                "username": "Vault Guardian",
+                "icon_emoji": ":white_check_mark:",
+                "mrkdwn": true
+              },
+              "metadata": {
+                "designer": {
+                  "x": 2100,
+                  "y": -300
+                }
+              }
+            }
+          ],
+          "filter": {
+            "name": "Hash Mismatch - Restore",
+            "conditions": [
+              [
+                {
+                  "a": "{{4.hash_match}}",
+                  "o": "text:equal",
+                  "b": "false"
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 10,
+              "module": "notion:updateDatabaseItem",
+              "version": 1,
+              "parameters": {
+                "pageId": "{{1.id}}"
+              },
+              "mapper": {
+                "properties": {
+                  "Status": {
+                    "select": {
+                      "name": "verified"
+                    }
+                  },
+                  "Last Verified": {
+                    "date": {
+                      "start": "{{now}}"
+                    }
+                  },
+                  "Notes": {
+                    "rich_text": [
+                      {
+                        "text": {
+                          "content": "False alarm - hash verified on re-check"
+                        }
+                      }
+                    ]
+                  },
+                  "Auto-heal": {
+                    "checkbox": false
+                  }
+                }
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "id": 11,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": {},
+              "mapper": {
+                "url": "YOUR_IKE_BOT_URL/api/agent-logs",
+                "method": "post",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "qs": [],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "authUser": "",
+                "authPass": "",
+                "timeout": "",
+                "shareCookies": false,
+                "ca": "",
+                "rejectUnauthorized": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "gzip": true,
+                "useMtls": false,
+                "contentType": "application/json",
+                "serializeUrl": false,
+                "followAllRedirects": false,
+                "body": "{\"level\":\"info\",\"action\":\"vault_auto_heal_false_alarm\",\"message\":\"File {{1.properties.file_name.title[0].plain_text}} verified - false alarm\",\"metadata\":{\"file_id\":\"{{1.id}}\",\"file_name\":\"{{1.properties.file_name.title[0].plain_text}}\",\"original_hash\":\"{{4.original_hash}}\",\"backup_hash\":\"{{4.backup_hash}}\"}}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1800,
+                  "y": 0
+                }
+              }
+            }
+          ],
+          "filter": {
+            "name": "False Alarm - Hash Match",
+            "conditions": [
+              [
+                {
+                  "a": "{{4.hash_match}}",
+                  "o": "text:equal",
+                  "b": "true"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
+  }
+}

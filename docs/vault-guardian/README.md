@@ -182,6 +182,56 @@ Proactive integrity monitoring with automated checksum validation:
 
 ---
 
+#### [08 - Test Scenarios & Examples](./08-TEST-SCENARIOS-EXAMPLES.md) ⭐ NEW
+**Purpose**: Practical test scenarios with step-by-step validation  
+**Time Required**: 4-6 hours for all scenarios  
+**Prerequisites**: All scenarios built
+
+**What's Covered**:
+- 7 comprehensive test scenarios
+- Sample test data and templates
+- End-to-end integration testing
+- Stress testing procedures
+- Error recovery validation
+- Performance benchmarking
+- Test data templates (JSON, CSV)
+
+**Use this** to thoroughly validate your implementation before going live.
+
+---
+
+#### [09 - Implementation Details](./09-IMPLEMENTATION-DETAILS.md) ⭐ NEW
+**Purpose**: Advanced implementation details and best practices  
+**Time Required**: Reference guide  
+**Prerequisites**: Basic scenarios operational
+
+**What's Covered**:
+- Architecture deep dive with data flow patterns
+- Make.com optimization strategies
+- API rate limits and quota management
+- Security considerations and access control
+- Performance tuning and monitoring
+- Disaster recovery procedures
+- Scaling strategies (horizontal & vertical)
+- Custom webhooks and API integration
+
+**Reference this** for production optimization and troubleshooting.
+
+---
+
+### Ready-to-Deploy Blueprints
+
+#### [scenarios/AUTO_HEAL_v1.0_blueprint.json](./scenarios/AUTO_HEAL_v1.0_blueprint.json) ⭐ NEW
+Complete Make.com blueprint for AUTO_HEAL scenario with all modules, routers, and error handlers configured. Import directly into Make.com and replace placeholders.
+
+#### [scenarios/BACKUP_SYNC_v1.0_blueprint.json](./scenarios/BACKUP_SYNC_v1.0_blueprint.json) ⭐ NEW
+Complete Make.com blueprint for BACKUP_SYNC scenario with 4-module configuration. Ready for immediate deployment.
+
+#### [scenarios/CHECKSUM_WATCHER_v1.1_blueprint.json](./07-CHECKSUM-WATCHER-IMPLEMENTATION.md#complete-scenario-blueprint-makecom-import) ⭐ NEW
+Complete Make.com blueprint for CHECKSUM_WATCHER scenario (embedded in guide 07).
+
+---
+
 ### Future Planning
 
 #### [06 - Phase Four Planning](./06-PHASE-FOUR-PLANNING.md)
@@ -208,17 +258,25 @@ Proactive integrity monitoring with automated checksum validation:
    - [ ] Read [01-GOOGLE-DRIVE-SETUP.md](./01-GOOGLE-DRIVE-SETUP.md)
    - [ ] Create all Google Drive folders
    - [ ] Set up Notion databases
+   - [ ] Download JSON blueprints from `scenarios/` directory
    - [ ] Configure Slack channels
 
 2. **Week 1: Scenario Building** (Days 3-5)
-   - [ ] Read [02-VAULT-GUARDIAN-AUTO-HEAL.md](./02-VAULT-GUARDIAN-AUTO-HEAL.md)
-   - [ ] Build AUTO_HEAL scenario in Make.com
-   - [ ] Read [03-VAULT-GUARDIAN-BACKUP-SYNC.md](./03-VAULT-GUARDIAN-BACKUP-SYNC.md)
-   - [ ] Build BACKUP_SYNC scenario in Make.com
+   - [ ] **Option A**: Import JSON blueprints (faster)
+     - Import `scenarios/AUTO_HEAL_v1.0_blueprint.json`
+     - Import `scenarios/BACKUP_SYNC_v1.0_blueprint.json`
+     - Replace placeholders (database IDs, folder IDs, Slack user IDs)
+   - [ ] **Option B**: Build from guides (detailed)
+     - Read [02-VAULT-GUARDIAN-AUTO-HEAL.md](./02-VAULT-GUARDIAN-AUTO-HEAL.md)
+     - Build AUTO_HEAL scenario in Make.com module-by-module
+     - Read [03-VAULT-GUARDIAN-BACKUP-SYNC.md](./03-VAULT-GUARDIAN-BACKUP-SYNC.md)
+     - Build BACKUP_SYNC scenario in Make.com module-by-module
 
 3. **Week 2: Testing** (Days 1-3)
    - [ ] Read [04-TEST-PLAN.md](./04-TEST-PLAN.md)
-   - [ ] Execute all 6 test cases
+   - [ ] Read [08-TEST-SCENARIOS-EXAMPLES.md](./08-TEST-SCENARIOS-EXAMPLES.md) for detailed examples
+   - [ ] Execute all 6 test cases from Test Plan
+   - [ ] Run 7 test scenarios from Examples guide
    - [ ] Document results
    - [ ] Fix any issues found
 
@@ -230,9 +288,16 @@ Proactive integrity monitoring with automated checksum validation:
    - [ ] Activate AUTO_HEAL second
    - [ ] Monitor closely for 24 hours
 
-5. **Week 3+: Operations**
-   - [ ] Daily monitoring (first week)
+5. **Week 3: Phase 2 Enhancement** (Optional)
+   - [ ] Deploy CHECKSUM_WATCHER using [07-CHECKSUM-WATCHER-IMPLEMENTATION.md](./07-CHECKSUM-WATCHER-IMPLEMENTATION.md)
+   - [ ] Import JSON blueprint or build manually
+   - [ ] Test checksum validation cycles
+   - [ ] Monitor for 48 hours
+
+6. **Week 4+: Operations**
+   - [ ] Daily monitoring (first week) - see [09-IMPLEMENTATION-DETAILS.md](./09-IMPLEMENTATION-DETAILS.md)
    - [ ] Weekly reviews (first month)
+   - [ ] Monthly optimization review
    - [ ] Consider Phase Four after 4-8 weeks
 
 ---
