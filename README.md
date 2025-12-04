@@ -371,6 +371,28 @@ ike-bot/
 - CORS enabled
 - Request logging and audit trails
 
+## Vault Guardian System
+
+**NEW**: Comprehensive documentation for automated vault backup and healing system is now available!
+
+The Vault Guardian system provides automated monitoring, backup synchronization, and corruption healing for Trust Vault files using Make.com scenarios.
+
+📖 **[View Vault Guardian Documentation →](./docs/vault-guardian/README.md)**
+
+**Key Features**:
+- Automated corruption detection and healing
+- Multi-tier backup strategy
+- Real-time Slack notifications
+- Notion-based audit logging
+- Manual intervention workflows
+
+**Quick Links**:
+- [Setup Guide](./docs/vault-guardian/01-GOOGLE-DRIVE-SETUP.md)
+- [AUTO_HEAL Configuration](./docs/vault-guardian/02-VAULT-GUARDIAN-AUTO-HEAL.md)
+- [BACKUP_SYNC Configuration](./docs/vault-guardian/03-VAULT-GUARDIAN-BACKUP-SYNC.md)
+- [Test Plan](./docs/vault-guardian/04-TEST-PLAN.md)
+- [Phase Four Planning](./docs/vault-guardian/06-PHASE-FOUR-PLANNING.md)
+
 ## Future Enhancements
 
 - [ ] Job queue for background processing (Bull/BullMQ)
