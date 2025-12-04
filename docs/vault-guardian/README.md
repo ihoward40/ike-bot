@@ -219,7 +219,34 @@ Proactive integrity monitoring with automated checksum validation:
 
 ---
 
+#### [10 - VERIZON_GUARDIAN Implementation](./10-VERIZON-GUARDIAN-IMPLEMENTATION.md) ⚡ PATH A - URGENT
+**Purpose**: Real-time monitoring and automated response for Verizon communications  
+**Time Required**: 20-30 minutes deployment  
+**Prerequisites**: Make.com account, OpenAI API key  
+**Priority**: CRITICAL - Live Fire Defense
+
+**What's Covered**:
+- Gmail watch for Verizon email domains
+- GPT-4 powered violation analysis
+- Severity-based routing (CRITICAL/HIGH/MEDIUM/LOW)
+- Instant Slack alerts to #verizon-watch
+- Automatic Notion case tracking
+- Evidence preservation in Google Drive
+- Error recovery and fallback notifications
+
+**Pre-Configured** with actual IDs:
+- Notion Database: `5b5979486c04411382801840f4818800`
+- Slack Channel: `C0A20NPLY65` (#verizon-watch)
+- Slack User: `U0917LJH52L` (for CRITICAL @mentions)
+
+**Deploy this immediately** for urgent Verizon monitoring needs.
+
+---
+
 ### Ready-to-Deploy Blueprints
+
+#### [scenarios/VERIZON_GUARDIAN_v1.0_blueprint.json](./scenarios/VERIZON_GUARDIAN_v1.0_blueprint.json) ⚡ PATH A - NEW
+Complete Make.com blueprint for Verizon email monitoring with AI-powered violation detection. **No placeholders** - pre-configured with actual database/channel IDs. Ready to import and activate immediately.
 
 #### [scenarios/AUTO_HEAL_v1.0_blueprint.json](./scenarios/AUTO_HEAL_v1.0_blueprint.json) ⭐ NEW
 Complete Make.com blueprint for AUTO_HEAL scenario with all modules, routers, and error handlers configured. Import directly into Make.com and replace placeholders.

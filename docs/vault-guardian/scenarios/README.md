@@ -6,7 +6,32 @@ This directory contains ready-to-deploy JSON blueprints for all Vault Guardian M
 
 ## Available Blueprints
 
-### 1. AUTO_HEAL_v1.0_blueprint.json
+### 1. VERIZON_GUARDIAN_v1.0_blueprint.json ⭐ NEW - PATH A
+**Purpose**: Real-time Verizon email monitoring and violation detection  
+**Modules**: 9 modules with AI classification and severity routing  
+**Complexity**: Advanced  
+**Priority**: CRITICAL - Live Fire Defense
+
+**Features**:
+- Gmail watch for @verizon.com, @vzw.com, @verizonwireless.com
+- GPT-4 powered violation analysis and classification
+- Severity-based routing (CRITICAL/HIGH/MEDIUM/LOW)
+- Instant Slack alerts to #verizon-watch
+- Automatic Notion case tracking
+- Evidence preservation in Google Drive
+- Error recovery with fallback notifications
+
+**Pre-Configured**:
+- Notion Database ID: `5b5979486c04411382801840f4818800`
+- Slack Channel: `C0A20NPLY65` (#verizon-watch)
+- Slack User: `U0917LJH52L` (for CRITICAL @mentions)
+- No placeholders - ready to import and activate
+
+**Documentation**: See [10-VERIZON-GUARDIAN-IMPLEMENTATION.md](../10-VERIZON-GUARDIAN-IMPLEMENTATION.md)
+
+---
+
+### 2. AUTO_HEAL_v1.0_blueprint.json
 **Purpose**: Automated corruption detection and restoration  
 **Modules**: 12 modules with 2 routers  
 **Complexity**: Advanced
@@ -34,7 +59,7 @@ This directory contains ready-to-deploy JSON blueprints for all Vault Guardian M
 
 ---
 
-### 2. BACKUP_SYNC_v1.0_blueprint.json
+### 3. BACKUP_SYNC_v1.0_blueprint.json
 **Purpose**: Automated backup synchronization  
 **Modules**: 4 modules  
 **Complexity**: Simple

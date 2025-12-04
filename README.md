@@ -380,6 +380,7 @@ The Vault Guardian system provides automated monitoring, backup synchronization,
 📖 **[View Vault Guardian Documentation →](./docs/vault-guardian/README.md)**
 
 **Key Features**:
+- **PATH A (Urgent)**: Real-time Verizon email monitoring with AI violation detection ⚡
 - Automated corruption detection and healing
 - Proactive checksum validation (Phase 2)
 - Multi-tier backup strategy
@@ -388,6 +389,12 @@ The Vault Guardian system provides automated monitoring, backup synchronization,
 - Manual intervention workflows
 
 **Quick Links**:
+
+**PATH A - Live Fire Defense** ⚡:
+- [VERIZON_GUARDIAN Implementation](./docs/vault-guardian/10-VERIZON-GUARDIAN-IMPLEMENTATION.md) - Real-time Verizon monitoring (20-30 min deploy)
+- [VERIZON_GUARDIAN Blueprint](./docs/vault-guardian/scenarios/VERIZON_GUARDIAN_v1.0_blueprint.json) - Pre-configured JSON (no placeholders)
+
+**PATH B - Core Infrastructure**:
 - [Setup Guide](./docs/vault-guardian/01-GOOGLE-DRIVE-SETUP.md)
 - [AUTO_HEAL Configuration](./docs/vault-guardian/02-VAULT-GUARDIAN-AUTO-HEAL.md)
 - [BACKUP_SYNC Configuration](./docs/vault-guardian/03-VAULT-GUARDIAN-BACKUP-SYNC.md)
