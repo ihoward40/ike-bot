@@ -431,13 +431,15 @@ Isiah T. Howard
 Founder & Executive Director  
 ISIAH TARIK HOWARD TRUST
 
-📧 [your-email]@ikesolutions.com  
-📞 [Your Phone Number]  
-🌐 [www.yourwebsite.com]  
+📧 [your-email-address]  
+📞 [your-phone-number]  
+🌐 [your-website-url]  
 📍 Newark, New Jersey
 
 Supporting families facing eviction, disability discrimination, and legal access barriers through integrated advocacy and technology tools.
 ```
+
+**Note**: Replace bracketed placeholders with your actual contact information.
 
 ---
 

@@ -276,7 +276,7 @@ A future where every family—regardless of income, disability status, or litera
 - Prepared demand letter and complaint templates
 - Coordinated with regulatory agencies
 
-**Outcome**: Case pending, but real-time monitoring system (VERIZON_GUARDIAN) now prevents future violations through instant alerts and evidence preservation.
+**Outcome**: Case pending, but real-time monitoring system ([VERIZON_GUARDIAN](../../vault-guardian/10-VERIZON-GUARDIAN-IMPLEMENTATION.md)) now prevents future violations through instant alerts and evidence preservation.
 
 ### Case Study 2: Wrongful Eviction Prevention
 **Challenge**: Family with disabled child faced eviction for requesting wheelchair-accessible entrance (ADA violation by landlord).

@@ -373,6 +373,8 @@
 
 Use this rubric to quickly assess grant fit (score 1-5 for each):
 
+**Note**: Copy this matrix to a separate document or spreadsheet for each grant evaluation. Don't edit the documentation directly.
+
 | Criteria | Weight | Score (1-5) | Weighted Score |
 |----------|--------|-------------|----------------|
 | **Mission Alignment**: Does grant focus match our work? | 3x | ___ | ___ |
