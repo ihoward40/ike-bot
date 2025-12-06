@@ -371,6 +371,113 @@ ike-bot/
 - CORS enabled
 - Request logging and audit trails
 
+## Vault Guardian System
+
+**NEW**: Comprehensive documentation for automated vault backup and healing system is now available!
+
+The Vault Guardian system provides automated monitoring, backup synchronization, and corruption healing for Trust Vault files using Make.com scenarios.
+
+📖 **[View Vault Guardian Documentation →](./docs/vault-guardian/README.md)**
+
+**Key Features**:
+- **PATH A (Urgent)**: Real-time Verizon email monitoring with AI violation detection ⚡
+- Automated corruption detection and healing
+- Proactive checksum validation (Phase 2)
+- Multi-tier backup strategy
+- Real-time Slack notifications
+- Notion-based audit logging
+- Manual intervention workflows
+
+**Quick Links**:
+
+**PATH A - Live Fire Defense** ⚡:
+- [VERIZON_GUARDIAN Implementation](./docs/vault-guardian/10-VERIZON-GUARDIAN-IMPLEMENTATION.md) - Real-time Verizon monitoring (20-30 min deploy)
+- [VERIZON_GUARDIAN Blueprint](./docs/vault-guardian/scenarios/VERIZON_GUARDIAN_v1.0_blueprint.json) - Pre-configured JSON (no placeholders)
+
+**PATH B - Core Infrastructure**:
+- [Setup Guide](./docs/vault-guardian/01-GOOGLE-DRIVE-SETUP.md)
+- [AUTO_HEAL Configuration](./docs/vault-guardian/02-VAULT-GUARDIAN-AUTO-HEAL.md)
+- [BACKUP_SYNC Configuration](./docs/vault-guardian/03-VAULT-GUARDIAN-BACKUP-SYNC.md)
+
+## SintraPrime AI Connector
+
+**NEW**: Master AI coordinator for Sintra automation agents with GPT-4 Turbo integration!
+
+SintraPrime provides intelligent decision-making and workflow orchestration for Vault Guardian and Grant Acquisition systems.
+
+📖 **[View SintraPrime Documentation →](./sintra-prime/README.md)**
+
+**Key Features**:
+- **Dual Implementations**: Node.js (Express) and Python (Flask) versions
+- **GPT-4 Turbo Integration**: Advanced reasoning for complex decisions
+- **Vault Guardian Integration**: Intelligent escalation and anomaly classification
+- **Grant Acquisition Integration**: Automated grant scoring and funder matching
+- **Production-Ready**: Health checks, error handling, usage tracking
+
+**Quick Links**:
+- [Node.js Setup](./sintra-prime/nodejs/) - Express implementation (Port 3000)
+- [Python Setup](./sintra-prime/python/) - Flask implementation (Port 3001)
+- [Comparison Guide](./sintra-prime/docs/COMPARISON.md) - Feature comparison & recommendations
+- [Vault Guardian Integration](./sintra-prime/docs/VAULT-GUARDIAN-INTEGRATION.md) - Connect to existing scenarios
+- [Grant Acquisition Integration](./sintra-prime/docs/GRANT-ACQUISITION-INTEGRATION.md) - Grant workflow automation
+- [Deployment Guide](./sintra-prime/docs/DEPLOYMENT.md) - Production deployment options
+
+## Grant Acquisition Division
+
+**NEW**: Systematic funding pipeline management with Notion-based tracking!
+
+Complete grant acquisition infrastructure for discovering, evaluating, and tracking grant opportunities.
+
+📖 **[View Grant Acquisition Documentation →](./docs/grant-acquisition/README.md)**
+
+**Key Features**:
+- **Notion Pipeline**: 16-property database with 6 pre-configured views
+- **Master Org Profile**: Reusable narratives (400/150/50 word versions)
+- **Outreach Templates**: 7 ready-to-use email templates
+- **Focus Areas & Strategy**: Tier 1/2/3 priority classification
+
+**Quick Links**:
+- [Notion Pipeline Setup](./docs/grant-acquisition/01-NOTION-PIPELINE-SETUP.md)
+- [Master Org Profile](./docs/grant-acquisition/02-MASTER-ORG-PROFILE.md)
+- [Outreach Templates](./docs/grant-acquisition/03-OUTREACH-TEMPLATES.md)
+- [Focus Areas](./docs/grant-acquisition/04-FOCUS-AREAS.md)
+
+**Additional Resources**:
+- [CHECKSUM_WATCHER Implementation](./docs/vault-guardian/07-CHECKSUM-WATCHER-IMPLEMENTATION.md) ⭐ Phase 2
+- [Test Scenarios & Examples](./docs/vault-guardian/08-TEST-SCENARIOS-EXAMPLES.md)
+- [Implementation Details & Best Practices](./docs/vault-guardian/09-IMPLEMENTATION-DETAILS.md)
+- [Test Plan](./docs/vault-guardian/04-TEST-PLAN.md)
+- [Ready-to-Deploy JSON Blueprints](./docs/vault-guardian/scenarios/)
+- [Phase Four Planning](./docs/vault-guardian/06-PHASE-FOUR-PLANNING.md)
+
+## Grant Acquisition Division
+
+**NEW**: Foundation build for systematic grant discovery, tracking, and application management!
+
+The Grant Acquisition Division provides centralized pipeline management for securing funding to support operations, legal defense, and community impact initiatives.
+
+📖 **[View Grant Acquisition Documentation →](./docs/grant-acquisition/README.md)**
+
+**Key Features**:
+- Notion-based grant pipeline (15+ properties for comprehensive tracking)
+- Master organization profile (copy-paste-ready narratives)
+- LOI and outreach email templates
+- Strategic focus area prioritization
+- Funder research framework
+- Application decision matrix
+
+**Quick Start** (20 minutes):
+1. [Notion Pipeline Setup](./docs/grant-acquisition/01-NOTION-PIPELINE-SETUP.md) - Database schema and views
+2. [Master Org Profile](./docs/grant-acquisition/02-MASTER-ORG-PROFILE.md) - Reusable narratives
+3. [Outreach Templates](./docs/grant-acquisition/03-OUTREACH-TEMPLATES.md) - LOI and cold email library
+4. [Focus Areas](./docs/grant-acquisition/04-FOCUS-AREAS.md) - Priority funding targets
+
+**Success Metrics**:
+- Track grants researched, applied, and won
+- Monitor award rates and funding mix
+- Manage deadlines and follow-ups
+- Build funder relationships
+
 ## Future Enhancements
 
 - [ ] Job queue for background processing (Bull/BullMQ)
