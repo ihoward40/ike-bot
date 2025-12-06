@@ -399,6 +399,49 @@ The Vault Guardian system provides automated monitoring, backup synchronization,
 - [AUTO_HEAL Configuration](./docs/vault-guardian/02-VAULT-GUARDIAN-AUTO-HEAL.md)
 - [BACKUP_SYNC Configuration](./docs/vault-guardian/03-VAULT-GUARDIAN-BACKUP-SYNC.md)
 
+## SintraPrime AI Connector
+
+**NEW**: Master AI coordinator for Sintra automation agents with GPT-4 Turbo integration!
+
+SintraPrime provides intelligent decision-making and workflow orchestration for Vault Guardian and Grant Acquisition systems.
+
+📖 **[View SintraPrime Documentation →](./sintra-prime/README.md)**
+
+**Key Features**:
+- **Dual Implementations**: Node.js (Express) and Python (Flask) versions
+- **GPT-4 Turbo Integration**: Advanced reasoning for complex decisions
+- **Vault Guardian Integration**: Intelligent escalation and anomaly classification
+- **Grant Acquisition Integration**: Automated grant scoring and funder matching
+- **Production-Ready**: Health checks, error handling, usage tracking
+
+**Quick Links**:
+- [Node.js Setup](./sintra-prime/nodejs/) - Express implementation (Port 3000)
+- [Python Setup](./sintra-prime/python/) - Flask implementation (Port 3001)
+- [Comparison Guide](./sintra-prime/docs/COMPARISON.md) - Feature comparison & recommendations
+- [Vault Guardian Integration](./sintra-prime/docs/VAULT-GUARDIAN-INTEGRATION.md) - Connect to existing scenarios
+- [Grant Acquisition Integration](./sintra-prime/docs/GRANT-ACQUISITION-INTEGRATION.md) - Grant workflow automation
+- [Deployment Guide](./sintra-prime/docs/DEPLOYMENT.md) - Production deployment options
+
+## Grant Acquisition Division
+
+**NEW**: Systematic funding pipeline management with Notion-based tracking!
+
+Complete grant acquisition infrastructure for discovering, evaluating, and tracking grant opportunities.
+
+📖 **[View Grant Acquisition Documentation →](./docs/grant-acquisition/README.md)**
+
+**Key Features**:
+- **Notion Pipeline**: 16-property database with 6 pre-configured views
+- **Master Org Profile**: Reusable narratives (400/150/50 word versions)
+- **Outreach Templates**: 7 ready-to-use email templates
+- **Focus Areas & Strategy**: Tier 1/2/3 priority classification
+
+**Quick Links**:
+- [Notion Pipeline Setup](./docs/grant-acquisition/01-NOTION-PIPELINE-SETUP.md)
+- [Master Org Profile](./docs/grant-acquisition/02-MASTER-ORG-PROFILE.md)
+- [Outreach Templates](./docs/grant-acquisition/03-OUTREACH-TEMPLATES.md)
+- [Focus Areas](./docs/grant-acquisition/04-FOCUS-AREAS.md)
+
 **Additional Resources**:
 - [CHECKSUM_WATCHER Implementation](./docs/vault-guardian/07-CHECKSUM-WATCHER-IMPLEMENTATION.md) ⭐ Phase 2
 - [Test Scenarios & Examples](./docs/vault-guardian/08-TEST-SCENARIOS-EXAMPLES.md)
