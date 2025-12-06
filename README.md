@@ -398,6 +398,34 @@ The Vault Guardian system provides automated monitoring, backup synchronization,
 - [Setup Guide](./docs/vault-guardian/01-GOOGLE-DRIVE-SETUP.md)
 - [AUTO_HEAL Configuration](./docs/vault-guardian/02-VAULT-GUARDIAN-AUTO-HEAL.md)
 - [BACKUP_SYNC Configuration](./docs/vault-guardian/03-VAULT-GUARDIAN-BACKUP-SYNC.md)
+
+## Grant Acquisition Division
+
+**NEW**: Foundation build for systematic grant discovery, tracking, and application management!
+
+The Grant Acquisition Division provides centralized pipeline management for securing funding to support operations, legal defense, and community impact initiatives.
+
+📖 **[View Grant Acquisition Documentation →](./docs/grant-acquisition/README.md)**
+
+**Key Features**:
+- Notion-based grant pipeline (15+ properties for comprehensive tracking)
+- Master organization profile (copy-paste-ready narratives)
+- LOI and outreach email templates
+- Strategic focus area prioritization
+- Funder research framework
+- Application decision matrix
+
+**Quick Start** (20 minutes):
+1. [Notion Pipeline Setup](./docs/grant-acquisition/01-NOTION-PIPELINE-SETUP.md) - Database schema and views
+2. [Master Org Profile](./docs/grant-acquisition/02-MASTER-ORG-PROFILE.md) - Reusable narratives
+3. [Outreach Templates](./docs/grant-acquisition/03-OUTREACH-TEMPLATES.md) - LOI and cold email library
+4. [Focus Areas](./docs/grant-acquisition/04-FOCUS-AREAS.md) - Priority funding targets
+
+**Success Metrics**:
+- Track grants researched, applied, and won
+- Monitor award rates and funding mix
+- Manage deadlines and follow-ups
+- Build funder relationships
 - [CHECKSUM_WATCHER Implementation](./docs/vault-guardian/07-CHECKSUM-WATCHER-IMPLEMENTATION.md) ⭐ NEW
 - [Test Scenarios & Examples](./docs/vault-guardian/08-TEST-SCENARIOS-EXAMPLES.md) ⭐ NEW
 - [Implementation Details & Best Practices](./docs/vault-guardian/09-IMPLEMENTATION-DETAILS.md) ⭐ NEW
