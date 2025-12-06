@@ -39,11 +39,31 @@ See [COMPARISON.md](docs/COMPARISON.md) for detailed feature comparison.
 
 ## Quick Start
 
-### Prerequisites
+### 🚀 Fast Track: 5-Minute Test (Recommended First)
+
+**Test SintraPrime logic locally before deploying**:
+
+```bash
+# See QUICK-START-TEST.md for full setup script
+mkdir ~/sintra-prime-test && cd ~/sintra-prime-test
+# Follow instructions in QUICK-START-TEST.md
+```
+
+This validates:
+- ✅ Your OpenAI API key works
+- ✅ AI decision-making logic is correct  
+- ✅ JSON formatting is proper
+- ✅ Routing and metadata extraction works
+
+📖 **[→ Full Quick Start Test Guide](QUICK-START-TEST.md)**
+
+---
+
+### 🔧 Production Deployment
+
+#### Prerequisites
 - OpenAI API key (get one at https://platform.openai.com)
 - Node.js 18+ (for Node.js version) OR Python 3.9+ (for Python version)
-
-### Setup
 
 #### Option 1: Node.js/Express
 
