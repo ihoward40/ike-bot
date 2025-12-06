@@ -55,11 +55,21 @@ Metadata: ${JSON.stringify(metadata || {})}
     });
 
     if (!response.ok) {
-      const error = await response.json();
+      let error;
+      try {
+        error = await response.json();
+      } catch {
+        error = { error: await response.text() };
+      }
       throw new Error(`OpenAI API error: ${JSON.stringify(error)}`);
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error(`Invalid JSON response from OpenAI API: ${await response.text()}`);
+    }
 
     res.json({
       status: "ok",

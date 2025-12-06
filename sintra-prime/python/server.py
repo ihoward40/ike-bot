@@ -59,10 +59,16 @@ Metadata: {json.dumps(metadata)}
         )
 
         if not r.ok:
-            error_data = r.json()
+            try:
+                error_data = r.json()
+            except ValueError:
+                error_data = {"error": r.text}
             raise Exception(f"OpenAI API error: {json.dumps(error_data)}")
 
-        result = r.json()
+        try:
+            result = r.json()
+        except ValueError:
+            raise Exception(f"Invalid JSON response from OpenAI API: {r.text}")
 
         return jsonify({
             "status": "ok",
