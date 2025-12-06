@@ -170,11 +170,13 @@ Use SintraPrime for grant opportunity analysis and prioritization:
 
 ## Documentation
 
+- **[Quick Start Test](QUICK-START-TEST.md)** - 5-minute local validation before deployment
+- **[Day 1-30 Roadmap](DAY-1-30-ROADMAP.md)** ⭐ **NEW** - Real-world expectations for AI ecosystem transformation
 - **[Comparison Guide](docs/COMPARISON.md)** - Node.js vs Python feature comparison
 - **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment options
+- **[Testing Guide](docs/TESTING.md)** - Comprehensive verification procedures
 - **[Vault Guardian Integration](docs/VAULT-GUARDIAN-INTEGRATION.md)** - Connect to existing scenarios
 - **[Grant Acquisition Integration](docs/GRANT-ACQUISITION-INTEGRATION.md)** - Grant workflow automation
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
 
 ## Use Cases
 
