@@ -553,7 +553,7 @@ class GmailEnforcementEvent(BaseModel):
     issues_spotted: Optional[str] = None
     recommended_next_step: Optional[str] = None
     draft_reply: Optional[str] = None
-    escalation_targets: Optional[str] = None
+    escalation_targets: Optional[List[str]] = None
     priority_level: Optional[str] = "medium"
     internal_notes: Optional[str] = None
     notion_url: Optional[str] = None
@@ -599,18 +599,23 @@ async def health_check():
     return {"status": "healthy", "service": "sintra-gmail-intake"}
 
 if __name__ == "__main__":
-    # Development mode: use reload=True
-    # Production mode: use reload=False, consider using gunicorn or similar
-    uvicorn.run("sintra_gmail_intake:app", host="127.0.0.1", port=8000, reload=True)
+    # For local testing only (127.0.0.1)
+    # uvicorn.run("sintra_gmail_intake:app", host="127.0.0.1", port=8000, reload=True)
+    
+    # For production webhook endpoint (accepts external requests)
+    # Use 0.0.0.0 to bind to all interfaces, disable reload
+    uvicorn.run("sintra_gmail_intake:app", host="0.0.0.0", port=8000, reload=False)
 ```
 
 ### **Run the Server**
 
+**Development (local testing only):**
 ```bash
-python sintra_gmail_intake.py
+# Test locally before deploying
+python sintra_gmail_intake.py  # Will start on 0.0.0.0:8000
 ```
 
-**Server will start on:** `http://localhost:8000`
+**Production:** See deployment section below for Railway, Render, or VPS options.
 
 **Test it:**
 ```bash
@@ -629,13 +634,26 @@ curl -X POST http://localhost:8000/webhooks/sintra/gmail-intake \
 
 ### **Production Deployment**
 
-For production, deploy this to:
-- Railway.app (easiest)
-- Render.com
-- DigitalOcean App Platform
-- Your own VPS with nginx/caddy
+**Important:** The server is configured to bind to `0.0.0.0:8000` to accept external webhook requests from Make.com.
 
-Make sure to use HTTPS and set the webhook URL in Make.com to your public endpoint.
+**Recommended platforms:**
+- **Railway.app** (easiest, auto-HTTPS)
+- **Render.com** (free tier with auto-sleep)
+- **DigitalOcean App Platform** (simple deployment)
+- **Your own VPS** with nginx/caddy reverse proxy
+
+**Production checklist:**
+- ✅ Use HTTPS (required for Make.com webhooks)
+- ✅ Set `reload=False` in uvicorn config
+- ✅ Use environment variables for sensitive config
+- ✅ Implement authentication/API key validation on webhook endpoint
+- ✅ Set up logging and monitoring
+- ✅ Configure firewall rules
+- ✅ Use a process manager (PM2, systemd, or supervisor)
+
+**For local testing with Make.com:**
+- Use [ngrok](https://ngrok.com/) or [localhost.run](https://localhost.run/) to expose local server
+- Example: `ngrok http 8000` gives you a public HTTPS URL
 
 ---
 
