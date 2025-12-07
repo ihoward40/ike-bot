@@ -57,7 +57,7 @@ https://hook.us2.make.com/[your-unique-id]
 
 | Notion Field | Make.com Mapping Formula |
 |--------------|--------------------------|
-| **Event Summary** | `{{1.agent}} \| MSG: {{1.message}} \| REPLY: {{1.reply}} \| TAGS: {{join(1.tags; ", ")}} \| CONF: {{1.confidence}} \| ROUTE: {{1.route}} \| PRIORITY: {{1.priority}}` |
+| **Event Summary** | `{{1.agent}} - MSG: {{1.message}} - REPLY: {{1.reply}} - TAGS: {{join(1.tags; ", ")}} - CONF: {{1.confidence}} - ROUTE: {{1.route}} - PRIORITY: {{1.priority}}` |
 | **Agent** | `{{1.agent}}` |
 | **Role** | `{{1.role}}` |
 | **Reply** | `{{1.reply}}` |
@@ -343,7 +343,7 @@ Trigger Code: {{1.trigger_code}}
 ```
 {{1.route_valid}} = false
 OR
-isEmpty({{1.route}})
+{{1.route}} = ""
 ```
 
 #### **Module 1: Slack Error Alert**
@@ -890,7 +890,7 @@ After each test, verify:
                   {
                     "key": "Event Summary",
                     "type": "title",
-                    "title": "{{1.agent}} | MSG: {{1.message}} | REPLY: {{1.reply}} | TAGS: {{join(1.tags; \", \")}} | CONF: {{1.confidence}} | ROUTE: {{1.route}} | PRIORITY: {{1.priority}}"
+                    "title": "{{1.agent}} - MSG: {{1.message}} - REPLY: {{1.reply}} - TAGS: {{join(1.tags; \", \")}} - CONF: {{1.confidence}} - ROUTE: {{1.route}} - PRIORITY: {{1.priority}}"
                   },
                   {
                     "key": "Agent",
