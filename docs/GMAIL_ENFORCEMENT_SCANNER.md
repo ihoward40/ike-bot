@@ -780,7 +780,7 @@ curl -X POST http://localhost:8000/webhooks/sintra/gmail-intake \
         "issues_spotted": "string",
         "recommended_next_step": "string",
         "draft_reply": "string",
-        "escalation_targets": "string",
+        "escalation_targets": ["array"],
         "priority_level": "string",
         "internal_notes": "string",
         "notion_url": "string"
