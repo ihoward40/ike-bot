@@ -599,12 +599,12 @@ async def health_check():
     return {"status": "healthy", "service": "sintra-gmail-intake"}
 
 if __name__ == "__main__":
-    # For local testing only (127.0.0.1)
-    # uvicorn.run("sintra_gmail_intake:app", host="127.0.0.1", port=8000, reload=True)
-    
-    # For production webhook endpoint (accepts external requests)
-    # Use 0.0.0.0 to bind to all interfaces, disable reload
+    # Default configuration: accepts external webhook requests
+    # Use 0.0.0.0 to bind to all interfaces
     uvicorn.run("sintra_gmail_intake:app", host="0.0.0.0", port=8000, reload=False)
+    
+    # For local testing without webhooks (Python debugging only):
+    # uvicorn.run("sintra_gmail_intake:app", host="127.0.0.1", port=8000, reload=True)
 ```
 
 ### **Run the Server**
