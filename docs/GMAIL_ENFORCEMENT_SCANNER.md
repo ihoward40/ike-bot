@@ -1,5 +1,21 @@
 # 📧 Gmail Enforcement Scanner — Complete Build Guide
 
+## ⚠️ Privacy & Security Warning
+
+**IMPORTANT:** This scenario sends email content (including potentially sensitive enforcement documents, personal information, financial data, and legal communications) to OpenAI's API for analysis. 
+
+**Before implementing:**
+- ✅ Review OpenAI's [data usage policies](https://openai.com/policies/usage-policies)
+- ✅ Consider data retention and privacy implications
+- ✅ Ensure compliance with GDPR, CCPA, HIPAA, or other relevant regulations
+- ✅ Be aware that email content will be processed by a third-party AI service
+- ✅ Consider using OpenAI's zero data retention option if available
+- ✅ Review all enforcement emails for client confidentiality before automation
+
+**Alternative:** Consider running a local LLM (like Llama or Mistral) for sensitive enforcement work instead of cloud-based AI services.
+
+---
+
 ## Overview
 
 The **Howard Trust Gmail Enforcement Scanner** automatically monitors your Gmail inbox for enforcement-related emails (Verizon, IRS, SSA, banking disputes, etc.), analyzes them with AI, logs to Notion, alerts via Slack, and forwards structured data to your SintraPrime webhook for further processing.
@@ -52,6 +68,8 @@ HTTP webhook sends to SintraPrime for agent processing
 ### **Search Query Options**
 
 Choose one or rotate between these queries:
+
+**⚠️ Note:** Gmail search syntax has limitations. Test each query individually in your Gmail web interface before adding to automation. Complex queries may need simplification.
 
 #### **Option 1: Verizon Focus (Recommended Start)**
 ```
@@ -315,7 +333,13 @@ Create a database with these properties:
 | **Escalation Targets** | `{{3.choices[1].message.parsed.escalation_targets}}` |
 | **Internal Notes** | `{{3.choices[1].message.parsed.internal_notes}}` |
 
-**Note:** Replace `3.choices...` with the actual variable name Make.com assigns to your OpenAI output (usually something like `{{3.output}}` or `{{3.result}}`).
+**Note on Variable Names:** 
+- Make.com assigns numbered IDs to modules (e.g., module 3 = OpenAI)
+- The exact path depends on Make.com's output structure
+- Check your OpenAI module's output in Make.com's mapping helper
+- Common patterns: `{{3.output}}`, `{{3.result}}`, `{{3.choices[0].message.content}}`
+- If using JSON response format, access via `{{3.parsed.field_name}}`
+- Test your mappings with a sample execution to verify correct paths
 
 ---
 
@@ -459,14 +483,17 @@ Content-Type: application/json
   "issues_spotted": "{{join(3.choices[1].message.parsed.issues_spotted; '\n')}}",
   "recommended_next_step": "{{3.choices[1].message.parsed.recommended_next_step}}",
   "draft_reply": "{{3.choices[1].message.parsed.draft_reply}}",
-  "escalation_targets": "{{join(3.choices[1].message.parsed.escalation_targets; ', ')}}",
+  "escalation_targets": {{3.choices[1].message.parsed.escalation_targets}},
   "priority_level": "{{3.choices[1].message.parsed.priority_level}}",
   "internal_notes": "{{3.choices[1].message.parsed.internal_notes}}",
   "notion_url": "{{4.url}}"
 }
 ```
 
-**Note:** Change `route` and `tags` values for each Router path.
+**Notes:** 
+- Change `route` and `tags` values for each Router path
+- `escalation_targets` is sent as an array (no join) to preserve structure
+- `issues_spotted` is joined with newlines for readability in SintraPrime
 
 ### **Path-Specific Configurations**
 
@@ -505,7 +532,7 @@ pip install fastapi uvicorn pydantic
 ### **Code: `sintra_gmail_intake.py`**
 
 ```python
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 import uvicorn
@@ -572,7 +599,9 @@ async def health_check():
     return {"status": "healthy", "service": "sintra-gmail-intake"}
 
 if __name__ == "__main__":
-    uvicorn.run("sintra_gmail_intake:app", host="0.0.0.0", port=8000, reload=True)
+    # Development mode: use reload=True
+    # Production mode: use reload=False, consider using gunicorn or similar
+    uvicorn.run("sintra_gmail_intake:app", host="127.0.0.1", port=8000, reload=True)
 ```
 
 ### **Run the Server**
@@ -859,13 +888,23 @@ Check your SintraPrime server logs:
 
 ## 🔐 Security Considerations
 
-1. **Gmail OAuth:** Use OAuth2, not password authentication
-2. **OpenAI API Key:** Store securely in Make.com, don't expose in logs
-3. **Notion Token:** Use Make.com's secure connection storage
-4. **Webhook URL:** Use HTTPS in production, not HTTP
-5. **Slack Bot Token:** Keep confidential, rotate if compromised
-6. **Email Content:** Be aware you're sending email content to OpenAI
-7. **Rate Limiting:** Set reasonable limits on Gmail search (10-50 emails)
+1. **⚠️ Email Content Privacy (CRITICAL):** See privacy warning at top of this document. You're sending potentially sensitive enforcement emails containing personal information, legal documents, and financial data to OpenAI's API. Ensure compliance with applicable privacy regulations and client confidentiality requirements.
+
+2. **Gmail OAuth:** Use OAuth2, not password authentication. Avoid storing Gmail passwords.
+
+3. **OpenAI API Key:** Store securely in Make.com's connection settings. Never expose in logs or share publicly.
+
+4. **Notion Token:** Use Make.com's secure connection storage. Rotate regularly.
+
+5. **Webhook URL:** Always use HTTPS in production, never HTTP. Implement authentication on your webhook endpoint.
+
+6. **Slack Bot Token:** Keep confidential, rotate immediately if compromised.
+
+7. **Rate Limiting:** Set reasonable limits on Gmail search (10-50 emails per run) to avoid overwhelming your system and API quotas.
+
+8. **Data Retention:** Configure OpenAI's data retention settings. Consider zero-retention options for sensitive enforcement work.
+
+9. **Access Control:** Limit Make.com scenario access to authorized personnel only. Use role-based permissions.
 
 ---
 
