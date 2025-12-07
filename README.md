@@ -375,15 +375,7 @@ ike-bot/
 
 IKE-BOT integrates with Make.com for advanced workflow automation.
 
-📖 **[SintraPrime Orchestration Router v1 Setup Guide](./docs/SINTRAPRIME_ROUTER_SETUP.md)**
-
-This guide includes:
-- Step-by-step Make.com scenario configuration
-- 9 intelligent routing branches
-- Notion logging integration
-- Escalation alerts
-- Testing protocols
-- Exportable JSON blueprint
+### 📚 Make.com Scenario Guides
 
 🚀 **[Current Status & Activation Guide](./docs/SINTRAPRIME_STATUS.md)** ← **Start Here**
 
@@ -392,6 +384,25 @@ See what's working now:
 - ✅ 4 working action handlers
 - ✅ Database integration
 - ✅ Complete test examples
+
+📖 **[SintraPrime Orchestration Router v1](./docs/SINTRAPRIME_ROUTER_SETUP.md)**
+
+Event routing hub:
+- 9 intelligent routing branches
+- Notion logging integration
+- Escalation alerts
+- Testing protocols
+- Exportable JSON blueprint
+
+📧 **[Gmail Enforcement Scanner](./docs/GMAIL_ENFORCEMENT_SCANNER.md)**
+
+Automated email monitoring:
+- Gmail inbox monitoring
+- AI-powered legal analysis (OpenAI)
+- Multi-path categorization (Verizon, IRS, Banking, etc.)
+- Notion logging with AI insights
+- Slack alerts
+- SintraPrime webhook integration
 
 ## Future Enhancements
 
