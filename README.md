@@ -371,6 +371,20 @@ ike-bot/
 - CORS enabled
 - Request logging and audit trails
 
+## Make.com Integration
+
+IKE-BOT integrates with Make.com for advanced workflow automation. See the complete setup guide:
+
+📖 **[SintraPrime Orchestration Router v1 Setup Guide](./docs/SINTRAPRIME_ROUTER_SETUP.md)**
+
+This guide includes:
+- Step-by-step Make.com scenario configuration
+- 9 intelligent routing branches
+- Notion logging integration
+- Escalation alerts
+- Testing protocols
+- Exportable JSON blueprint
+
 ## Future Enhancements
 
 - [ ] Job queue for background processing (Bull/BullMQ)
