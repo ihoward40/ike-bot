@@ -373,7 +373,7 @@ ike-bot/
 
 ## Make.com Integration
 
-IKE-BOT integrates with Make.com for advanced workflow automation. See the complete setup guide:
+IKE-BOT integrates with Make.com for advanced workflow automation.
 
 📖 **[SintraPrime Orchestration Router v1 Setup Guide](./docs/SINTRAPRIME_ROUTER_SETUP.md)**
 
@@ -384,6 +384,14 @@ This guide includes:
 - Escalation alerts
 - Testing protocols
 - Exportable JSON blueprint
+
+🚀 **[Current Status & Activation Guide](./docs/SINTRAPRIME_STATUS.md)** ← **Start Here**
+
+See what's working now:
+- ✅ Active webhook endpoint (`/webhooks/make`)
+- ✅ 4 working action handlers
+- ✅ Database integration
+- ✅ Complete test examples
 
 ## Future Enhancements
 
