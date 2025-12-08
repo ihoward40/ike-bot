@@ -423,6 +423,7 @@ Gmail → Normalizer → Router → Make.com pipeline:
 - Intelligent routing engine (6 creditors + fallback)
 - Risk scoring & dishonor prediction
 - Beneficiary impact detection
+- **NEW: Notion case auto-linking**
 - Batch processing support
 - Railway/Render deployment ready
 
@@ -431,17 +432,29 @@ Gmail → Normalizer → Router → Make.com pipeline:
 npm run router:dev    # Development mode
 npm run router:start  # Production mode
 npm run router:test   # Run tests
+npm run notion:test   # Test Notion linker
 ```
 
 **Endpoints:**
 - `GET /health` - Health check
-- `POST /route-email` - Route single Gmail message
+- `POST /route-email` - Route single Gmail message (+ auto-link to Notion)
 - `POST /route-email/batch` - Batch processing
 - `POST /test-router` - Test routing logic
 
 📚 **[Router Usage Guide](./docs/SINTRAPRIME_ROUTER_USAGE.md)**
 
 Integration examples and code samples
+
+🔥 **[Notion Case Auto-Linker](./docs/NOTION_CASE_LINKER.md)** ← **NEW**
+
+Automatic case management in Notion:
+- Smart case matching (creditor + thread similarity)
+- Auto-create new cases with full metadata
+- Intelligent updates (only upgrade risk/dishonor levels)
+- Tag merging and summary appending
+- Notion database schema guide
+- Make.com integration
+- Testing & monitoring guide
 
 ## Future Enhancements
 

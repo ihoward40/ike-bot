@@ -11,6 +11,19 @@ import { logger } from '../config/logger';
 // Import JavaScript modules
 const { normalizeGmailMessage } = require('../utils/normalizer-gmail');
 const { routeMessage } = require('../utils/sintraprime-router-v1');
+const { NotionCaseLinker } = require('../utils/notion-case-linker');
+
+// Initialize Notion Case Linker (if configured)
+let caseLinker: any = null;
+if (process.env.NOTION_API_KEY && process.env.NOTION_DATABASE_ID) {
+  caseLinker = new NotionCaseLinker(
+    process.env.NOTION_API_KEY,
+    process.env.NOTION_DATABASE_ID
+  );
+  logger.info('Notion Case Linker initialized');
+} else {
+  logger.warn('Notion Case Linker not configured - set NOTION_API_KEY and NOTION_DATABASE_ID');
+}
 
 const app = express();
 
@@ -106,14 +119,43 @@ app.post('/route-email', async (req: Request, res: Response) => {
       riskLevel: decision.riskLevel 
     });
 
-    // Step 3: Log to database
-    await logRoutingDecision(traceId, normalized, decision);
+    // Step 3: Link to Notion case (if configured)
+    let notionCase = null;
+    if (caseLinker) {
+      try {
+        notionCase = await caseLinker.linkOrCreateCase(decision, normalized);
+        logger.info({ 
+          traceId, 
+          message: 'Notion case linked',
+          caseId: notionCase.caseId,
+          action: notionCase.action,
+          isNew: notionCase.isNew
+        });
+      } catch (notionError: any) {
+        logger.error({ 
+          traceId, 
+          message: 'Notion linking failed',
+          error: notionError.message 
+        });
+        // Continue processing even if Notion fails
+      }
+    }
 
-    // Step 4: Return decision to Make.com
+    // Step 4: Log to database
+    await logRoutingDecision(traceId, normalized, decision, notionCase);
+
+    // Step 5: Return decision to Make.com
     res.json({
       ok: true,
       route: decision.dispatchTarget,
       data: decision,
+      notionCase: notionCase ? {
+        id: notionCase.caseId,
+        title: notionCase.caseTitle,
+        url: notionCase.caseUrl,
+        action: notionCase.action,
+        isNew: notionCase.isNew
+      } : null,
       meta: {
         traceId,
         timestamp: new Date().toISOString(),
@@ -296,7 +338,8 @@ function extractTimestamp(traceId: string): number {
 async function logRoutingDecision(
   traceId: string, 
   normalized: any, 
-  decision: any
+  decision: any,
+  notionCase?: any
 ): Promise<void> {
   try {
     await supabase.from('agent_logs').insert({
@@ -315,7 +358,13 @@ async function logRoutingDecision(
         tags: decision.tags,
         reason: decision.reason,
         dishonorPrediction: decision.meta.dishonorPrediction,
-        beneficiaryImpact: decision.meta.beneficiaryImpact
+        beneficiaryImpact: decision.meta.beneficiaryImpact,
+        notionCase: notionCase ? {
+          caseId: notionCase.caseId,
+          caseTitle: notionCase.caseTitle,
+          action: notionCase.action,
+          isNew: notionCase.isNew
+        } : null
       }
     });
   } catch (err: any) {

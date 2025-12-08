@@ -10,12 +10,15 @@
     "router:dev": "ts-node-dev --respawn --transpile-only src/router-server.ts",
     "router:start": "node dist/router-server.js",
     "router:test": "node test/sintraprime-router.test.js",
+    "notion:test": "jest test/notion-case-linker.test.js",
+    "test": "jest",
     "db:init": "supabase db execute --file supabase/migrations/00001_init_schema.sql",
     "db:seed": "supabase db execute --file supabase/migrations/00002_seed_data.sql",
     "db:migrate": "supabase db push",
     "db:reset": "supabase db reset"
   },
   "dependencies": {
+    "@notionhq/client": "^2.2.15",
     "@supabase/supabase-js": "^2.84.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -30,8 +33,11 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.5.1",
     "@types/uuid": "^10.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   }
