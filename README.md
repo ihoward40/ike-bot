@@ -404,7 +404,7 @@ Automated email monitoring:
 - Slack alerts
 - SintraPrime webhook integration
 
-🔧 **[SintraPrime Router v1 Upgrades](./docs/SINTRAPRIME_ROUTER_V1_UPGRADES.md)** ← **New**
+🔧 **[SintraPrime Router v1 Upgrades](./docs/SINTRAPRIME_ROUTER_V1_UPGRADES.md)**
 
 Advanced enhancements:
 - Gmail OAuth connection helper
@@ -414,6 +414,34 @@ Advanced enhancements:
 - Error handling with retry & DLQ
 - Security guardrails (tokens, sanitization, rate limiting)
 - SintraPrime intelligence hooks (dishonor prediction, beneficiary protection, case linking)
+
+⚡ **[Router Microservice](./docs/SINTRAPRIME_ROUTER_MICROSERVICE.md)** ← **Production Ready**
+
+Gmail → Normalizer → Router → Make.com pipeline:
+- Express microservice with REST API
+- Gmail message normalization
+- Intelligent routing engine (6 creditors + fallback)
+- Risk scoring & dishonor prediction
+- Beneficiary impact detection
+- Batch processing support
+- Railway/Render deployment ready
+
+**Quick Start:**
+```bash
+npm run router:dev    # Development mode
+npm run router:start  # Production mode
+npm run router:test   # Run tests
+```
+
+**Endpoints:**
+- `GET /health` - Health check
+- `POST /route-email` - Route single Gmail message
+- `POST /route-email/batch` - Batch processing
+- `POST /test-router` - Test routing logic
+
+📚 **[Router Usage Guide](./docs/SINTRAPRIME_ROUTER_USAGE.md)**
+
+Integration examples and code samples
 
 ## Future Enhancements
 
