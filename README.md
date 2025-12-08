@@ -404,6 +404,17 @@ Automated email monitoring:
 - Slack alerts
 - SintraPrime webhook integration
 
+🔧 **[SintraPrime Router v1 Upgrades](./docs/SINTRAPRIME_ROUTER_V1_UPGRADES.md)** ← **New**
+
+Advanced enhancements:
+- Gmail OAuth connection helper
+- Message normalizer function
+- Expanded trigger conditions (7 creditors)
+- Structured JSON routing logic
+- Error handling with retry & DLQ
+- Security guardrails (tokens, sanitization, rate limiting)
+- SintraPrime intelligence hooks (dishonor prediction, beneficiary protection, case linking)
+
 ## Future Enhancements
 
 - [ ] Job queue for background processing (Bull/BullMQ)
