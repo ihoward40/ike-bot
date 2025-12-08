@@ -1,15 +1,28 @@
 # IKE BOT – Trust Automation Engine
+## SintraPrime Orchestration Router v1-v8 with Foundation Intelligence Layer
 
-A comprehensive backend API for trust automation, enforcement actions, and beneficiary management.
+A comprehensive enforcement automation system with complete operational intelligence for trust protection, beneficiary defense, and multi-agency regulatory coordination.
 
-## Features
+## 🚀 Production-Ready Features
 
+### Complete 8-Layer Intelligence Stack
+- **Router v1-v7**: Full enforcement pipeline (normalization → routing → countermeasures → timelines → execution → self-design)
+- **Router v8**: Foundation intelligence layer (telemetry, health monitoring, command center dashboard)
+- **Enhancement Modules**: Case linking (v11B), influence weighting (v11C), live stream processing (v12A)
+
+### Operational Capabilities
 - 🔐 **Full CRUD APIs** - Beneficiaries and credit disputes with validation
 - 📊 **Supabase Integration** - PostgreSQL database with migrations
 - 🔗 **Webhook Hub** - Stripe, Make.com, SendGrid, Postmark integrations
 - 🤖 **OpenAI Agent-Ready** - Tool definitions for AI agent integration
-- 📝 **Audit Logging** - Complete request/response logging with trace IDs
+- 📝 **Audit Logging** - Complete request/response logging with trace IDs + telemetry
 - ⚡ **Production-Ready** - Error handling, pagination, filtering, sorting
+- 🎯 **Real-time Dashboard** - Command Center with case prioritization
+- 📈 **System Health Monitoring** - Performance metrics and alerting foundation
+- 🔗 **Intelligent Case Linking** - Automatic relationship discovery (creditor, beneficiary, timeline, template)
+- 🏆 **Priority Scoring** - 6-factor influence weighting for smart case prioritization
+- 📱 **Daily Briefings** - Automated Slack digests with top priority cases
+- 📁 **Evidence Organization** - Auto-filing in structured case folders
 
 ## Setup
 
