@@ -19,7 +19,7 @@
     "db:reset": "supabase db reset"
   },
   "dependencies": {
-    "@notionhq/client": "^2.2.15",
+    "@notionhq/client": "^2.3.0",
     "@supabase/supabase-js": "^2.84.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
