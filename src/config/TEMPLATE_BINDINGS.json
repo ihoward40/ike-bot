@@ -1,0 +1,170 @@
+{
+  "VERIZON_INITIAL_DISPUTE": {
+    "googleDocId": "GDOC_VERZ_01",
+    "notionTemplateId": "NOTION_VERZ_INIT",
+    "makeScenarioId": 2001,
+    "driveFolderPath": "/Verizon/Disputes/"
+  },
+  "VERIZON_ADMIN_FOLLOWUP": {
+    "googleDocId": "GDOC_VERZ_02",
+    "notionTemplateId": "NOTION_VERZ_ADMIN",
+    "makeScenarioId": 2002,
+    "driveFolderPath": "/Verizon/Admin/"
+  },
+  "VERIZON_FINAL_LEGAL_DEMAND": {
+    "googleDocId": "GDOC_VERZ_03",
+    "notionTemplateId": "NOTION_VERZ_FINAL",
+    "makeScenarioId": 2003,
+    "driveFolderPath": "/Verizon/LegalDemand/"
+  },
+  "FCC_TELECOM_COMPLAINT": {
+    "googleDocId": "GDOC_VERZ_FCC",
+    "notionTemplateId": "NOTION_VERZ_FCC",
+    "makeScenarioId": 2004,
+    "driveFolderPath": "/Verizon/FCC/"
+  },
+  "BPU_VERIZON_COMPLAINT": {
+    "googleDocId": "GDOC_VERZ_BPU",
+    "notionTemplateId": "NOTION_VERZ_BPU",
+    "makeScenarioId": 2005,
+    "driveFolderPath": "/Verizon/BPU/"
+  },
+  "TRO_TEMPLATE_VERIZON": {
+    "googleDocId": "GDOC_VERZ_TRO",
+    "notionTemplateId": "NOTION_VERZ_TRO",
+    "makeScenarioId": 2006,
+    "driveFolderPath": "/Verizon/TRO/"
+  },
+  "IRS_FORMAL_RESPONSE_PACKAGE": {
+    "googleDocId": "GDOC_IRS_01",
+    "notionTemplateId": "NOTION_IRS_RESP",
+    "makeScenarioId": 2007,
+    "driveFolderPath": "/IRS/FormalResponse/"
+  },
+  "IRS_APPEAL_TEMPLATE": {
+    "googleDocId": "GDOC_IRS_APPEAL",
+    "notionTemplateId": "NOTION_IRS_APPEAL",
+    "makeScenarioId": 2008,
+    "driveFolderPath": "/IRS/Appeals/"
+  },
+  "IRS_TAS_HARDSHIP_REQUEST": {
+    "googleDocId": "GDOC_IRS_TAS",
+    "notionTemplateId": "NOTION_IRS_TAS",
+    "makeScenarioId": 2009,
+    "driveFolderPath": "/IRS/TAS/"
+  },
+  "IRS_CDP_HEARING_REQUEST": {
+    "googleDocId": "GDOC_IRS_CDP",
+    "notionTemplateId": "NOTION_IRS_CDP",
+    "makeScenarioId": 2010,
+    "driveFolderPath": "/IRS/CDP/"
+  },
+  "IRS_PENALTY_ABATEMENT": {
+    "googleDocId": "GDOC_IRS_PENALTY",
+    "notionTemplateId": "NOTION_IRS_PENALTY",
+    "makeScenarioId": 2011,
+    "driveFolderPath": "/IRS/PenaltyAbatement/"
+  },
+  "WELLS_FARGO_INITIAL_DISPUTE": {
+    "googleDocId": "GDOC_WF_01",
+    "notionTemplateId": "NOTION_WF_INIT",
+    "makeScenarioId": 2012,
+    "driveFolderPath": "/WellsFargo/Disputes/"
+  },
+  "CFPB_COMPLAINT_TEMPLATE": {
+    "googleDocId": "GDOC_WF_CFPB",
+    "notionTemplateId": "NOTION_WF_CFPB",
+    "makeScenarioId": 2013,
+    "driveFolderPath": "/WellsFargo/CFPB/"
+  },
+  "OCC_COMPLAINT_TEMPLATE": {
+    "googleDocId": "GDOC_WF_OCC",
+    "notionTemplateId": "NOTION_WF_OCC",
+    "makeScenarioId": 2014,
+    "driveFolderPath": "/WellsFargo/OCC/"
+  },
+  "FDIC_COMPLAINT_TEMPLATE": {
+    "googleDocId": "GDOC_WF_FDIC",
+    "notionTemplateId": "NOTION_WF_FDIC",
+    "makeScenarioId": 2015,
+    "driveFolderPath": "/WellsFargo/FDIC/"
+  },
+  "CHASE_INITIAL_DISPUTE": {
+    "googleDocId": "GDOC_CHASE_01",
+    "notionTemplateId": "NOTION_CHASE_INIT",
+    "makeScenarioId": 2016,
+    "driveFolderPath": "/Chase/Disputes/"
+  },
+  "EWS_REPORT_DISPUTE": {
+    "googleDocId": "GDOC_CHASE_EWS",
+    "notionTemplateId": "NOTION_CHASE_EWS",
+    "makeScenarioId": 2017,
+    "driveFolderPath": "/Chase/EWS/"
+  },
+  "CHASE_CFPB_COMPLAINT": {
+    "googleDocId": "GDOC_CHASE_CFPB",
+    "notionTemplateId": "NOTION_CHASE_CFPB",
+    "makeScenarioId": 2018,
+    "driveFolderPath": "/Chase/CFPB/"
+  },
+  "DF_INITIAL_DISPUTE": {
+    "googleDocId": "GDOC_DF_01",
+    "notionTemplateId": "NOTION_DF_INIT",
+    "makeScenarioId": 2019,
+    "driveFolderPath": "/DakotaFinancial/Disputes/"
+  },
+  "DF_CFPB_EQUIPMENT_FINANCE": {
+    "googleDocId": "GDOC_DF_CFPB",
+    "notionTemplateId": "NOTION_DF_CFPB",
+    "makeScenarioId": 2020,
+    "driveFolderPath": "/DakotaFinancial/CFPB/"
+  },
+  "DF_STATE_AG_COMPLAINT": {
+    "googleDocId": "GDOC_DF_AG",
+    "notionTemplateId": "NOTION_DF_AG",
+    "makeScenarioId": 2021,
+    "driveFolderPath": "/DakotaFinancial/StateAG/"
+  },
+  "TIKTOK_ACCOUNT_APPEAL": {
+    "googleDocId": "GDOC_TIKTOK_01",
+    "notionTemplateId": "NOTION_TIKTOK_APPEAL",
+    "makeScenarioId": 2022,
+    "driveFolderPath": "/TikTok/Appeals/"
+  },
+  "FTC_TIKTOK_COMPLAINT": {
+    "googleDocId": "GDOC_TIKTOK_FTC",
+    "notionTemplateId": "NOTION_TIKTOK_FTC",
+    "makeScenarioId": 2023,
+    "driveFolderPath": "/TikTok/FTC/"
+  },
+  "CREDIT_BUREAU_DISPUTE": {
+    "googleDocId": "GDOC_GENERAL_CRA",
+    "notionTemplateId": "NOTION_GENERAL_CRA",
+    "makeScenarioId": 2024,
+    "driveFolderPath": "/General/CreditBureaus/"
+  },
+  "FCRA_REINVESTIGATION_REQUEST": {
+    "googleDocId": "GDOC_GENERAL_FCRA",
+    "notionTemplateId": "NOTION_GENERAL_FCRA",
+    "makeScenarioId": 2025,
+    "driveFolderPath": "/General/FCRA/"
+  },
+  "STATE_AG_COMPLAINT": {
+    "googleDocId": "GDOC_GENERAL_AG",
+    "notionTemplateId": "NOTION_GENERAL_AG",
+    "makeScenarioId": 2026,
+    "driveFolderPath": "/General/StateAG/"
+  },
+  "LITIGATION_DEMAND_LETTER": {
+    "googleDocId": "GDOC_GENERAL_LIT",
+    "notionTemplateId": "NOTION_GENERAL_LIT",
+    "makeScenarioId": 2027,
+    "driveFolderPath": "/General/Litigation/"
+  },
+  "EMERGENCY_TRO_TEMPLATE": {
+    "googleDocId": "GDOC_GENERAL_TRO",
+    "notionTemplateId": "NOTION_GENERAL_TRO",
+    "makeScenarioId": 2028,
+    "driveFolderPath": "/General/TRO/"
+  }
+}
