@@ -279,7 +279,7 @@ app.post('/test-router', async (req: Request, res: Response) => {
  * Generate a unique trace ID for request tracking
  */
 function generateTraceId(): string {
-  return `route_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `route_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 }
 
 /**
