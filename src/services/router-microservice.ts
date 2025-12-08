@@ -15,6 +15,10 @@ const { NotionCaseLinker } = require('../utils/notion-case-linker');
 const { generateCountermeasures } = require('../utils/countermeasure-engine');
 const { executeCountermeasurePlan } = require('../utils/template-automation');
 
+// Router v8 Foundation Layer imports
+const { getTelemetrySummary } = require('../utils/telemetry-summary');
+const { getSystemHealth } = require('../utils/health-monitor');
+
 // Initialize Notion Case Linker (if configured)
 let caseLinker: any = null;
 if (process.env.NOTION_API_KEY && process.env.NOTION_DATABASE_ID) {
@@ -56,24 +60,78 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.get('/health', (req: Request, res: Response) => {
   res.json({ 
     status: 'OK', 
-    service: 'SintraPrime Orchestration Router v1',
-    version: '1.0.0',
+    service: 'SintraPrime Orchestration Router v1-v8',
+    version: '8.0.0',
     timestamp: new Date().toISOString()
   });
 });
 
 app.get('/', (req: Request, res: Response) => {
   res.json({
-    service: 'SintraPrime Orchestration Router v1',
-    version: '1.0.0',
+    service: 'SintraPrime Orchestration Router v1-v8',
+    version: '8.0.0',
     endpoints: {
       health: 'GET /health',
+      commandCenter: 'GET /command-center',
+      telemetrySummary: 'GET /api/telemetry-summary',
+      systemHealth: 'GET /api/system-health',
       routeEmail: 'POST /route-email',
       routeEmailBatch: 'POST /route-email/batch',
       testRouter: 'POST /test-router'
     },
     documentation: 'https://github.com/ihoward40/ike-bot/docs/SINTRAPRIME_ROUTER_USAGE.md'
   });
+});
+
+// -----------------------
+// Router v8 Foundation Layer Endpoints
+// -----------------------
+
+/**
+ * GET /command-center
+ * 
+ * Command Center Lite dashboard - operational intelligence UI
+ */
+app.get('/command-center', (req: Request, res: Response) => {
+  try {
+    res.sendFile(require('path').join(__dirname, '../views/command-center.html'));
+  } catch (err: any) {
+    logger.error({ message: 'Failed to serve command center', error: err.message });
+    res.status(500).json({ ok: false, error: 'Failed to load command center' });
+  }
+});
+
+/**
+ * GET /api/telemetry-summary
+ * 
+ * Get aggregated telemetry statistics
+ * Query params:
+ *   - limit: number of events to analyze (default: 500)
+ */
+app.get('/api/telemetry-summary', (req: Request, res: Response) => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 500;
+    const summary = getTelemetrySummary(limit);
+    res.json(summary);
+  } catch (err: any) {
+    logger.error({ message: 'Failed to get telemetry summary', error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/system-health
+ * 
+ * Get current system health status and metrics
+ */
+app.get('/api/system-health', (req: Request, res: Response) => {
+  try {
+    const health = getSystemHealth();
+    res.json(health);
+  } catch (err: any) {
+    logger.error({ message: 'Failed to get system health', error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
+  }
 });
 
 // -----------------------
