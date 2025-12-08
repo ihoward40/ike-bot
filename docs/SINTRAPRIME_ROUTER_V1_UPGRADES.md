@@ -340,7 +340,7 @@ const normalized = {
     body_text: cleanBodyText(message['Body Plain'], message['Body HTML']),
     body_preview: cleanBodyText(message['Body Plain'], message['Body HTML']).substring(0, 200),
     timestamp: new Date(message.Date).toISOString(),
-    message_hash: require('crypto').createHash('sha256').update(message['Message ID']).digest('hex')
+    message_hash: sha256(message['Message ID']) // Use Make.com's built-in sha256() function
   },
   metadata: {
     tags: extractTags(cleanBodyText(message['Body Plain'], message['Body HTML'])),
@@ -834,6 +834,8 @@ function isRetryableError(error) {
   );
 }
 
+// Note: In Make.com, use the "Sleep" module instead of setTimeout
+// This is for IKE-BOT backend use only
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -1320,7 +1322,7 @@ class APIKeyManager {
     return newKey;
   }
   
-  private generateSecureKey(): string {
+  generateSecureKey() {
     return crypto.randomBytes(32).toString('hex');
   }
 }
@@ -1580,6 +1582,15 @@ function findRelatedCase(emailData, existingCases) {
   }
   
   return null;
+}
+
+function generateRandomString(length) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 }
 
 function generateUniqueId(emailData) {
