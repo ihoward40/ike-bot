@@ -2,19 +2,19 @@
 // Daily Ops Briefing for Slack
 
 const { sendSlackMessage } = require("./slack");
-const { readTelemetrySummary } = require("../utils/telemetry-summary");
+const { getTelemetrySummary } = require("../utils/telemetry-summary");
 const { getActiveCases, getUpcomingDeadlines } = require("./case-service");
-const { systemHealthCheck } = require("../utils/health-monitor");
+const { getSystemHealth } = require("../utils/health-monitor");
 
 /**
  * Build daily digest message
  * @returns {Promise<string>}
  */
 async function buildSlackDigest() {
-  const telemetry = readTelemetrySummary(300);
+  const telemetry = getTelemetrySummary(300);
   const cases = await getActiveCases();
   const deadlines = await getUpcomingDeadlines();
-  const health = await systemHealthCheck();
+  const health = getSystemHealth();
 
   const criticalCases = cases.filter(c => c.priority === "critical");
   const highCases = cases.filter(c => c.priority === "high");
@@ -57,9 +57,9 @@ ${urgentDeadlines.slice(0, 5).map(d =>
 • Slack: ${healthStatus.slack}
 
 📈 *Automation Performance (24h):*
-• Success Rate: ${(telemetry.successRate * 100).toFixed(1)}%
-• Failed Executions: ${telemetry.failExec}
-• Avg Duration: ${telemetry.avgDurationMs}ms
+• Success Rate: ${(telemetry.overall.successRate * 100).toFixed(1)}%
+• Failed Executions: ${telemetry.overall.failureCount}
+• Avg Duration: ${telemetry.overall.avgDurationMs}ms
 
 📂 *New Evidence Logged:* Auto-organizer active.
 

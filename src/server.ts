@@ -16,8 +16,8 @@ import { logger } from "./config/logger";
 
 // SintraPrime Router v1-v8 Integration
 const { buildCommandCenterLite } = require("./utils/command-center-lite");
-const { readTelemetrySummary } = require("./utils/telemetry-summary");
-const { systemHealthCheck } = require("./utils/health-monitor");
+const { getTelemetrySummary } = require("./utils/telemetry-summary");
+const { getSystemHealth } = require("./utils/health-monitor");
 const { sendSlackDigest } = require("./services/slack-digest");
 const { buildCaseLinks } = require("./utils/case-linker");
 const { handleEvent } = require("./utils/live-stream-processor");
@@ -85,7 +85,7 @@ app.get("/api/command-center-lite", async (_req, res) => {
 app.get("/api/telemetry-summary", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit as string) || 500;
-    const summary = readTelemetrySummary(limit);
+    const summary = getTelemetrySummary(limit);
     res.json({ ok: true, summary });
   } catch (error) {
     logger.error({ error }, "Telemetry summary error");
@@ -98,7 +98,7 @@ app.get("/api/telemetry-summary", async (req, res) => {
  */
 app.get("/api/system-health", async (_req, res) => {
   try {
-    const health = await systemHealthCheck();
+    const health = getSystemHealth();
     res.json({ ok: true, health });
   } catch (error) {
     logger.error({ error }, "System health check error");
@@ -111,7 +111,7 @@ app.get("/api/system-health", async (_req, res) => {
  */
 app.post("/health-check-run", async (_req, res) => {
   try {
-    const result = await systemHealthCheck();
+    const result = getSystemHealth();
     res.json({ ok: true, result });
   } catch (error) {
     logger.error({ error }, "Health check run error");

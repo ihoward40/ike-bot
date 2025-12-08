@@ -2,8 +2,8 @@
 // Command Center Lite - Operational Dashboard Data Builder
 
 const { getActiveCases, getUpcomingDeadlines } = require("../services/case-service");
-const { readTelemetrySummary } = require("./telemetry-summary");
-const { systemHealthCheck } = require("./health-monitor");
+const { getTelemetrySummary } = require("./telemetry-summary");
+const { getSystemHealth } = require("./health-monitor");
 const { computeCaseInfluence } = require("./case-influence");
 
 /**
@@ -15,8 +15,8 @@ async function buildCommandCenterLite() {
     const [cases, deadlines, telemetry, health] = await Promise.all([
       getActiveCases(),
       getUpcomingDeadlines(),
-      Promise.resolve(readTelemetrySummary(500)),
-      systemHealthCheck()
+      Promise.resolve(getTelemetrySummary(500)),
+      Promise.resolve(getSystemHealth())
     ]);
 
     // Enrich cases with influence scoring
@@ -45,10 +45,10 @@ async function buildCommandCenterLite() {
       overview: {
         totalCases: enrichedCases.length,
         upcomingDeadlines: deadlines.length,
-        automationSuccessRate: telemetry.successRate,
-        failedExecutions: telemetry.failExec,
-        lastExecution: telemetry.lastEvent,
-        avgDurationMs: telemetry.avgDurationMs
+        automationSuccessRate: telemetry.overall.successRate,
+        failedExecutions: telemetry.overall.failureCount,
+        lastExecution: telemetry.recentActivity[0] || null,
+        avgDurationMs: telemetry.overall.avgDurationMs
       },
       topPriorityCases: topCases.map(c => ({
         caseId: c.caseId,
