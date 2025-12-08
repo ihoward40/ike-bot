@@ -12,6 +12,7 @@ import { logger } from '../config/logger';
 const { normalizeGmailMessage } = require('../utils/normalizer-gmail');
 const { routeMessage } = require('../utils/sintraprime-router-v1');
 const { NotionCaseLinker } = require('../utils/notion-case-linker');
+const { generateCountermeasures } = require('../utils/countermeasure-engine');
 
 // Initialize Notion Case Linker (if configured)
 let caseLinker: any = null;
@@ -119,11 +120,41 @@ app.post('/route-email', async (req: Request, res: Response) => {
       riskLevel: decision.riskLevel 
     });
 
-    // Step 3: Link to Notion case (if configured)
+    // Step 3: Generate countermeasures (Router v4)
+    let countermeasures = null;
+    try {
+      countermeasures = generateCountermeasures(decision);
+      logger.info({ 
+        traceId, 
+        message: 'Countermeasures generated',
+        priority: countermeasures.priority,
+        posture: countermeasures.posture,
+        actionCount: countermeasures.actions.length,
+        requiresReview: countermeasures.requiresHumanReview
+      });
+    } catch (cmError: any) {
+      logger.error({ 
+        traceId, 
+        message: 'Countermeasure generation failed',
+        error: cmError.message 
+      });
+      // Continue processing even if countermeasures fail
+    }
+
+    // Step 4: Link to Notion case (if configured)
     let notionCase = null;
     if (caseLinker) {
       try {
-        notionCase = await caseLinker.linkOrCreateCase(decision, normalized);
+        notionCase = await caseLinker.linkOrCreateCase(decision, normalized, {
+          // Add countermeasure data if available
+          ...(countermeasures && {
+            recommendedPath: countermeasures.recommendedPath,
+            enforcementPosture: countermeasures.posture,
+            actionCount: countermeasures.actions.length,
+            nextDeadline: countermeasures.timelines?.immediate?.deadline,
+            requiresReview: countermeasures.requiresHumanReview
+          })
+        });
         logger.info({ 
           traceId, 
           message: 'Notion case linked',
@@ -141,14 +172,15 @@ app.post('/route-email', async (req: Request, res: Response) => {
       }
     }
 
-    // Step 4: Log to database
-    await logRoutingDecision(traceId, normalized, decision, notionCase);
+    // Step 5: Log to database
+    await logRoutingDecision(traceId, normalized, decision, notionCase, countermeasures);
 
-    // Step 5: Return decision to Make.com
+    // Step 6: Return decision to Make.com
     res.json({
       ok: true,
       route: decision.dispatchTarget,
       data: decision,
+      countermeasures: countermeasures || null,  // NEW: Router v4 output
       notionCase: notionCase ? {
         id: notionCase.caseId,
         title: notionCase.caseTitle,
@@ -339,13 +371,14 @@ async function logRoutingDecision(
   traceId: string, 
   normalized: any, 
   decision: any,
-  notionCase?: any
+  notionCase?: any,
+  countermeasures?: any
 ): Promise<void> {
   try {
     await supabase.from('agent_logs').insert({
       trace_id: traceId,
-      level: decision.riskLevel === 'critical' ? 'warn' : 'info',
-      message: `Email routed: ${decision.dispatchTarget}`,
+      level: countermeasures?.priority === 'critical' ? 'warn' : decision.riskLevel === 'critical' ? 'warn' : 'info',
+      message: `Email routed: ${decision.dispatchTarget}${countermeasures ? ` | Posture: ${countermeasures.posture}` : ''}`,
       action: 'route_email',
       metadata: {
         messageId: normalized.id,
@@ -359,6 +392,14 @@ async function logRoutingDecision(
         reason: decision.reason,
         dishonorPrediction: decision.meta.dishonorPrediction,
         beneficiaryImpact: decision.meta.beneficiaryImpact,
+        countermeasures: countermeasures ? {
+          priority: countermeasures.priority,
+          posture: countermeasures.posture,
+          recommendedPath: countermeasures.recommendedPath,
+          actionCount: countermeasures.actions.length,
+          requiresHumanReview: countermeasures.requiresHumanReview,
+          flags: countermeasures.flags
+        } : null,
         notionCase: notionCase ? {
           caseId: notionCase.caseId,
           caseTitle: notionCase.caseTitle,
