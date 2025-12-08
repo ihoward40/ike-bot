@@ -445,7 +445,7 @@ npm run notion:test   # Test Notion linker
 
 Integration examples and code samples
 
-🔥 **[Notion Case Auto-Linker](./docs/NOTION_CASE_LINKER.md)** ← **NEW**
+🔥 **[Notion Case Auto-Linker](./docs/NOTION_CASE_LINKER.md)**
 
 Automatic case management in Notion:
 - Smart case matching (creditor + thread similarity)
@@ -455,6 +455,51 @@ Automatic case management in Notion:
 - Notion database schema guide
 - Make.com integration
 - Testing & monitoring guide
+
+🎯 **[Router v4 Countermeasure Engine](./docs/COUNTERMEASURE_ENGINE.md)**
+
+Tactical enforcement planning:
+- Priority & posture decision logic (low→critical, observe→emergency)
+- Track selection (ADMIN, REGULATOR, IRS_PROCEDURE, LITIGATION, MONITOR)
+- Creditor-specific regulator mapping (FCC, CFPB, OCC, TAS, FTC)
+- Action plan builder with template keys and timeframes
+- Timeline calculator with deadline management
+- Human review requirement detection
+- Full integration with Router v2 + Router v3 (persona)
+
+⚡ **[Template Automation System](./docs/TEMPLATE_AUTOMATION.md)** ← **NEW**
+
+Master Template Key Map & Automation Engine:
+- **30+ enforcement templates** organized by creditor/category
+- **4 automation channels**: Google Docs, Notion, Make.com, Google Drive
+- **Automatic execution** of Router v4 countermeasure plans
+- **Complete integration** with full Router v1-v4 pipeline
+
+**Categories:**
+- Verizon (6 templates): Disputes, FCC/BPU complaints, TRO
+- IRS (5 templates): Responses, appeals, TAS, CDP, penalty abatement
+- Wells Fargo (4 templates): Disputes, CFPB/OCC/FDIC complaints
+- Chase/EWS (3 templates): Disputes, EWS report, CFPB
+- Dakota Financial (3 templates): Equipment finance disputes
+- TikTok (2 templates): Account appeals, FTC complaints
+- General (5 templates): Credit bureaus, FCRA, State AG, litigation, TRO
+
+**Quick Start:**
+```bash
+npm run template:test   # Test template registry
+```
+
+**API Example:**
+```javascript
+const { executeCountermeasurePlan } = require('./src/utils/template-automation');
+
+// Automatically generate documents, trigger Make.com, create Notion pages
+const results = await executeCountermeasurePlan(countermeasurePlan, {
+  caseId: 'CASE-VRZ-20251207-ABC123',
+  creditor: 'Verizon',
+  templateData: { account_number: '123', ... }
+});
+```
 
 ## Future Enhancements
 

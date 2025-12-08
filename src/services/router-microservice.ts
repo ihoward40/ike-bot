@@ -13,6 +13,7 @@ const { normalizeGmailMessage } = require('../utils/normalizer-gmail');
 const { routeMessage } = require('../utils/sintraprime-router-v1');
 const { NotionCaseLinker } = require('../utils/notion-case-linker');
 const { generateCountermeasures } = require('../utils/countermeasure-engine');
+const { executeCountermeasurePlan } = require('../utils/template-automation');
 
 // Initialize Notion Case Linker (if configured)
 let caseLinker: any = null;

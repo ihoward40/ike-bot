@@ -11,6 +11,7 @@
     "router:start": "node dist/router-server.js",
     "router:test": "node test/sintraprime-router.test.js",
     "notion:test": "jest test/notion-case-linker.test.js",
+    "template:test": "jest test/template-registry.test.js",
     "test": "jest",
     "db:init": "supabase db execute --file supabase/migrations/00001_init_schema.sql",
     "db:seed": "supabase db execute --file supabase/migrations/00002_seed_data.sql",
