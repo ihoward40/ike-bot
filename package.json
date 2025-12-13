@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc -p .",
     "start": "node dist/server.js",
+    "sintra": "ts-node src/sintraPrime/cli/sintra-cli.ts",
     "db:init": "supabase db execute --file supabase/migrations/00001_init_schema.sql",
     "db:seed": "supabase db execute --file supabase/migrations/00002_seed_data.sql",
     "db:migrate": "supabase db push",
