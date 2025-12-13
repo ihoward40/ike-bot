@@ -115,5 +115,7 @@ export class EnforcementPacketService {
     if (error) {
       throw new AppError(500, `Failed to delete enforcement packet: ${error.message}`);
     }
+
+    return { success: true };
   }
 }
