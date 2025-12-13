@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder_key_for_testing';
+const stripe = new Stripe(stripeKey, {
   apiVersion: '2025-11-17.clover',
 });
 
