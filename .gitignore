@@ -199,3 +199,6 @@ sintraprime-agent/logs/
 sintraprime-agent/memory/
 sintraprime-agent/node_modules/
 sintraprime-agent/.env
+
+# Flask output directory
+output/
