@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase';
+import { logger } from '../config/logger';
+import crypto from 'crypto';
 
 /**
  * Generic billing alert webhook handler
@@ -16,7 +18,7 @@ export const handleBillingAlert = async (req: Request, res: Response) => {
       });
     }
 
-    console.log(`Billing alert received from ${alert.source}: ${alert.alert_type}`);
+    logger.info({ source: alert.source, alertType: alert.alert_type }, 'Billing alert received');
 
     // Store the billing event
     const { data, error } = await supabase.from('billing_events').insert({
@@ -66,7 +68,7 @@ export const handleBillingAlert = async (req: Request, res: Response) => {
         await handleChargeDispute(alert);
         break;
       default:
-        console.log(`Unhandled billing alert type: ${alert.alert_type}`);
+        logger.info({ alertType: alert.alert_type }, 'Unhandled billing alert type');
     }
 
     res.json({ 
@@ -75,27 +77,27 @@ export const handleBillingAlert = async (req: Request, res: Response) => {
       event_id: data.id 
     });
   } catch (error: any) {
-    console.error('Error processing billing alert:', error);
+    logger.error({ error }, 'Error processing billing alert');
     res.status(500).json({ error: error.message });
   }
 };
 
 async function handlePaymentOverdue(alert: any) {
-  console.log(`Payment overdue alert for beneficiary: ${alert.beneficiary_id}`);
+  logger.info({ beneficiaryId: alert.beneficiary_id }, 'Payment overdue alert');
   // Could trigger notification workflow, enforcement action, etc.
 }
 
 async function handleSubscriptionCancelled(alert: any) {
-  console.log(`Subscription cancelled for beneficiary: ${alert.beneficiary_id}`);
+  logger.info({ beneficiaryId: alert.beneficiary_id }, 'Subscription cancelled');
   // Could update beneficiary status, send notification, etc.
 }
 
 async function handlePaymentMethodExpired(alert: any) {
-  console.log(`Payment method expired for beneficiary: ${alert.beneficiary_id}`);
+  logger.info({ beneficiaryId: alert.beneficiary_id }, 'Payment method expired');
   // Could send renewal reminder, update payment status, etc.
 }
 
 async function handleChargeDispute(alert: any) {
-  console.log(`Charge dispute alert: ${alert.message}`);
+  logger.info({ message: alert.message }, 'Charge dispute alert');
   // Could create enforcement packet, log dispute, etc.
 }
