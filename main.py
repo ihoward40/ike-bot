@@ -40,8 +40,29 @@ def log_to_notion(title, body, archive=False):
     requests.post("https://api.notion.com/v1/pages", headers=headers, data=json.dumps(data))
 
 def notify_sintra(event_type, payload):
+    """Send event to both SintraPrime webhook and dashboard"""
+    # Original webhook notification
     if SINTRA_WEBHOOK_URL:
-        requests.post(SINTRA_WEBHOOK_URL, json={"type": event_type, "payload": payload})
+        try:
+            requests.post(SINTRA_WEBHOOK_URL, json={"type": event_type, "payload": payload}, timeout=5)
+        except Exception as e:
+            print(f"Failed to notify Sintra webhook: {e}")
+    
+    # Also send to SintraPrime dashboard
+    sintra_dashboard_url = os.getenv("SINTRA_DASHBOARD_URL", "http://localhost:5011")
+    try:
+        requests.post(
+            f"{sintra_dashboard_url}/event",
+            json={
+                "event_type": event_type,
+                "payload": payload,
+                "source": "flask_backend",
+                "timestamp": datetime.now().isoformat()
+            },
+            timeout=5
+        )
+    except Exception as e:
+        print(f"Failed to notify Sintra dashboard: {e}")
 
 def send_to_gmail(subject, body, filepath):
     msg = EmailMessage()
@@ -95,12 +116,19 @@ def run_agent():
     data = request.json
     agent = data.get("agent")
     payload = data.get("payload", {})
+    
+    # Notify SintraPrime that agent run was requested
+    notify_sintra("agent_run_requested", {"agent": agent, "payload": payload})
+    
     if agent not in AGENTS:
+        notify_sintra("agent_error", {"agent": agent, "error": "Invalid agent name"})
         return jsonify({"error": "Invalid agent name."}), 400
     try:
         result = AGENTS[agent](payload)
+        notify_sintra("agent_run_completed", {"agent": agent, "result": result})
         return jsonify({"result": result}), 200
     except Exception as e:
+        notify_sintra("agent_run_failed", {"agent": agent, "error": str(e)})
         return jsonify({"error": str(e)}), 500
 
 @app.route("/intake", methods=["GET", "POST"])
@@ -119,8 +147,14 @@ def form_intake():
 
 @app.route("/digest", methods=["POST"])
 def trigger_digest():
-    send_daily_digest()
-    return jsonify({"status": "Daily digest sent"})
+    notify_sintra("digest_triggered", {"timestamp": datetime.now().isoformat()})
+    try:
+        send_daily_digest()
+        notify_sintra("digest_sent", {"status": "success", "timestamp": datetime.now().isoformat()})
+        return jsonify({"status": "Daily digest sent"})
+    except Exception as e:
+        notify_sintra("digest_failed", {"error": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 def affidavit_bot(payload):
     content = payload.get("statement", "Affidavit content not provided.")

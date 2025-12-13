@@ -1,0 +1,362 @@
+{
+  "name": "Verizon Enforcement Automation v1",
+  "description": "Automated enforcement packet generation and submission for Verizon cases with SintraPrime integration",
+  "version": "1.0.0",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": "{{WEBHOOK_ID}}",
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {},
+        "expect": [
+          {
+            "name": "case_id",
+            "type": "text",
+            "label": "Case ID",
+            "required": true
+          },
+          {
+            "name": "beneficiary_id",
+            "type": "text",
+            "label": "Beneficiary ID",
+            "required": true
+          },
+          {
+            "name": "enforcement_type",
+            "type": "select",
+            "label": "Enforcement Type",
+            "required": true,
+            "options": [
+              "ucc_lien",
+              "foia_request",
+              "notice_of_default",
+              "cease_and_desist"
+            ]
+          },
+          {
+            "name": "target_agency",
+            "type": "text",
+            "label": "Target Agency",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "url": "{{SINTRA_DASHBOARD_URL}}/event",
+        "method": "post",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "X-API-Key",
+            "value": "{{SINTRA_API_KEY}}"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "authUser": "",
+        "authPass": "",
+        "timeout": "",
+        "shareCookies": false,
+        "ca": "",
+        "rejectUnauthorized": true,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "gzip": true,
+        "useMtls": false,
+        "contentType": "application/json",
+        "serializeUrl": false,
+        "body": "{\n  \"event_type\": \"enforcement_initiated\",\n  \"case_id\": \"{{CASE_ID}}\",\n  \"beneficiary_id\": \"{{1.beneficiary_id}}\",\n  \"enforcement_type\": \"{{1.enforcement_type}}\",\n  \"target_agency\": \"{{1.target_agency}}\",\n  \"timestamp\": \"{{now}}\",\n  \"source\": \"make_automation\"\n}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "method": {
+              "label": "POST"
+            },
+            "bodyType": {
+              "label": "Raw"
+            },
+            "contentType": {
+              "label": "JSON (application/json)"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "handleErrors",
+            "type": "boolean",
+            "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+            "required": false
+          },
+          {
+            "name": "useNewZLibDeCompress",
+            "type": "hidden"
+          }
+        ],
+        "expect": [
+          {
+            "name": "url",
+            "type": "url",
+            "label": "URL",
+            "required": true
+          },
+          {
+            "name": "method",
+            "type": "select",
+            "label": "Method",
+            "required": true,
+            "validate": {
+              "enum": [
+                "get",
+                "post",
+                "put",
+                "patch",
+                "delete",
+                "options"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "url": "{{IKE_BOT_API_URL}}/api/v2/run-agent",
+        "method": "post",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "authUser": "",
+        "authPass": "",
+        "timeout": "",
+        "shareCookies": false,
+        "ca": "",
+        "rejectUnauthorized": true,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "gzip": true,
+        "useMtls": false,
+        "contentType": "application/json",
+        "serializeUrl": false,
+        "body": "{\n  \"agent\": \"enforcement_bot\",\n  \"payload\": {\n    \"case_id\": \"{{CASE_ID}}\",\n    \"beneficiary_id\": \"{{1.beneficiary_id}}\",\n    \"enforcement_type\": \"{{1.enforcement_type}}\",\n    \"target_agency\": \"{{1.target_agency}}\",\n    \"initiated_by\": \"make_automation\"\n  }\n}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "method": {
+              "label": "POST"
+            },
+            "bodyType": {
+              "label": "Raw"
+            },
+            "contentType": {
+              "label": "JSON (application/json)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "util:SetVariables",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "variables": [
+          {
+            "name": "enforcement_result",
+            "value": "{{3.data}}"
+          },
+          {
+            "name": "sintra_event_id",
+            "value": "{{2.data.event_id}}"
+          },
+          {
+            "name": "case_status",
+            "value": "processing"
+          }
+        ],
+        "scope": "roundtrip"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "scope": {
+              "label": "One cycle"
+            },
+            "variables": {
+              "items": [
+                null,
+                null,
+                null
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "url": "{{SINTRA_DASHBOARD_URL}}/mode",
+        "method": "post",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "X-API-Key",
+            "value": "{{SINTRA_API_KEY}}"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\n  \"mode\": \"enforcement_active\",\n  \"case_id\": \"{{CASE_ID}}\",\n  \"metadata\": {\n    \"enforcement_type\": \"{{1.enforcement_type}}\",\n    \"target_agency\": \"{{1.target_agency}}\",\n    \"timestamp\": \"{{now}}\"\n  }\n}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "method": {
+              "label": "POST"
+            },
+            "bodyType": {
+              "label": "Raw"
+            },
+            "contentType": {
+              "label": "JSON (application/json)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "gateway:WebhookRespond",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "status": "200",
+        "body": "{\n  \"success\": true,\n  \"case_id\": \"{{CASE_ID}}\",\n  \"enforcement_result\": {{4.enforcement_result}},\n  \"sintra_event_id\": \"{{4.sintra_event_id}}\",\n  \"status\": \"{{4.case_status}}\",\n  \"timestamp\": \"{{now}}\"\n}",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 1500,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "headers": {
+              "items": [
+                null
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
+  },
+  "variables": [
+    {
+      "name": "CASE_ID",
+      "description": "Unique case identifier",
+      "value": ""
+    },
+    {
+      "name": "WEBHOOK_ID",
+      "description": "Make.com webhook identifier",
+      "value": ""
+    },
+    {
+      "name": "SINTRA_DASHBOARD_URL",
+      "description": "SintraPrime dashboard base URL",
+      "value": "http://localhost:5011"
+    },
+    {
+      "name": "SINTRA_API_KEY",
+      "description": "API key for SintraPrime authentication",
+      "value": ""
+    },
+    {
+      "name": "IKE_BOT_API_URL",
+      "description": "IKE Bot FastAPI server URL",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

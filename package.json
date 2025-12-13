@@ -10,10 +10,13 @@
     "db:init": "supabase db execute --file supabase/migrations/00001_init_schema.sql",
     "db:seed": "supabase db execute --file supabase/migrations/00002_seed_data.sql",
     "db:migrate": "supabase db push",
-    "db:reset": "supabase db reset"
+    "db:reset": "supabase db reset",
+    "verify:blueprint": "node verify-blueprint.js",
+    "sintra:dashboard": "cd sintraprime-agent && npm run dashboard"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.84.0",
+    "axios": "^1.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
