@@ -1,6 +1,6 @@
 // CLI Commands for SintraPrime
 
-import { getSintraPrime } from '../core/sintraPrime';
+import { getSintraPrime, SintraPrime } from '../core/sintraPrime';
 import { SintraMode } from '../core/types';
 
 export class SintraCLI {
@@ -30,7 +30,7 @@ export class SintraCLI {
     }
   }
 
-  private static getStatus(sintra: any): string {
+  private static getStatus(sintra: SintraPrime): string {
     const status = sintra.getStatus();
     return `
 SintraPrime ${status.online ? 'ONLINE' : 'OFFLINE'}
@@ -43,7 +43,7 @@ Last Heartbeat: ${status.lastHeartbeat}
 `.trim();
   }
 
-  private static setMode(sintra: any, modeStr: string): string {
+  private static setMode(sintra: SintraPrime, modeStr: string): string {
     const modeUpper = modeStr.toUpperCase();
     
     if (!Object.values(SintraMode).includes(modeUpper as SintraMode)) {
@@ -54,7 +54,7 @@ Last Heartbeat: ${status.lastHeartbeat}
     return `Mode set to ${modeUpper}`;
   }
 
-  private static getEvents(sintra: any, count: number): string {
+  private static getEvents(sintra: SintraPrime, count: number): string {
     const events = sintra.getRecentEvents(count);
     
     if (events.length === 0) {
