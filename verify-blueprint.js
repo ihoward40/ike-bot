@@ -84,6 +84,6 @@ async function verifyBlueprint() {
 
 // Run verification
 verifyBlueprint().catch(error => {
-  console.error('❌ Verification failed:', error.message);
+  console.error('❌ Verification failed:', error.message || String(error));
   process.exit(1);
 });

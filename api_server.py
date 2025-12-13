@@ -116,15 +116,23 @@ async def notify_sintra_prime(event_type: str, payload: Dict[str, Any]) -> bool:
             json=event.dict(),
             timeout=5
         )
-        response.raise_for_status()
         
-        logger.info(
-            "sintra_event_sent",
-            event_type=event_type,
-            status_code=response.status_code,
-            payload_keys=list(payload.keys())
-        )
-        return True
+        # Check response status without raising exception
+        if response.status_code >= 200 and response.status_code < 300:
+            logger.info(
+                "sintra_event_sent",
+                event_type=event_type,
+                status_code=response.status_code,
+                payload_keys=list(payload.keys())
+            )
+            return True
+        else:
+            logger.warning(
+                "sintra_event_http_error",
+                event_type=event_type,
+                status_code=response.status_code
+            )
+            return False
         
     except requests.exceptions.RequestException as e:
         logger.error(
