@@ -1,14 +1,19 @@
 {
   "name": "sintraprime-agent",
-  "version": "1.0.0",
-  "description": "SintraPrime autonomous agent with IKE Bot integration",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "SintraPrime v1: Activated Reality Mode - Provably Alive AI Agent",
+  "main": "core-agent.js",
+  "bin": {
+    "sintra": "./sintra-cli.js"
+  },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node visibility-server.js",
+    "dev": "nodemon visibility-server.js",
+    "daemon": "node visibility-server.js",
     "dashboard": "node dashboard-server.js",
-    "heartbeat": "node heartbeat-monitor.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cli": "node sintra-cli.js",
+    "core": "node core-agent.js daemon",
+    "test": "node sintra-cli.js status"
   },
   "keywords": [
     "automation",
