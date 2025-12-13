@@ -187,6 +187,62 @@ Content-Type: application/json
 DELETE /api/credit-disputes/:id
 ```
 
+### Enforcement Packets
+
+#### List Enforcement Packets
+```http
+GET /api/enforcement-packets
+```
+
+Query parameters:
+- `page` (number): Page number
+- `limit` (number): Results per page
+- `sortBy` (string): Field to sort by
+- `sortOrder` (string): asc or desc
+- `status` (string): Filter by status (draft, pending, sent, completed, failed)
+- `beneficiary_id` (string): Filter by beneficiary UUID
+- `packet_type` (string): Filter by packet type
+
+#### Get Enforcement Packet
+```http
+GET /api/enforcement-packets/:id
+```
+
+#### Create Enforcement Packet
+```http
+POST /api/enforcement-packets
+Content-Type: application/json
+
+{
+  "beneficiary_id": "uuid",
+  "packet_type": "ucc_lien",
+  "description": "Filing UCC lien for trust enforcement",
+  "target_agency": "County Recorder",
+  "status": "draft"
+}
+```
+
+Packet types: `ucc_lien`, `foia_request`, `irs_rebuttal`, `affidavit`, `notice_of_default`, `other`
+
+Status values: `draft`, `pending`, `sent`, `completed`, `failed`
+
+#### Update Enforcement Packet
+```http
+PUT /api/enforcement-packets/:id
+Content-Type: application/json
+
+{
+  "status": "sent",
+  "description": "Updated description",
+  "tracking_number": "1234567890"
+}
+```
+
+#### Delete Enforcement Packet
+```http
+DELETE /api/enforcement-packets/:id
+```
+
 ## Webhooks
 
 All webhook endpoints accept POST requests.
@@ -280,7 +336,7 @@ Available tools:
 - `create_beneficiary` - Create a new beneficiary
 - `list_credit_disputes` - List credit disputes
 - `create_credit_dispute` - Create a new credit dispute
-- `run_enforcement_packet` - Create enforcement packet (future implementation)
+- `run_enforcement_packet` - Create enforcement packet with description field
 
 ## Database
 

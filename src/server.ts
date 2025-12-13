@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import beneficiaryRoutes from "./routes/beneficiary.routes";
 import creditDisputeRoutes from "./routes/creditDispute.routes";
+import enforcementPacketRoutes from "./routes/enforcementPacket.routes";
 import webhookRoutes from "./routes/webhook.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { 
@@ -38,6 +39,7 @@ app.get("/", (_req, res) => {
 // API Routes
 app.use("/api/beneficiaries", beneficiaryRoutes);
 app.use("/api/credit-disputes", creditDisputeRoutes);
+app.use("/api/enforcement-packets", enforcementPacketRoutes);
 
 // Error handling - error logger before error handler
 app.use(errorLogger);
