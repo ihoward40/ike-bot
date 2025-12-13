@@ -64,17 +64,6 @@ export class EnforcementPacketService {
   }
 
   async create(input: CreateEnforcementPacketInput) {
-    // Verify beneficiary exists
-    const { data: beneficiary, error: beneficiaryError } = await supabase
-      .from('beneficiaries')
-      .select('id')
-      .eq('id', input.beneficiary_id)
-      .single();
-
-    if (beneficiaryError || !beneficiary) {
-      throw new AppError(404, 'Beneficiary not found');
-    }
-
     const { data, error } = await supabase
       .from('enforcement_packets')
       .insert(input)
