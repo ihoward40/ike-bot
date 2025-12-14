@@ -22,17 +22,30 @@ function getPlatform(): "windows" | "macos" | "linux" | "unknown" {
 }
 
 /**
+ * Sanitize text for shell commands to prevent command injection
+ */
+function sanitizeText(text: string): string {
+  // Remove dangerous characters and limit length
+  return text
+    .replace(/[`$\\]/g, '') // Remove backticks, dollar signs, backslashes
+    .replace(/[\n\r]/g, ' ') // Replace newlines with spaces
+    .substring(0, 500); // Limit length to prevent abuse
+}
+
+/**
  * Generate TTS command based on platform
  */
 function getTTSCommand(text: string): string | null {
   const platform = getPlatform();
   
-  // Escape text for shell
-  const escapedText = text.replace(/"/g, '\\"');
+  // Sanitize text to prevent command injection
+  const sanitizedText = sanitizeText(text);
+  // Escape remaining special characters for shell
+  const escapedText = sanitizedText.replace(/["']/g, '');
 
   switch (platform) {
     case "windows":
-      // PowerShell TTS
+      // PowerShell TTS - use single quotes to prevent expansion
       return `powershell -Command "Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Speak('${escapedText}')"`;
     
     case "macos":

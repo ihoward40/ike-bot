@@ -92,10 +92,17 @@ export function readEvents(date?: Date): MemoryEvent[] {
     const content = fs.readFileSync(logPath, "utf-8");
     const lines = content.trim().split("\n").filter((line: string) => line);
     
-    return lines.map((line: string) => {
+    return lines.map((line: string, index: number) => {
       try {
         return JSON.parse(line) as MemoryEvent;
-      } catch {
+      } catch (error) {
+        // Log malformed lines for debugging and data integrity monitoring
+        logger.warn({
+          error,
+          line,
+          lineNumber: index + 1,
+          file: logPath
+        }, "[SintraPrime Memory] Malformed JSON line");
         return null;
       }
     }).filter((event: MemoryEvent | null): event is MemoryEvent => event !== null);
