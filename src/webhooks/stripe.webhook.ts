@@ -2,13 +2,25 @@ import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-11-17.clover',
-});
+const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder';
+let stripe: Stripe | null = null;
+
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = new Stripe(stripeKey, {
+    apiVersion: '2025-11-17.clover',
+  });
+} else {
+  console.warn('Stripe secret key not configured. Stripe webhooks will be disabled.');
+}
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
 export const handleStripeWebhook = async (req: Request, res: Response) => {
+  if (!stripe) {
+    console.error('Stripe not configured');
+    return res.status(503).json({ error: 'Stripe integration not configured' });
+  }
+
   const sig = req.headers['stripe-signature'] as string;
 
   if (!webhookSecret) {
