@@ -8,3 +8,4 @@ requests
 structlog
 uvicorn
 fastapi
+elevenlabs

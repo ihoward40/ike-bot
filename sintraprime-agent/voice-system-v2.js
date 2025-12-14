@@ -293,18 +293,12 @@ class VoiceSystemV2 {
     
     // Windows: Use intelligent tier selection
     
-    // ElevenLabs for high-value moments (if configured and within budget)
+    // ElevenLabs as primary voice engine (if configured and within budget)
     if (this.elevenLabsApiKey && this.elevenLabsCharCount < this.elevenLabsLimit) {
-      if (
-        category === this.phraseCategories.LEGAL ||
-        category === this.phraseCategories.CRITICAL ||
-        priority === 'critical'
-      ) {
-        return this.tiers.ELEVENLABS;
-      }
+      return this.tiers.ELEVENLABS;
     }
 
-    // Edge TTS for everything else (default workhorse)
+    // Edge TTS as fallback when ElevenLabs is not available or limit reached
     return this.tiers.EDGE;
   }
 
