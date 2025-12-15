@@ -5,6 +5,7 @@
 
 import { Router, Request, Response } from "express";
 import { agentCore, stateMachine, contextMemory, intentRouter, toolAuthority } from "../sintraPrime";
+import { TaskState } from "../sintraPrime/agent";
 import { logger } from "../config/logger";
 
 const router = Router();
@@ -45,6 +46,41 @@ router.post("/tasks/:taskId/approve", async (req: Request, res: Response) => {
   } catch (error) {
     logger.error({ error }, "[Agent API] Approve failed");
     res.status(500).json({ error: "Task approval failed" });
+  }
+});
+
+/**
+ * Cancel a task
+ * POST /api/agent/tasks/:taskId/cancel
+ */
+router.post("/tasks/:taskId/cancel", (req: Request, res: Response) => {
+  try {
+    const { taskId } = req.params;
+    const { userId = "default", reason } = req.body ?? {};
+
+    const task = agentCore.getTaskStatus(taskId);
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    try {
+      stateMachine.transitionTask(
+        taskId,
+        TaskState.CANCELLED,
+        typeof reason === "string" && reason.length > 0 ? reason : `Cancelled by ${userId}`
+      );
+
+      res.json({ success: true, taskId, state: TaskState.CANCELLED });
+    } catch (transitionError) {
+      res.status(409).json({
+        error: "Cannot cancel task in current state",
+        taskId,
+        state: task.state
+      });
+    }
+  } catch (error) {
+    logger.error({ error }, "[Agent API] Cancel task failed");
+    res.status(500).json({ error: "Failed to cancel task" });
   }
 });
 
@@ -198,8 +234,11 @@ router.get("/stats", (req: Request, res: Response) => {
           planning: stateMachine.getTasksByState("planning" as any).length,
           awaiting_approval: stateMachine.getTasksByState("awaiting_approval" as any).length,
           executing: stateMachine.getTasksByState("executing" as any).length,
+          paused: stateMachine.getTasksByState("paused" as any).length,
+          waiting: stateMachine.getTasksByState("waiting" as any).length,
           completed: stateMachine.getTasksByState("completed" as any).length,
-          failed: stateMachine.getTasksByState("failed" as any).length
+          failed: stateMachine.getTasksByState("failed" as any).length,
+          cancelled: stateMachine.getTasksByState("cancelled" as any).length
         }
       },
       memory: memoryStats,
