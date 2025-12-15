@@ -160,10 +160,14 @@ export async function announceEvent(eventType: string, message?: string): Promis
  */
 export function getTTSInfo(): {
   platform: string;
+  supported: boolean;
   available: boolean;
+  availabilityKnown: boolean;
+  lastCheckedAt?: number;
   engine: string;
 } {
   const platform = getPlatform();
+  const supported = platform !== "unknown";
   let engine = "none";
 
   switch (platform) {
@@ -180,7 +184,14 @@ export function getTTSInfo(): {
 
   return {
     platform,
-    available: platform !== "unknown",
+    supported,
+    availabilityKnown:
+      !!cachedAvailability && Date.now() - cachedAvailability.checkedAt < AVAILABILITY_CACHE_MS,
+    available:
+      !!cachedAvailability && Date.now() - cachedAvailability.checkedAt < AVAILABILITY_CACHE_MS
+        ? cachedAvailability.value
+        : false,
+    lastCheckedAt: cachedAvailability?.checkedAt,
     engine
   };
 }
