@@ -384,6 +384,15 @@ Agent checks for waiting tasks every 60 seconds (configurable in `core/index.ts`
 agentCore.startPeriodicCheck(60000); // 60 seconds
 ```
 
+### Audio (TTS)
+SintraPrime audio is best-effort. If the required TTS engine is not available, speech is skipped and the agent continues without failing.
+
+Platform backends:
+- Windows: PowerShell + System.Speech
+- macOS: say
+- Linux: espeak
+
+
 ### Memory Limits
 - Max context entries per user: 1000
 - Max conversation history: 100 items
