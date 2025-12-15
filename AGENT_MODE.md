@@ -162,6 +162,17 @@ POST /api/agent/tasks/{taskId}/approve
 
 Transitions task to `executing` and runs the plan.
 
+### Cancel Task
+```bash
+POST /api/agent/tasks/{taskId}/cancel
+{
+  "userId": "user123",
+  "reason": "No longer needed"
+}
+```
+
+Transitions task to `cancelled` if it is in a cancellable state.
+
 ### Get Task Status
 ```bash
 GET /api/agent/tasks/{taskId}
@@ -174,7 +185,7 @@ Returns complete task details including state, plan, and progress.
 GET /api/agent/tasks?state=awaiting_approval
 ```
 
-Filter by state: `created`, `planning`, `awaiting_approval`, `executing`, `completed`, `failed`
+Filter by state: `created`, `planning`, `awaiting_approval`, `executing`, `paused`, `waiting`, `completed`, `failed`, `cancelled`
 
 ### Get User Context
 ```bash
@@ -461,8 +472,10 @@ const prefs = contextMemory.getContextByType(userId, "preference");
 # Check task details
 curl http://localhost:3000/api/agent/tasks/{taskId}
 
-# View last step executed
 # If needed, cancel and retry
+curl -X POST http://localhost:3000/api/agent/tasks/{taskId}/cancel \
+  -H "Content-Type: application/json" \
+  -d '{"userId":"user123","reason":"stuck"}'
 ```
 
 ### Memory Growing Large
