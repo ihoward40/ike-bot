@@ -4,8 +4,7 @@
  */
 
 import { Router, Request, Response } from "express";
-import { agentCore, stateMachine, contextMemory, intentRouter, toolAuthority } from "../sintraPrime";
-import { TaskState } from "../sintraPrime/agent";
+import { agentCore, stateMachine, contextMemory, intentRouter, toolAuthority, TaskState } from "../sintraPrime";
 import { logger } from "../config/logger";
 
 const router = Router();
