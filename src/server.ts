@@ -4,6 +4,7 @@ import cors from "cors";
 import beneficiaryRoutes from "./routes/beneficiary.routes";
 import creditDisputeRoutes from "./routes/creditDispute.routes";
 import webhookRoutes from "./routes/webhook.routes";
+import agentRoutes from "./routes/agent.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { 
   traceMiddleware, 
@@ -36,8 +37,9 @@ app.get("/", (_req, res) => {
   const sintraStatus = SintraPrime.getStatus();
   res.json({ 
     ok: true, 
-    message: "IKE-BOT running",
-    sintraPrime: sintraStatus
+    message: "IKE-BOT running with Agent Mode",
+    sintraPrime: sintraStatus,
+    agentMode: true
   });
 });
 
@@ -50,6 +52,7 @@ app.get("/api/sintraprime/status", (_req, res) => {
 // API Routes
 app.use("/api/beneficiaries", beneficiaryRoutes);
 app.use("/api/credit-disputes", creditDisputeRoutes);
+app.use("/api/agent", agentRoutes);
 
 // Error handling - error logger before error handler
 app.use(errorLogger);

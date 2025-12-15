@@ -7,11 +7,12 @@ import { startHeartbeat, stopHeartbeat, isHeartbeatRunning } from "./heartbeat";
 import { initializeMemory, logEvent } from "./memory";
 import { logTimeEvent } from "./timeTracker";
 import { speak, isTTSAvailable, getTTSInfo } from "../tts/voiceSystem";
+import { agentCore } from "../agent/agentCore";
 
 let isActive = false;
 
 /**
- * Activate SintraPrime system
+ * Activate SintraPrime system with agent mode
  */
 export async function activate(): Promise<void> {
   if (isActive) {
@@ -20,7 +21,7 @@ export async function activate(): Promise<void> {
   }
 
   try {
-    logger.info("[SintraPrime] Activating...");
+    logger.info("[SintraPrime] Activating with Agent Mode...");
 
     // Initialize memory system
     initializeMemory();
@@ -35,7 +36,8 @@ export async function activate(): Promise<void> {
       nodeVersion: process.version,
       platform: process.platform,
       arch: process.arch,
-      uptime: process.uptime()
+      uptime: process.uptime(),
+      agentMode: true
     });
 
     // Check TTS availability
@@ -48,13 +50,17 @@ export async function activate(): Promise<void> {
 
     logEvent("tts_check", { ...ttsInfo, available: ttsAvailable });
 
+    // Start agent mode periodic checks
+    agentCore.startPeriodicCheck(60000); // Check every minute
+    logger.info("[SintraPrime] Agent mode periodic checks started");
+
     // Announce activation if TTS is available
     if (ttsAvailable) {
-      await speak("SintraPrime is now active");
+      await speak("SintraPrime agent mode is now active");
     }
 
     isActive = true;
-    logger.info("[SintraPrime] ✓ ACTIVE");
+    logger.info("[SintraPrime] ✓ ACTIVE (Agent Mode)");
 
   } catch (error) {
     logger.error({ error }, "[SintraPrime] Activation failed");
@@ -77,6 +83,10 @@ export async function deactivate(): Promise<void> {
   try {
     logger.info("[SintraPrime] Deactivating...");
 
+    // Stop agent mode periodic checks
+    agentCore.stopPeriodicCheck();
+    logger.info("[SintraPrime] Agent mode periodic checks stopped");
+
     // Log deactivation
     logTimeEvent("sintraprime_deactivated");
     logEvent("deactivation", {
@@ -86,7 +96,7 @@ export async function deactivate(): Promise<void> {
     // Announce deactivation if TTS is available
     const ttsAvailable = await isTTSAvailable();
     if (ttsAvailable) {
-      await speak("SintraPrime is shutting down");
+      await speak("SintraPrime agent mode is shutting down");
     }
 
     // Stop heartbeat
