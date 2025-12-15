@@ -62,6 +62,10 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# SintraPrime runtime files
+logs/
+memory/
+
 # Flask stuff:
 instance/
 .webassets-cache
