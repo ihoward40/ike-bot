@@ -10,6 +10,9 @@ import { logEvent } from "../core/memory";
 
 const execAsync = promisify(exec);
 
+const AVAILABILITY_CACHE_MS = 30_000;
+let cachedAvailability: { value: boolean; checkedAt: number } | null = null;
+
 /**
  * Detect platform
  */
@@ -27,8 +30,8 @@ function getPlatform(): "windows" | "macos" | "linux" | "unknown" {
 function sanitizeText(text: string): string {
   // Remove dangerous characters and limit length
   return text
-    .replace(/[`$\\]/g, '') // Remove backticks, dollar signs, backslashes
-    .replace(/[\n\r]/g, ' ') // Replace newlines with spaces
+    .replace(/[`$\\]/g, "") // Remove backticks, dollar signs, backslashes
+    .replace(/[\n\r]/g, " ") // Replace newlines with spaces
     .substring(0, 500); // Limit length to prevent abuse
 }
 
@@ -37,25 +40,25 @@ function sanitizeText(text: string): string {
  */
 function getTTSCommand(text: string): string | null {
   const platform = getPlatform();
-  
+
   // Sanitize text to prevent command injection
   const sanitizedText = sanitizeText(text);
   // Escape remaining special characters for shell
-  const escapedText = sanitizedText.replace(/["']/g, '');
+  const escapedText = sanitizedText.replace(/["']/g, "");
 
   switch (platform) {
     case "windows":
       // PowerShell TTS - use single quotes to prevent expansion
       return `powershell -Command "Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Speak('${escapedText}')"`;
-    
+
     case "macos":
       // macOS say command
       return `say "${escapedText}"`;
-    
+
     case "linux":
       // Linux espeak
       return `espeak "${escapedText}"`;
-    
+
     default:
       return null;
   }
@@ -65,28 +68,40 @@ function getTTSCommand(text: string): string | null {
  * Check if TTS is available on the system
  */
 export async function isTTSAvailable(): Promise<boolean> {
+  const now = Date.now();
+  if (cachedAvailability && now - cachedAvailability.checkedAt < AVAILABILITY_CACHE_MS) {
+    return cachedAvailability.value;
+  }
+
   const platform = getPlatform();
-  
+  let available = false;
+
   try {
     switch (platform) {
       case "windows":
-        await execAsync("powershell -Command \"Get-Command Add-Type\"");
-        return true;
-      
+        await execAsync('powershell -Command "Get-Command Add-Type"');
+        available = true;
+        break;
+
       case "macos":
         await execAsync("which say");
-        return true;
-      
+        available = true;
+        break;
+
       case "linux":
         await execAsync("which espeak");
-        return true;
-      
+        available = true;
+        break;
+
       default:
-        return false;
+        available = false;
     }
   } catch {
-    return false;
+    available = false;
   }
+
+  cachedAvailability = { value: available, checkedAt: now };
+  return available;
 }
 
 /**
@@ -94,6 +109,13 @@ export async function isTTSAvailable(): Promise<boolean> {
  */
 export async function speak(text: string): Promise<void> {
   const platform = getPlatform();
+
+  const available = await isTTSAvailable();
+  if (!available) {
+    logger.debug({ platform }, "[SintraPrime TTS] Not available (skipping audio)");
+    return;
+  }
+
   const command = getTTSCommand(text);
 
   if (!command) {
@@ -105,19 +127,23 @@ export async function speak(text: string): Promise<void> {
   try {
     logger.info({ text, platform }, "[SintraPrime TTS] Speaking...");
     await execAsync(command);
-    
-    logEvent("tts_spoken", { 
-      text, 
+
+    logEvent("tts_spoken", {
+      text,
       platform,
-      success: true 
+      success: true
     });
   } catch (error) {
     logger.error({ error, text, platform }, "[SintraPrime TTS] Failed to speak");
-    logEvent("tts_error", { 
-      text, 
-      platform, 
-      error: String(error) 
-    }, { severity: "error" });
+    logEvent(
+      "tts_error",
+      {
+        text,
+        platform,
+        error: String(error)
+      },
+      { severity: "error" }
+    );
   }
 }
 
