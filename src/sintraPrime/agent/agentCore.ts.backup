@@ -1,15 +1,11 @@
 /**
- * Agent API Routes - Enhanced
+ * Agent API Routes
  * Endpoints for interacting with SintraPrime agent mode
- * Includes rate limiting, validation, and metrics collection
  */
 
 import { Router, Request, Response } from "express";
 import { agentCore, stateMachine, contextMemory, intentRouter, toolAuthority, TaskState } from "../sintraPrime";
 import { logger } from "../config/logger";
-import { agentRateLimiter, classifyRateLimiter } from "../middleware/rateLimiter";
-import { validateBody, schemas } from "../middleware/validation";
-import { metricsCollector } from "../sintraPrime/agent/metrics";
 
 const router = Router();
 
@@ -17,50 +13,40 @@ const router = Router();
  * Process input through agent
  * POST /api/agent/process
  */
-router.post("/process", 
-  agentRateLimiter.middleware(),
-  validateBody(schemas.processInput),
-  async (req: Request, res: Response) => {
-    const startTime = Date.now();
-    try {
-      const { input, userId, autoExecute } = req.body;
+router.post("/process", async (req: Request, res: Response) => {
+  try {
+    const { input, userId = "default", autoExecute = false } = req.body;
 
-      const result = await agentCore.processInput(input, userId, autoExecute);
-
-      metricsCollector.recordRequest("/api/agent/process", "POST", 200, Date.now() - startTime);
-      res.json(result);
-    } catch (error) {
-      logger.error({ error }, "[Agent API] Process failed");
-      metricsCollector.recordRequest("/api/agent/process", "POST", 500, Date.now() - startTime);
-      res.status(500).json({ error: "Agent processing failed" });
+    if (!input) {
+      return res.status(400).json({ error: "input is required" });
     }
+
+    const result = await agentCore.processInput(input, userId, autoExecute);
+
+    res.json(result);
+  } catch (error) {
+    logger.error({ error }, "[Agent API] Process failed");
+    res.status(500).json({ error: "Agent processing failed" });
   }
-);
+});
 
 /**
  * Approve and execute task
  * POST /api/agent/tasks/:taskId/approve
  */
-router.post("/tasks/:taskId/approve", 
-  agentRateLimiter.middleware(),
-  validateBody(schemas.approveTask),
-  async (req: Request, res: Response) => {
-    const startTime = Date.now();
-    try {
-      const { taskId } = req.params;
-      const { userId } = req.body;
+router.post("/tasks/:taskId/approve", async (req: Request, res: Response) => {
+  try {
+    const { taskId } = req.params;
+    const { userId = "default" } = req.body;
 
-      const result = await agentCore.approveAndExecute(taskId, userId);
+    const result = await agentCore.approveAndExecute(taskId, userId);
 
-      metricsCollector.recordRequest("/api/agent/tasks/:id/approve", "POST", 200, Date.now() - startTime);
-      res.json(result);
-    } catch (error) {
-      logger.error({ error }, "[Agent API] Approve failed");
-      metricsCollector.recordRequest("/api/agent/tasks/:id/approve", "POST", 500, Date.now() - startTime);
-      res.status(500).json({ error: "Task approval failed" });
-    }
+    res.json(result);
+  } catch (error) {
+    logger.error({ error }, "[Agent API] Approve failed");
+    res.status(500).json({ error: "Task approval failed" });
   }
-);
+});
 
 /**
  * Cancel a task
@@ -179,25 +165,22 @@ router.get("/history/:userId", (req: Request, res: Response) => {
  * Classify intent (for testing)
  * POST /api/agent/classify
  */
-router.post("/classify",
-  classifyRateLimiter.middleware(),
-  validateBody(schemas.classifyIntent),
-  async (req: Request, res: Response) => {
-    const startTime = Date.now();
-    try {
-      const { input } = req.body;
+router.post("/classify", async (req: Request, res: Response) => {
+  try {
+    const { input } = req.body;
 
-      const intent = await intentRouter.classifyIntent(input);
-
-      metricsCollector.recordRequest("/api/agent/classify", "POST", 200, Date.now() - startTime);
-      res.json(intent);
-    } catch (error) {
-      logger.error({ error }, "[Agent API] Classify failed");
-      metricsCollector.recordRequest("/api/agent/classify", "POST", 500, Date.now() - startTime);
-      res.status(500).json({ error: "Classification failed" });
+    if (!input) {
+      return res.status(400).json({ error: "input is required" });
     }
+
+    const intent = await intentRouter.classifyIntent(input);
+
+    res.json(intent);
+  } catch (error) {
+    logger.error({ error }, "[Agent API] Classify failed");
+    res.status(500).json({ error: "Classification failed" });
   }
-);
+});
 
 /**
  * Get available tools
@@ -232,7 +215,7 @@ router.post("/tools/:toolName/approve", (req: Request, res: Response) => {
 });
 
 /**
- * Get agent stats (enhanced with metrics)
+ * Get agent stats
  * GET /api/agent/stats
  */
 router.get("/stats", (req: Request, res: Response) => {
@@ -240,7 +223,6 @@ router.get("/stats", (req: Request, res: Response) => {
     const tasks = stateMachine.getAllTasks();
     const activeTasks = stateMachine.getActiveTasks();
     const memoryStats = contextMemory.getStats();
-    const metrics = metricsCollector.getAllMetrics();
 
     const stats = {
       tasks: {
@@ -262,23 +244,6 @@ router.get("/stats", (req: Request, res: Response) => {
       tools: {
         available: toolAuthority.getAvailableTools().length,
         executionHistory: toolAuthority.getExecutionHistory().length
-      },
-      metrics: {
-        tasks: {
-          total: metrics.tasks.totalTasks,
-          completed: metrics.tasks.completedTasks,
-          failed: metrics.tasks.failedTasks,
-          averageCompletionTime: Math.round(metrics.tasks.averageCompletionTime),
-          byIntent: Object.fromEntries(metrics.tasks.byIntent)
-        },
-        tools: {
-          totalExecutions: metrics.tools.totalExecutions,
-          successRate: metrics.tools.totalExecutions > 0 
-            ? (metrics.tools.successfulExecutions / metrics.tools.totalExecutions * 100).toFixed(2) + '%'
-            : '0%',
-          averageExecutionTime: Math.round(metrics.tools.averageExecutionTime)
-        },
-        requests: metrics.requests
       }
     };
 

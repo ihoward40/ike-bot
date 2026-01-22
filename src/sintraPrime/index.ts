@@ -38,6 +38,10 @@ export {
   contextMemory
 } from "./agent";
 
+export {
+  TaskState
+} from "./agent";
+
 export type {
   AgentResult,
   Intent,
@@ -48,7 +52,7 @@ export type {
   ToolResult,
   ToolCapability,
   Task,
-  TaskState,
+  TaskStateValue,
   ContextEntry,
   UserContext
 } from "./agent";

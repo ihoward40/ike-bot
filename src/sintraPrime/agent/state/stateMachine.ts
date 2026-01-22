@@ -12,7 +12,7 @@ import { ExecutionPlan } from "../planner/planningEngine";
 /**
  * Task state
  */
-export enum TaskState {
+export const enum TaskState {
   CREATED = "created",
   PLANNING = "planning",
   AWAITING_APPROVAL = "awaiting_approval",
@@ -23,6 +23,9 @@ export enum TaskState {
   FAILED = "failed",
   CANCELLED = "cancelled"
 }
+
+// String literal type for runtime usage
+export type TaskStateValue = TaskState;
 
 /**
  * Task entity with state
