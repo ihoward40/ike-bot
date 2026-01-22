@@ -23,6 +23,7 @@ interface ClientRecord {
 export class RateLimiter {
   private clients: Map<string, ClientRecord> = new Map();
   private config: RateLimitConfig;
+  private cleanupTimer: NodeJS.Timeout | null = null;
 
   constructor(config: Partial<RateLimitConfig> = {}) {
     this.config = {
@@ -31,7 +32,19 @@ export class RateLimiter {
     };
 
     // Cleanup old entries every minute
-    setInterval(() => this.cleanup(), 60000);
+    this.cleanupTimer = setInterval(() => this.cleanup(), 60000);
+    // Allow process to exit gracefully
+    this.cleanupTimer.unref();
+  }
+
+  /**
+   * Stop the cleanup timer (for graceful shutdown)
+   */
+  stop() {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+      this.cleanupTimer = null;
+    }
   }
 
   /**

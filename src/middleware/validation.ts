@@ -39,7 +39,7 @@ export function validateBody<T extends ZodSchema>(schema: T) {
 export const schemas = {
   processInput: z.object({
     input: z.string().min(1).max(5000),
-    userId: z.string().min(1).max(100),
+    userId: z.string().min(1).max(100).default("default"),  // Default preserved for backward compatibility
     autoExecute: z.boolean().optional().default(false)
   }),
 

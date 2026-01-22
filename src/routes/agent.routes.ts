@@ -52,11 +52,11 @@ router.post("/tasks/:taskId/approve",
 
       const result = await agentCore.approveAndExecute(taskId, userId);
 
-      metricsCollector.recordRequest("/api/agent/tasks/:id/approve", "POST", 200, Date.now() - startTime);
+      metricsCollector.recordRequest("/api/agent/tasks/:taskId/approve", "POST", 200, Date.now() - startTime);
       res.json(result);
     } catch (error) {
       logger.error({ error }, "[Agent API] Approve failed");
-      metricsCollector.recordRequest("/api/agent/tasks/:id/approve", "POST", 500, Date.now() - startTime);
+      metricsCollector.recordRequest("/api/agent/tasks/:taskId/approve", "POST", 500, Date.now() - startTime);
       res.status(500).json({ error: "Task approval failed" });
     }
   }

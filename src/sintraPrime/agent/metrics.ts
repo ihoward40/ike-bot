@@ -64,6 +64,27 @@ export class MetricsCollector {
     timestamp: Date;
   }> = [];
 
+  private pruneTimer: NodeJS.Timeout | null = null;
+
+  constructor() {
+    // Prune old metrics every hour
+    this.pruneTimer = setInterval(() => {
+      this.pruneOldMetrics();
+    }, 60 * 60 * 1000);
+    // Allow process to exit gracefully
+    this.pruneTimer.unref();
+  }
+
+  /**
+   * Stop the prune timer (for graceful shutdown)
+   */
+  stop() {
+    if (this.pruneTimer) {
+      clearInterval(this.pruneTimer);
+      this.pruneTimer = null;
+    }
+  }
+
   /**
    * Record task creation
    */
@@ -263,7 +284,11 @@ export class MetricsCollector {
 // Export singleton instance
 export const metricsCollector = new MetricsCollector();
 
-// Prune old metrics every hour
-setInterval(() => {
-  metricsCollector.pruneOldMetrics();
-}, 60 * 60 * 1000);
+// Graceful shutdown support
+process.on('SIGTERM', () => {
+  metricsCollector.stop();
+});
+
+process.on('SIGINT', () => {
+  metricsCollector.stop();
+});
