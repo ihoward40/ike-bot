@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS processed_documents (
     
     -- AFV Detection Results
     afv_found BOOLEAN NOT NULL DEFAULT FALSE,
-    afv_confidence DECIMAL(3, 2), -- 0.00 to 1.00
+    afv_confidence DECIMAL(3, 2) CHECK (afv_confidence >= 0.00 AND afv_confidence <= 1.00), -- 0.00 to 1.00
     afv_notation_text TEXT,
     afv_notation_type VARCHAR(50),
     afv_date DATE,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS processed_documents (
     discharge_period_expired BOOLEAN NOT NULL DEFAULT FALSE,
     
     -- Classification
-    classification_confidence DECIMAL(3, 2), -- 0.00 to 1.00
+    classification_confidence DECIMAL(3, 2) CHECK (classification_confidence >= 0.00 AND classification_confidence <= 1.00), -- 0.00 to 1.00
     
     -- Entities
     entity_count INTEGER DEFAULT 0,

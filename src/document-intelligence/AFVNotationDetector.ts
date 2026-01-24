@@ -247,10 +247,47 @@ export class AFVNotationDetector {
   }
 
   /**
-   * Parse date string to Date object
+   * Parse date string to Date object with explicit format handling
+   * Handles common date formats: MM/DD/YYYY, YYYY-MM-DD, Month DD, YYYY
    */
   private parseDate(dateStr: string): Date | undefined {
     try {
+      // First try ISO format (YYYY-MM-DD) which is unambiguous
+      const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+      if (isoMatch) {
+        const [, year, month, day] = isoMatch;
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      // Try written format (Month DD, YYYY) which is unambiguous
+      const writtenMatch = /^([A-Za-z]+)\.?\s+(\d{1,2}),?\s+(\d{4})$/.exec(dateStr);
+      if (writtenMatch) {
+        const date = new Date(dateStr);
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      // For MM/DD/YYYY format, assume US format (month first)
+      const slashMatch = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/.exec(dateStr);
+      if (slashMatch) {
+        let [, part1, part2, part3] = slashMatch;
+        // Expand 2-digit year to 4-digit
+        let year = parseInt(part3);
+        if (year < 100) {
+          year += year < 50 ? 2000 : 1900;
+        }
+        // Assume US format: month/day/year
+        const date = new Date(year, parseInt(part1) - 1, parseInt(part2));
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      // Fallback to standard parsing (may be ambiguous)
       const date = new Date(dateStr);
       if (!isNaN(date.getTime())) {
         return date;

@@ -347,12 +347,43 @@ export class DocumentProcessor {
         document_type: document.metadata.documentType,
         title: document.metadata.title,
         text_content: document.textContent,
+        
+        // AFV Detection fields
         afv_found: document.afvNotation?.found || false,
         afv_confidence: document.afvNotation?.confidence || 0,
+        afv_notation_text: document.afvNotation?.notationText,
+        afv_notation_type: document.afvNotation?.notationType,
+        afv_date: document.afvNotation?.afvDate,
+        
+        // Exemption fields
+        has_exemption: document.afvNotation?.hasExemption || false,
+        exemption_text: document.afvNotation?.exemptionText,
+        
+        // Compliance fields
+        is_compliant: document.afvNotation?.isCompliant || false,
+        compliance_issues: document.afvNotation?.complianceIssues ? JSON.stringify(document.afvNotation.complianceIssues) : null,
+        
+        // Discharge eligibility fields
         discharge_eligible: document.dischargeEligibility?.isEligible || false,
         discharge_date: document.dischargeEligibility?.dischargeDate,
+        days_remaining: document.dischargeEligibility?.daysRemaining,
+        discharge_period_expired: document.dischargeEligibility?.dischargePeriodExpired || false,
+        
+        // Classification
         classification_confidence: document.classificationConfidence,
+        
+        // Entities
         entity_count: document.entities.length,
+        entities: document.entities.length > 0 ? JSON.stringify(document.entities) : null,
+        
+        // Metadata
+        source: document.metadata.source,
+        file_size: document.metadata.fileSize,
+        mime_type: document.metadata.mimeType,
+        storage_location: document.metadata.storageLocation,
+        received_date: document.metadata.receivedDate,
+        
+        // Timestamps
         created_at: document.metadata.createdAt,
         updated_at: document.metadata.updatedAt,
       });
