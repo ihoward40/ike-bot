@@ -15,6 +15,10 @@
           "description": "Type of enforcement packet (required)",
           "enum": ["ucc_lien", "foia_request", "irs_rebuttal", "affidavit", "notice_of_default", "other"]
         },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the enforcement packet purpose and details (optional)"
+        },
         "target_agency": {
           "type": "string",
           "description": "Target agency or organization (optional, e.g., 'IRS', 'Credit Bureau', 'County Recorder')"
@@ -38,7 +42,7 @@
       "type": "object",
       "description": "The created enforcement packet object with status and tracking info"
     },
-    "implementation_note": "This currently creates a draft enforcement packet. Future implementation will include document generation, mailing, and tracking.",
-    "api_endpoint": "POST /api/enforcement-packets (to be implemented)"
+    "implementation_note": "Creates a draft enforcement packet. Future implementation will include document generation, mailing, and tracking.",
+    "api_endpoint": "POST /api/enforcement-packets"
   }
 }

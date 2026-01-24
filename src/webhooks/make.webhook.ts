@@ -80,6 +80,7 @@ async function handleCreateEnforcementPacket(payload: any) {
   await supabase.from('enforcement_packets').insert({
     beneficiary_id: data.beneficiary_id,
     packet_type: data.packet_type,
+    description: data.description,
     target_agency: data.target_agency,
     status: 'pending',
   });
