@@ -1,0 +1,16 @@
+{
+  "type": "function",
+  "function": {
+    "name": "get_discharge_eligible_documents",
+    "description": "Get all documents that are eligible for discharge under the 30-day AFV rule. Returns documents sorted by discharge date.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    },
+    "returns": {
+      "type": "array",
+      "description": "Array of discharge-eligible documents"
+    },
+    "api_endpoint": "GET /api/document-intelligence/discharge-eligible"
+  }
+}

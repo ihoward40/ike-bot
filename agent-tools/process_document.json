@@ -1,0 +1,78 @@
+{
+  "type": "function",
+  "function": {
+    "name": "process_document",
+    "description": "Process a legal document to detect AFV (Accepted for Value) notation, calculate discharge eligibility, and extract entities. Returns comprehensive analysis including AFV confidence, discharge dates, and extracted legal references.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Full text content of the document to process"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Optional document metadata",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Document title or name"
+            },
+            "documentType": {
+              "type": "string",
+              "description": "Document type (affidavit, notice, commercial_instrument, etc.)",
+              "enum": [
+                "affidavit",
+                "notice",
+                "commercial_instrument",
+                "promissory_note",
+                "bill_of_exchange",
+                "invoice",
+                "contract",
+                "correspondence",
+                "court_filing",
+                "other"
+              ]
+            },
+            "receivedDate": {
+              "type": "string",
+              "description": "Date the document was received (ISO 8601 format)"
+            },
+            "source": {
+              "type": "string",
+              "description": "Source of the document"
+            }
+          }
+        },
+        "options": {
+          "type": "object",
+          "description": "Processing options",
+          "properties": {
+            "detectAFV": {
+              "type": "boolean",
+              "description": "Whether to detect AFV notation (default: true)"
+            },
+            "calculateDischarge": {
+              "type": "boolean",
+              "description": "Whether to calculate discharge eligibility using 30-day rule (default: true)"
+            },
+            "extractEntities": {
+              "type": "boolean",
+              "description": "Whether to extract entities like dates, amounts, parties (default: true)"
+            },
+            "storeInDatabase": {
+              "type": "boolean",
+              "description": "Whether to store the processed document in database (default: false)"
+            }
+          }
+        }
+      },
+      "required": ["text"]
+    },
+    "returns": {
+      "type": "object",
+      "description": "Processing result with AFV detection, discharge eligibility, and extracted entities"
+    },
+    "api_endpoint": "POST /api/document-intelligence/process"
+  }
+}
