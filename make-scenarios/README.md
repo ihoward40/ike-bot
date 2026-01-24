@@ -18,7 +18,7 @@ Complete binder PDF ingestion workflow with SHA256 verification.
 
 **Best for:** Simple setup, existing systems without ready marker support
 
-#### [BINDER_OUTBOX_READY_MARKER_v1](./BINDER_OUTBOX_READY_MARKER_v1.md)
+#### [BINDER_OUTBOX_READY_v1](./BINDER_OUTBOX_READY_MARKER_v1.md) ⭐ Recommended
 Enhanced binder PDF workflow using `.ready` marker files.
 
 **Features:**
@@ -28,6 +28,14 @@ Enhanced binder PDF workflow using `.ready` marker files.
 - All features of COMPLETE_v1
 
 **Best for:** New implementations, systems with publisher control
+
+### Supporting Documentation
+
+- **[SINTRAPRIME_READY_RITUAL.md](./SINTRAPRIME_READY_RITUAL.md)** - No-false-ready publish ceremony
+- **[IMPLEMENTATION_CHECKLIST.md](./IMPLEMENTATION_CHECKLIST.md)** - 10-line developer guide
+- **[TEST_HARNESS.md](./TEST_HARNESS.md)** - 10 tests to prove reliability
+- **[SUGGESTED_UPGRADES.md](./SUGGESTED_UPGRADES.md)** - 20 enhancement options
+- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - One-page cheat sheet
 
 ---
 
