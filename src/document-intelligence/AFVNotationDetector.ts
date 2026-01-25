@@ -10,10 +10,10 @@ import { AFVNotationResult, AFVNotation } from './types';
 export class AFVNotationDetector {
   // AFV pattern variations
   private readonly AFV_PATTERNS = [
-    /accepted\s+for\s+value/gi,
-    /afv/gi,
-    /a\.f\.v\./gi,
-    /accepted\s*-\s*for\s*-\s*value/gi,
+    /\baccepted\s+for\s+value\b/gi,
+    /\ba\s*\.\s*f\s*\.\s*v\s*\.?\b/gi,
+    /\ba\s+f\s+v\b/gi,
+    /\baccepted\s*-\s*for\s*-\s*value\b/gi,
     /\baccepted\s+4\s+value\b/gi
   ];
 
