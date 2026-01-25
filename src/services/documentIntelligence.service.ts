@@ -8,6 +8,7 @@ import { supabase } from '../config/supabase';
 import { DocumentProcessor } from '../document-intelligence/DocumentProcessor';
 import { DocumentInput, DocumentProcessingResult } from '../document-intelligence/types';
 import { AppError } from '../middleware/errorHandler';
+import { logger } from '../config/logger';
 
 export class DocumentIntelligenceService {
   private processor: DocumentProcessor;
@@ -36,7 +37,7 @@ export class DocumentIntelligenceService {
       await this.storeProcessingResult(result, input);
     } catch (error) {
       // Log error but don't fail the processing
-      console.error('Failed to store processing result:', error);
+      logger.error({ error }, 'Failed to store processing result');
     }
 
     return result;

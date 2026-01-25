@@ -19,6 +19,10 @@ export class DocumentProcessor {
   private afvDetector: AFVNotationDetector;
   private commercialParser: CommercialInstrumentParser;
 
+  // Basic entity extraction patterns
+  private readonly BASIC_AMOUNT_PATTERN = /\$[\d,]+\.?\d*/g;
+  private readonly BASIC_DATE_PATTERN = /\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/g;
+
   // Document type classification keywords
   private readonly DOCUMENT_TYPE_KEYWORDS: Record<string, string[]> = {
     [DocumentType.PROMISSORY_NOTE]: [
@@ -203,9 +207,9 @@ export class DocumentProcessor {
     const entities: ExtractedEntity[] = [];
 
     // Extract amounts
-    const amountPattern = /\$[\d,]+\.?\d*/g;
+    this.BASIC_AMOUNT_PATTERN.lastIndex = 0;
     let match;
-    while ((match = amountPattern.exec(content)) !== null) {
+    while ((match = this.BASIC_AMOUNT_PATTERN.exec(content)) !== null) {
       entities.push({
         type: 'amount',
         value: match[0],
@@ -218,8 +222,8 @@ export class DocumentProcessor {
     }
 
     // Extract dates
-    const datePattern = /\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/g;
-    while ((match = datePattern.exec(content)) !== null) {
+    this.BASIC_DATE_PATTERN.lastIndex = 0;
+    while ((match = this.BASIC_DATE_PATTERN.exec(content)) !== null) {
       entities.push({
         type: 'date',
         value: match[0],
