@@ -40,7 +40,6 @@ app.get("/", (_req, res) => {
 app.use("/api/beneficiaries", beneficiaryRoutes);
 app.use("/api/credit-disputes", creditDisputeRoutes);
 app.use("/api/document-intelligence", documentIntelligenceRoutes);
-app.use("/api/document-intelligence", documentIntelligenceRoutes);
 
 // Error handling - error logger before error handler
 app.use(errorLogger);

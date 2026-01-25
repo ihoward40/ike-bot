@@ -387,9 +387,6 @@ Available tools:
 - `create_credit_dispute` - Create a new credit dispute
 - `process_document` - Process documents through Document Intelligence Module
 - `run_enforcement_packet` - Create enforcement packet (future implementation)
-- `list_credit_disputes` - List credit disputes
-- `create_credit_dispute` - Create a new credit dispute
-- `run_enforcement_packet` - Create enforcement packet (future implementation)
 
 ## Database
 

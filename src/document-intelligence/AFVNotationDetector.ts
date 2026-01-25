@@ -81,9 +81,10 @@ export class AFVNotationDetector {
 
     for (const pattern of patterns) {
       let match;
-      const regex = new RegExp(pattern.source, pattern.flags);
+      // Reset lastIndex for global regex
+      pattern.lastIndex = 0;
       
-      while ((match = regex.exec(content)) !== null) {
+      while ((match = pattern.exec(content)) !== null) {
         const position = {
           start: match.index,
           end: match.index + match[0].length
@@ -116,8 +117,8 @@ export class AFVNotationDetector {
    */
   private extractDate(context: string): Date | undefined {
     for (const pattern of this.DATE_PATTERNS) {
-      const regex = new RegExp(pattern.source, pattern.flags);
-      const match = regex.exec(context);
+      pattern.lastIndex = 0;
+      const match = pattern.exec(context);
       
       if (match) {
         try {
@@ -148,8 +149,8 @@ export class AFVNotationDetector {
    */
   private extractSignature(context: string): string | undefined {
     for (const pattern of this.SIGNATURE_PATTERNS) {
-      const regex = new RegExp(pattern.source, pattern.flags);
-      const match = regex.exec(context);
+      pattern.lastIndex = 0;
+      const match = pattern.exec(context);
       
       if (match && match[1]) {
         return match[1].trim();

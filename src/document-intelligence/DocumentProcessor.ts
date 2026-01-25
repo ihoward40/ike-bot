@@ -141,14 +141,15 @@ export class DocumentProcessor {
     const contentLower = content.toLowerCase();
     const scores: Record<string, number> = {};
 
-    // Calculate score for each document type
+    // Calculate score for each document type using simple string matching
     for (const [docType, keywords] of Object.entries(this.DOCUMENT_TYPE_KEYWORDS)) {
       let score = 0;
       for (const keyword of keywords) {
-        const regex = new RegExp(keyword.replace(/\s+/g, '\\s+'), 'gi');
-        const matches = content.match(regex);
-        if (matches) {
-          score += matches.length;
+        const keywordLower = keyword.toLowerCase();
+        let pos = 0;
+        while ((pos = contentLower.indexOf(keywordLower, pos)) !== -1) {
+          score++;
+          pos += keywordLower.length;
         }
       }
       scores[docType] = score;

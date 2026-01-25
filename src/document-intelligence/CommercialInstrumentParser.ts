@@ -99,10 +99,10 @@ export class CommercialInstrumentParser {
     const seen = new Set<string>();
 
     for (const pattern of this.PARTY_PATTERNS) {
-      const regex = new RegExp(pattern.source, pattern.flags);
+      pattern.lastIndex = 0;
       let match;
 
-      while ((match = regex.exec(content)) !== null) {
+      while ((match = pattern.exec(content)) !== null) {
         const value = match[1] || match[0];
         const trimmedValue = value.trim();
 
@@ -139,10 +139,10 @@ export class CommercialInstrumentParser {
     const seen = new Set<string>();
 
     for (const pattern of this.AMOUNT_PATTERNS) {
-      const regex = new RegExp(pattern.source, pattern.flags);
+      pattern.lastIndex = 0;
       let match;
 
-      while ((match = regex.exec(content)) !== null) {
+      while ((match = pattern.exec(content)) !== null) {
         const value = match[0].trim();
 
         if (!seen.has(value)) {
@@ -179,10 +179,10 @@ export class CommercialInstrumentParser {
     ];
 
     for (const pattern of datePatterns) {
-      const regex = new RegExp(pattern.source, pattern.flags);
+      pattern.lastIndex = 0;
       let match;
 
-      while ((match = regex.exec(content)) !== null) {
+      while ((match = pattern.exec(content)) !== null) {
         const value = match[0].trim();
 
         if (!seen.has(value)) {
@@ -213,10 +213,10 @@ export class CommercialInstrumentParser {
     const seen = new Set<string>();
 
     for (const pattern of this.REFERENCE_PATTERNS) {
-      const regex = new RegExp(pattern.source, pattern.flags);
+      pattern.lastIndex = 0;
       let match;
 
-      while ((match = regex.exec(content)) !== null) {
+      while ((match = pattern.exec(content)) !== null) {
         const value = (match[1] || match[0]).trim();
 
         if (!seen.has(value) && value.length > 2) {
