@@ -261,6 +261,111 @@ Example payload:
 }
 ```
 
+### Document Processing Webhook
+```http
+POST /webhooks/document
+```
+Processes documents through the Document Intelligence Module for AFV notation detection and discharge eligibility assessment.
+
+Example payload:
+```json
+{
+  "content": "INVOICE #123\nAmount: $1000\nACCEPTED FOR VALUE\nDate: 1/15/2024",
+  "document_type": "invoice",
+  "filename": "invoice_123.txt",
+  "source": "email"
+}
+```
+
+Returns processed document with:
+- Document type classification
+- AFV notation detection
+- Entity extraction (parties, dates, amounts, references)
+- Discharge eligibility assessment (30-day rule)
+- Compliance validation
+
+## Document Intelligence API
+
+### Process Document
+```http
+POST /api/document-intelligence/process
+Content-Type: application/json
+
+{
+  "content": "Document text content here...",
+  "document_type": "invoice",
+  "filename": "optional_filename.pdf",
+  "source": "upload"
+}
+```
+
+Document types: `promissory_note`, `invoice`, `bill`, `statement`, `notice`, `demand_letter`, `court_filing`, `other`
+
+Response:
+```json
+{
+  "id": "uuid",
+  "documentType": "invoice",
+  "afvNotation": {
+    "present": true,
+    "notations": [
+      {
+        "text": "ACCEPTED FOR VALUE",
+        "type": "accepted_for_value",
+        "position": { "start": 100, "end": 120 },
+        "date": "2024-01-15T00:00:00.000Z",
+        "signature": "/s/ John Doe"
+      }
+    ],
+    "confidence": 0.95
+  },
+  "commercialInstrument": {
+    "afvStatus": {
+      "hasAFV": true,
+      "afvDate": "2024-01-15T00:00:00.000Z",
+      "afvNotations": [...]
+    },
+    "dischargeEligibility": {
+      "eligible": true,
+      "reason": "AFV notation dated 1/15/2024 - 30-day period has elapsed",
+      "daysRemaining": 0,
+      "deadlineDate": "2024-02-14T00:00:00.000Z",
+      "afvDate": "2024-01-15T00:00:00.000Z"
+    },
+    "complianceStatus": {
+      "compliant": true,
+      "violations": [],
+      "warnings": []
+    },
+    "parties": [...],
+    "amounts": [...],
+    "dates": [...],
+    "references": [...]
+  },
+  "entities": [...],
+  "metadata": {
+    "processedAt": "2024-01-25T12:00:00.000Z",
+    "processingTime": 15,
+    "confidence": 0.92
+  }
+}
+```
+
+### List Documents
+```http
+GET /api/document-intelligence/documents?page=1&limit=10&document_type=invoice&has_afv=true
+```
+
+### Get Document
+```http
+GET /api/document-intelligence/documents/:id
+```
+
+### Delete Document
+```http
+DELETE /api/document-intelligence/documents/:id
+```
+
 ## OpenAI Agent Tools
 
 Tool definitions are available in `/agent-tools/` directory. Use the utility functions to load them:
@@ -278,6 +383,10 @@ const createBeneficiaryTool = getToolByName('create_beneficiary');
 Available tools:
 - `list_beneficiaries` - List all beneficiaries with filtering
 - `create_beneficiary` - Create a new beneficiary
+- `list_credit_disputes` - List credit disputes
+- `create_credit_dispute` - Create a new credit dispute
+- `process_document` - Process documents through Document Intelligence Module
+- `run_enforcement_packet` - Create enforcement packet (future implementation)
 - `list_credit_disputes` - List credit disputes
 - `create_credit_dispute` - Create a new credit dispute
 - `run_enforcement_packet` - Create enforcement packet (future implementation)
@@ -302,6 +411,7 @@ See [supabase/README.md](./supabase/README.md) for detailed migration documentat
 
 - `beneficiaries` - Trust beneficiaries
 - `credit_disputes` - Credit dispute tracking
+- `documents` - Processed legal documents with AFV notation detection
 - `billing_events` - Payment and billing events
 - `enforcement_packets` - Enforcement actions (UCC liens, FOIA, etc.)
 - `agent_logs` - Audit trail and request logs
@@ -327,12 +437,13 @@ X-Correlation-Id: uuid
 ```
 ike-bot/
 ├── src/
-│   ├── config/          # Configuration (Supabase, logger)
-│   ├── controllers/     # Request handlers
-│   ├── services/        # Business logic
-│   ├── models/          # Zod schemas & types
-│   ├── middleware/      # Express middleware
-│   ├── routes/          # API routes
+│   ├── config/                # Configuration (Supabase, logger)
+│   ├── controllers/           # Request handlers
+│   ├── services/              # Business logic
+│   ├── models/                # Zod schemas & types
+│   ├── document-intelligence/ # Document processing & AFV detection
+│   ├── middleware/            # Express middleware
+│   ├── routes/                # API routes
 │   ├── webhooks/        # Webhook handlers
 │   ├── utils/           # Utility functions
 │   └── queue/           # Job queue (future)
@@ -373,14 +484,19 @@ ike-bot/
 
 ## Future Enhancements
 
+- [x] Document Intelligence Module with AFV notation detection
 - [ ] Job queue for background processing (Bull/BullMQ)
 - [ ] Authentication & authorization (JWT)
 - [ ] Rate limiting
 - [ ] API documentation with Swagger/OpenAPI
 - [ ] Enforcement packet generation
-- [ ] Document management
 - [ ] Email notifications
 - [ ] Unit and integration tests
+- [ ] Compliance Checker (Phase 1)
+- [ ] Legal Research Integration (Phase 2)
+- [ ] Deadline Tracker (Phase 2)
+- [ ] Evidence Management System (Phase 3)
+- [ ] Predictive Analytics (Phase 3)
 
 ## License
 
