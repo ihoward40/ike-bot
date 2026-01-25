@@ -8,6 +8,7 @@ import {
   handleInboundEmail 
 } from '../webhooks/email.webhook';
 import { handleBillingAlert } from '../webhooks/billing.webhook';
+import { handleDocumentWebhook } from '../webhooks/document.webhook';
 import express from 'express';
 
 const router = Router();
@@ -29,5 +30,8 @@ router.post('/inbound-email', asyncHandler(handleInboundEmail));
 
 // Generic billing alert webhook
 router.post('/billing-alert', asyncHandler(handleBillingAlert));
+
+// Document processing webhook
+router.post('/document', asyncHandler(handleDocumentWebhook));
 
 export default router;

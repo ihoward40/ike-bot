@@ -4,6 +4,7 @@ import cors from "cors";
 import beneficiaryRoutes from "./routes/beneficiary.routes";
 import creditDisputeRoutes from "./routes/creditDispute.routes";
 import webhookRoutes from "./routes/webhook.routes";
+import documentIntelligenceRoutes from "./routes/documentIntelligence.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { 
   traceMiddleware, 
@@ -38,6 +39,7 @@ app.get("/", (_req, res) => {
 // API Routes
 app.use("/api/beneficiaries", beneficiaryRoutes);
 app.use("/api/credit-disputes", creditDisputeRoutes);
+app.use("/api/document-intelligence", documentIntelligenceRoutes);
 
 // Error handling - error logger before error handler
 app.use(errorLogger);

@@ -1,0 +1,143 @@
+{
+  "type": "function",
+  "function": {
+    "name": "process_document",
+    "description": "Process a legal document through the Document Intelligence Module. Detects AFV (Accepted for Value) notations, extracts entities (parties, amounts, dates, references), classifies document type, and assesses discharge eligibility based on the 30-day rule. Returns comprehensive analysis including AFV status, compliance validation, and commercial instrument details.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The full text content of the document to process (required)"
+        },
+        "document_type": {
+          "type": "string",
+          "enum": [
+            "promissory_note",
+            "invoice",
+            "bill",
+            "statement",
+            "notice",
+            "demand_letter",
+            "court_filing",
+            "other"
+          ],
+          "description": "Optional document type classification. If omitted, the system will automatically classify the document."
+        },
+        "filename": {
+          "type": "string",
+          "description": "Optional filename for reference and logging"
+        },
+        "source": {
+          "type": "string",
+          "description": "Optional source identifier (e.g., 'email', 'upload', 'webhook')"
+        }
+      },
+      "required": ["content"]
+    },
+    "returns": {
+      "type": "object",
+      "description": "Comprehensive document processing result including AFV detection, entity extraction, and discharge eligibility assessment",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this processing result"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Classified document type"
+        },
+        "afvNotation": {
+          "type": "object",
+          "description": "AFV notation detection results",
+          "properties": {
+            "present": {
+              "type": "boolean",
+              "description": "Whether AFV notation was detected"
+            },
+            "notations": {
+              "type": "array",
+              "description": "Array of detected AFV notations with positions and metadata"
+            },
+            "confidence": {
+              "type": "number",
+              "description": "Confidence score for AFV detection (0-1)"
+            }
+          }
+        },
+        "commercialInstrument": {
+          "type": "object",
+          "description": "Commercial instrument analysis (for applicable document types)",
+          "properties": {
+            "afvStatus": {
+              "type": "object",
+              "description": "AFV status with date and notations"
+            },
+            "dischargeEligibility": {
+              "type": "object",
+              "description": "Discharge eligibility assessment based on 30-day rule",
+              "properties": {
+                "eligible": {
+                  "type": "boolean"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "daysRemaining": {
+                  "type": "number"
+                },
+                "deadlineDate": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            },
+            "complianceStatus": {
+              "type": "object",
+              "description": "Compliance validation results with violations and warnings"
+            },
+            "parties": {
+              "type": "array",
+              "description": "Extracted party entities"
+            },
+            "amounts": {
+              "type": "array",
+              "description": "Extracted monetary amounts"
+            },
+            "dates": {
+              "type": "array",
+              "description": "Extracted dates"
+            },
+            "references": {
+              "type": "array",
+              "description": "Extracted reference numbers and identifiers"
+            }
+          }
+        },
+        "entities": {
+          "type": "array",
+          "description": "All extracted entities from the document"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Processing metadata including timestamp and confidence",
+          "properties": {
+            "processedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "processingTime": {
+              "type": "number",
+              "description": "Processing time in milliseconds"
+            },
+            "confidence": {
+              "type": "number",
+              "description": "Overall confidence score (0-1)"
+            }
+          }
+        }
+      }
+    },
+    "api_endpoint": "POST /api/document-intelligence/process"
+  }
+}
