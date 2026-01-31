@@ -4,6 +4,7 @@ import cors from "cors";
 import beneficiaryRoutes from "./routes/beneficiary.routes";
 import creditDisputeRoutes from "./routes/creditDispute.routes";
 import webhookRoutes from "./routes/webhook.routes";
+import aiRoutes from "./routes/ai.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { 
   traceMiddleware, 
@@ -35,9 +36,14 @@ app.get("/", (_req, res) => {
   res.json({ ok: true, message: "IKE-BOT running" });
 });
 
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, status: "healthy", timestamp: new Date().toISOString() });
+});
+
 // API Routes
 app.use("/api/beneficiaries", beneficiaryRoutes);
 app.use("/api/credit-disputes", creditDisputeRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Error handling - error logger before error handler
 app.use(errorLogger);
