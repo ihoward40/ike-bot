@@ -40,8 +40,29 @@ def log_to_notion(title, body, archive=False):
     requests.post("https://api.notion.com/v1/pages", headers=headers, data=json.dumps(data))
 
 def notify_sintra(event_type, payload):
+    """Send event to both SintraPrime webhook and dashboard"""
+    # Original webhook notification
     if SINTRA_WEBHOOK_URL:
-        requests.post(SINTRA_WEBHOOK_URL, json={"type": event_type, "payload": payload})
+        try:
+            requests.post(SINTRA_WEBHOOK_URL, json={"type": event_type, "payload": payload}, timeout=5)
+        except Exception as e:
+            print(f"Failed to notify Sintra webhook: {e}")
+    
+    # Also send to SintraPrime dashboard
+    sintra_dashboard_url = os.getenv("SINTRA_DASHBOARD_URL", "http://localhost:5011")
+    try:
+        requests.post(
+            f"{sintra_dashboard_url}/event",
+            json={
+                "event_type": event_type,
+                "payload": payload,
+                "source": "flask_backend",
+                "timestamp": datetime.now().isoformat()
+            },
+            timeout=5
+        )
+    except Exception as e:
+        print(f"Failed to notify Sintra dashboard: {e}")
 
 def send_to_gmail(subject, body, filepath):
     msg = EmailMessage()
@@ -95,17 +116,26 @@ def run_agent():
     data = request.json
     agent = data.get("agent")
     payload = data.get("payload", {})
+    
+    # Notify SintraPrime that agent run was requested
+    notify_sintra("agent_run_requested", {"agent": agent, "payload": payload})
+    
     if agent not in AGENTS:
+        notify_sintra("agent_error", {"agent": agent, "error": "Invalid agent name"})
         return jsonify({"error": "Invalid agent name."}), 400
     try:
         result = AGENTS[agent](payload)
+        notify_sintra("agent_run_completed", {"agent": agent, "result": result})
         return jsonify({"result": result}), 200
     except Exception as e:
+        notify_sintra("agent_run_failed", {"agent": agent, "error": str(e)})
         return jsonify({"error": str(e)}), 500
 
 @app.route("/intake", methods=["GET", "POST"])
 def form_intake():
     if request.method == "POST":
+        # Notify SintraPrime of intake submission
+        notify_sintra("intake_submitted", {"timestamp": datetime.now().isoformat()})
         return run_agent()
     return '''
         <form method="POST">
@@ -119,8 +149,14 @@ def form_intake():
 
 @app.route("/digest", methods=["POST"])
 def trigger_digest():
-    send_daily_digest()
-    return jsonify({"status": "Daily digest sent"})
+    notify_sintra("digest_triggered", {"timestamp": datetime.now().isoformat()})
+    try:
+        send_daily_digest()
+        notify_sintra("digest_sent", {"status": "success", "timestamp": datetime.now().isoformat()})
+        return jsonify({"status": "Daily digest sent"})
+    except Exception as e:
+        notify_sintra("digest_failed", {"error": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 def affidavit_bot(payload):
     content = payload.get("statement", "Affidavit content not provided.")
@@ -134,6 +170,102 @@ def affidavit_bot(payload):
 
 AGENTS = {"affidavit_bot": affidavit_bot}
 
+# SintraPrime Integration Endpoints
+@app.route("/status", methods=["GET"])
+def flask_status():
+    """Status endpoint for SintraPrime monitoring"""
+    return jsonify({
+        "service": "flask_backend",
+        "status": "running",
+        "port": 5000,
+        "agents": list(AGENTS.keys()),
+        "timestamp": datetime.now().isoformat()
+    })
+
+@app.route("/event", methods=["POST"])
+def receive_event():
+    """Receive events from SintraPrime"""
+    try:
+        event = request.json
+        event_type = event.get("event_type")
+        payload = event.get("payload", {})
+        
+        print(f"📥 Event received from SintraPrime: {event_type}")
+        
+        # Handle specific event types
+        if event_type == "trigger_agent":
+            agent = payload.get("agent")
+            if agent in AGENTS:
+                result = AGENTS[agent](payload)
+                return jsonify({"success": True, "result": result})
+            else:
+                return jsonify({"error": "Unknown agent"}), 400
+        
+        # Log all other events
+        return jsonify({
+            "success": True,
+            "message": f"Event {event_type} received",
+            "timestamp": datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/mode", methods=["GET", "POST"])
+def flask_mode():
+    """Sync mode with SintraPrime"""
+    sintra_dashboard_url = os.getenv("SINTRA_DASHBOARD_URL", "http://localhost:5011")
+    
+    if request.method == "GET":
+        # Get current mode from SintraPrime
+        try:
+            response = requests.get(f"{sintra_dashboard_url}/mode", timeout=5)
+            return jsonify(response.json())
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    
+    elif request.method == "POST":
+        # Set mode in SintraPrime
+        try:
+            mode_data = request.json
+            response = requests.post(
+                f"{sintra_dashboard_url}/mode",
+                json=mode_data,
+                timeout=5
+            )
+            # Notify about mode change
+            notify_sintra("flask_mode_change_requested", mode_data)
+            return jsonify(response.json())
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+@app.route("/")
+def index():
+    """Flask backend home"""
+    return jsonify({
+        "service": "IKE Bot Flask Backend",
+        "version": "1.0.0",
+        "endpoints": {
+            "status": "/status",
+            "event": "/event (POST)",
+            "mode": "/mode (GET/POST)",
+            "intake": "/intake",
+            "run_agent": "/run-agent (POST)",
+            "digest": "/digest (POST)"
+        },
+        "sintra_integration": True
+    })
+
 if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
+    
+    # Notify SintraPrime that Flask is starting
+    notify_sintra("flask_startup", {
+        "port": 5000,
+        "agents": list(AGENTS.keys()),
+        "timestamp": datetime.now().isoformat()
+    })
+    
+    print("🚀 Flask backend starting with SintraPrime integration...")
+    print("📡 Sending events to: http://localhost:5011")
     app.run(debug=True, port=5000)

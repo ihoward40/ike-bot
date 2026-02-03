@@ -1,0 +1,40 @@
+{
+  "name": "sintraprime-agent",
+  "version": "2.0.0",
+  "description": "SintraPrime v1: Activated Reality Mode - Provably Alive AI Agent",
+  "main": "core-agent.js",
+  "bin": {
+    "sintra": "./sintra-cli.js"
+  },
+  "scripts": {
+    "start": "node visibility-server.js",
+    "dev": "nodemon visibility-server.js",
+    "daemon": "node visibility-server.js",
+    "dashboard": "node dashboard-server.js",
+    "cli": "node sintra-cli.js",
+    "core": "node core-agent.js daemon",
+    "test": "node sintra-cli.js status"
+  },
+  "keywords": [
+    "automation",
+    "agent",
+    "sintra",
+    "ike-bot"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0",
+    "winston": "^3.11.0",
+    "node-cron": "^3.0.3",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
