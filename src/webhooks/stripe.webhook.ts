@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
+import { logger } from '../config/logger';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-11-17.clover',
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
@@ -12,7 +11,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature'] as string;
 
   if (!webhookSecret) {
-    console.error('Stripe webhook secret not configured');
+    logger.error('Stripe webhook secret not configured');
     return res.status(500).json({ error: 'Webhook configuration error' });
   }
 
@@ -22,12 +21,12 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
     // Verify webhook signature
     event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
   } catch (err: any) {
-    console.error('Webhook signature verification failed:', err.message);
+    logger.error({ error: err.message }, 'Webhook signature verification failed');
     return res.status(400).json({ error: `Webhook Error: ${err.message}` });
   }
 
   // Log the webhook event
-  console.log(`Stripe webhook received: ${event.type}`);
+  logger.info({ eventType: event.type }, 'Stripe webhook received');
 
   try {
     // Handle different event types
@@ -51,12 +50,12 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
         await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
         break;
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        logger.info({ eventType: event.type }, 'Unhandled Stripe event type');
     }
 
     res.json({ received: true });
   } catch (error: any) {
-    console.error('Error processing Stripe webhook:', error);
+    logger.error({ error }, 'Error processing Stripe webhook');
     res.status(500).json({ error: 'Webhook processing failed' });
   }
 };

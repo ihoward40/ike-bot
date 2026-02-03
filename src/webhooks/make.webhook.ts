@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase';
+import { logger } from '../config/logger';
+import crypto from 'crypto';
 
 /**
  * Handle webhooks from Make.com automation scenarios
@@ -10,10 +12,10 @@ export const handleMakeWebhook = async (req: Request, res: Response) => {
     const payload = req.body;
     
     // Log the incoming webhook
-    console.log('Make.com webhook received:', {
+    logger.info({
       scenario: payload.scenario_name,
       timestamp: new Date().toISOString(),
-    });
+    }, 'Make.com webhook received');
 
     // Validate webhook has required fields
     if (!payload.action) {
@@ -35,7 +37,7 @@ export const handleMakeWebhook = async (req: Request, res: Response) => {
         await handleBillingAlert(payload);
         break;
       default:
-        console.log(`Unknown Make.com action: ${payload.action}`);
+        logger.info({ action: payload.action }, 'Unknown Make.com action');
     }
 
     // Log to agent_logs
@@ -49,7 +51,7 @@ export const handleMakeWebhook = async (req: Request, res: Response) => {
 
     res.json({ success: true, message: 'Webhook processed' });
   } catch (error: any) {
-    console.error('Error processing Make.com webhook:', error);
+    logger.error({ error }, 'Error processing Make.com webhook');
     res.status(500).json({ error: 'Webhook processing failed' });
   }
 };
