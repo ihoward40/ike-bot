@@ -2,6 +2,10 @@
 
 A comprehensive backend API for trust automation, enforcement actions, and beneficiary management.
 
+## Related Projects
+
+- [SintraPrime](https://github.com/ihoward40/SintraPrime) - Frontend application for IKE BOT
+
 ## Features
 
 - 🔐 **Full CRUD APIs** - Beneficiaries and credit disputes with validation
