@@ -1,0 +1,230 @@
+{
+  "name": "VAULT_GUARDIAN_BACKUP_SYNC_v1.0",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-drive:watchFiles",
+      "version": 1,
+      "parameters": {
+        "drive": "my",
+        "folderId": "YOUR_ARCHIVE_FOLDER_ID",
+        "watchFor": "new",
+        "limit": 10
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "folderId": {
+              "label": "Archive Folder"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-drive:copyFile",
+      "version": 1,
+      "parameters": {
+        "fileId": "{{1.id}}"
+      },
+      "mapper": {
+        "name": "{{1.name}}_backup_{{formatDate(now; \"YYYYMMDD_HHmmss\")}}",
+        "parents": [
+          "YOUR_ARCHIVE_BACKUPS_FOLDER_ID"
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {
+          "mapper": {
+            "parents": {
+              "label": "Archive_Backups Folder"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "notion:createDatabaseItem",
+      "version": 1,
+      "parameters": {
+        "databaseId": "YOUR_BACKUP_LOG_DB_ID"
+      },
+      "mapper": {
+        "properties": {
+          "Name": {
+            "title": [
+              {
+                "text": {
+                  "content": "{{1.name}} - Backup {{formatDate(now; \"YYYY-MM-DD\")}}"
+                }
+              }
+            ]
+          },
+          "Original File ID": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "{{1.id}}"
+                }
+              }
+            ]
+          },
+          "Backup File ID": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "{{2.id}}"
+                }
+              }
+            ]
+          },
+          "File Name": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "{{1.name}}"
+                }
+              }
+            ]
+          },
+          "File Size": {
+            "number": "{{1.size}}"
+          },
+          "File Type": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "{{1.mimeType}}"
+                }
+              }
+            ]
+          },
+          "MD5 Hash": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "{{1.md5Checksum}}"
+                }
+              }
+            ]
+          },
+          "Hash Verified": {
+            "checkbox": true
+          },
+          "Original Created": {
+            "date": {
+              "start": "{{1.createdTime}}"
+            }
+          },
+          "Backup Created": {
+            "date": {
+              "start": "{{now}}"
+            }
+          },
+          "Logged At": {
+            "date": {
+              "start": "{{now}}"
+            }
+          },
+          "Original Link": {
+            "url": "{{1.webContentLink}}"
+          },
+          "Backup Link": {
+            "url": "{{2.webContentLink}}"
+          },
+          "Source": {
+            "select": {
+              "name": "Archive Folder"
+            }
+          },
+          "Backup Method": {
+            "select": {
+              "name": "AUTO_SYNC"
+            }
+          },
+          "Owner": {
+            "email": "{{1.owners[].emailAddress}}"
+          },
+          "Status": {
+            "select": {
+              "name": "completed"
+            }
+          },
+          "Notes": {
+            "rich_text": [
+              {
+                "text": {
+                  "content": "Automated backup via VAULT_GUARDIAN_BACKUP_SYNC_v1.0"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "databaseId": {
+              "label": "Backup Log Database"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "slack:createMessage",
+      "version": 1,
+      "parameters": {
+        "channel": "#vault-guardian-backups"
+      },
+      "mapper": {
+        "text": "✅ *Backup Synced Successfully*\\n\\n**File**: `{{1.name}}`\\n**Size**: {{formatNumber(divide(1.size; 1048576); 2)}} MB\\n**Source**: Archive Folder\\n**Backup Location**: Archive_Backups\\n\\n**Details**:\\n- Original: [View File]({{1.webContentLink}})\\n- Backup: [View Backup]({{2.webContentLink}})\\n- Created: {{formatDate(1.createdTime; \"MMM DD, YYYY HH:mm\")}}\\n- Hash: `{{1.md5Checksum}}`\\n\\n**Status**: ✓ Backup logged to Notion",
+        "username": "Vault Guardian",
+        "icon_emoji": ":white_check_mark:",
+        "mrkdwn": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "sequential": true,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "schedule": {
+        "interval": 15,
+        "unit": "minutes"
+      }
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
+  }
+}
