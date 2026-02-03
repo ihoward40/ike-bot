@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "description": "FieldMap configuration for IKE-BOT automation scenarios",
+  "drive": {
+    "_placeholders": {
+      "binder_outbox_folder_id": "REPLACE_WITH_YOUR_OUTBOX_FOLDER_ID",
+      "binder_archive_folder_id": "REPLACE_WITH_YOUR_ARCHIVE_FOLDER_ID",
+      "evidence_upload_folder_id": "REPLACE_WITH_YOUR_EVIDENCE_FOLDER_ID"
+    },
+    "_notes": {
+      "binder_outbox_folder_id": "Google Drive folder where new binder PDFs are uploaded",
+      "binder_archive_folder_id": "Google Drive folder where processed binders are archived",
+      "evidence_upload_folder_id": "Google Drive folder for evidence file uploads"
+    }
+  },
+  "notion": {
+    "_placeholders": {
+      "db_cases_id": "REPLACE_WITH_YOUR_CASES_DATABASE_ID",
+      "db_evidence_id": "REPLACE_WITH_YOUR_EVIDENCE_DATABASE_ID",
+      "db_queue_id": "REPLACE_WITH_YOUR_QUEUE_DATABASE_ID",
+      "db_beneficiaries_id": "REPLACE_WITH_YOUR_BENEFICIARIES_DATABASE_ID"
+    },
+    "_notes": {
+      "db_cases_id": "Notion database containing case records with CaseID property",
+      "db_evidence_id": "Notion database for Evidence Log entries",
+      "db_queue_id": "Notion database for automation queue/workflow tracking",
+      "db_beneficiaries_id": "Notion database for beneficiary records"
+    }
+  },
+  "slack": {
+    "_placeholders": {
+      "notifications_channel": "REPLACE_WITH_YOUR_CHANNEL_ID",
+      "alerts_channel": "REPLACE_WITH_YOUR_ALERTS_CHANNEL_ID"
+    },
+    "_notes": {
+      "notifications_channel": "Slack channel for general notifications",
+      "alerts_channel": "Slack channel for critical alerts and errors"
+    }
+  },
+  "make": {
+    "webhook_urls": {
+      "binder_complete": "REPLACE_WITH_YOUR_WEBHOOK_URL",
+      "evidence_upload": "REPLACE_WITH_YOUR_WEBHOOK_URL",
+      "case_update": "REPLACE_WITH_YOUR_WEBHOOK_URL"
+    },
+    "_notes": {
+      "binder_complete": "Webhook URL for binder completion notifications",
+      "evidence_upload": "Webhook URL for evidence upload events",
+      "case_update": "Webhook URL for case update events"
+    }
+  },
+  "settings": {
+    "case_id_pattern": "HTN-\\d{4}-\\d{4}",
+    "default_sleep_seconds": 10,
+    "retry_sleep_seconds": 15,
+    "max_search_limit": 100,
+    "date_format": "YYYY-MM-DD",
+    "exhibit_code_prefix": "EX-",
+    "exhibit_code_padding": 2
+  },
+  "_setup_instructions": {
+    "step_1": "Replace all REPLACE_WITH_YOUR_* placeholders with actual IDs",
+    "step_2": "Upload this file to Google Drive",
+    "step_3": "Copy the file ID from the Google Drive URL",
+    "step_4": "Use this file ID in Make scenario Module 3 (Download FieldMap)",
+    "step_5": "Update settings as needed for your specific use case"
+  },
+  "_how_to_find_ids": {
+    "google_drive_folder_id": "Open folder in browser, copy ID from URL: https://drive.google.com/drive/folders/[FOLDER_ID]",
+    "notion_database_id": "Open database in browser, copy ID from URL: https://notion.so/[DATABASE_ID]?v=...",
+    "slack_channel_id": "Right-click channel → View channel details → Copy channel ID from bottom of details panel"
+  }
+}

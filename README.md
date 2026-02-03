@@ -10,6 +10,23 @@ A comprehensive backend API for trust automation, enforcement actions, and benef
 - 🤖 **OpenAI Agent-Ready** - Tool definitions for AI agent integration
 - 📝 **Audit Logging** - Complete request/response logging with trace IDs
 - ⚡ **Production-Ready** - Error handling, pagination, filtering, sorting
+- 🔄 **Make.com Scenarios** - Complete automation workflows for binder ingestion
+
+## Make.com Automation Scenarios
+
+IKE-BOT includes detailed Make.com scenario specifications for automating document workflows:
+
+### Binder PDF Ingestion
+- **[BINDER_OUTBOX_COMPLETE_v1](./make-scenarios/BINDER_OUTBOX_COMPLETE_v1.md)** - Standard workflow with SHA256 verification
+- **[BINDER_OUTBOX_READY_v1](./make-scenarios/BINDER_OUTBOX_READY_MARKER_v1.md)** - Enhanced workflow with `.ready` marker (recommended)
+
+### Supporting Documentation
+- **[SintraPrime Publish Ritual](./make-scenarios/SINTRAPRIME_READY_RITUAL.md)** - No-false-ready publish ceremony
+- **[Implementation Checklist](./make-scenarios/IMPLEMENTATION_CHECKLIST.md)** - 10-line developer guide
+- **[Test Harness](./make-scenarios/TEST_HARNESS.md)** - 10 tests to prove reliability
+- **[Suggested Upgrades](./make-scenarios/SUGGESTED_UPGRADES.md)** - 20 enhancement options
+
+See [make-scenarios/README.md](./make-scenarios/README.md) for complete documentation.
 
 ## Setup
 
@@ -361,6 +378,26 @@ ike-bot/
 - **Logging**: Pino
 - **Payments**: Stripe
 - **ORM**: Supabase Client
+- **Automation**: Make.com (scenarios included)
+
+## Configuration
+
+### FieldMap Configuration
+
+Make.com scenarios use a central configuration file (`FieldMap_Manifest.json`) stored in Google Drive. This file contains:
+
+- Google Drive folder IDs (Outbox, Archive, etc.)
+- Notion database IDs (Cases, Evidence Log, Queue, etc.)
+- Slack channel IDs for notifications
+- Scenario behavior settings
+
+See [config-templates/FieldMap_Manifest.template.json](./config-templates/FieldMap_Manifest.template.json) for a complete template.
+
+**Setup:**
+1. Copy template to `FieldMap_Manifest.json`
+2. Replace all `REPLACE_WITH_YOUR_*` placeholders
+3. Upload to Google Drive
+4. Note the file ID for Make.com scenarios
 
 ## Security
 
