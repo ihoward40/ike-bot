@@ -1,0 +1,110 @@
+{
+  "type": "function",
+  "function": {
+    "name": "generate_legal_document",
+    "description": "Generate a professional, court-compliant legal document. Supports multiple document types including Notice-to-Quit Response, ADA Accommodation Request, Ledger Dispute, Emergency Stay Motion, Affidavit of Truth, Trust Resolution, Proof of Service, Exhibits, Hearing Scripts, and Filing Checklists. Returns the document in requested formats (PDF and/or DOCX).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "document_type": {
+          "type": "string",
+          "description": "Type of legal document to generate",
+          "enum": [
+            "notice_to_quit_response",
+            "ada_accommodation_request",
+            "ledger_dispute",
+            "emergency_stay_motion",
+            "affidavit_of_truth",
+            "trust_resolution",
+            "proof_of_service",
+            "exhibit",
+            "hearing_script",
+            "filing_checklist",
+            "cover_letter"
+          ]
+        },
+        "client_name": {
+          "type": "string",
+          "description": "Full name of the client"
+        },
+        "client_address": {
+          "type": "string",
+          "description": "Client's current address"
+        },
+        "landlord_name": {
+          "type": "string",
+          "description": "Landlord's name or property management company"
+        },
+        "landlord_address": {
+          "type": "string",
+          "description": "Landlord's mailing address"
+        },
+        "docket_number": {
+          "type": "string",
+          "description": "Court docket number (e.g., ESX-LT-017577-25)"
+        },
+        "trial_date": {
+          "type": "string",
+          "description": "Scheduled trial date in ISO 8601 format (YYYY-MM-DD)"
+        },
+        "disability_status": {
+          "type": "string",
+          "description": "Description of any disability status for ADA compliance"
+        },
+        "trust_involved": {
+          "type": "boolean",
+          "description": "Whether the ISIAH TARIK HOWARD TRUST is involved (default: true)",
+          "default": true
+        },
+        "ada_notes": {
+          "type": "string",
+          "description": "Notes related to ADA accommodations or requests"
+        },
+        "ledger_dispute_details": {
+          "type": "string",
+          "description": "Details of any ledger or payment disputes"
+        },
+        "service_issues": {
+          "type": "string",
+          "description": "Any issues with service of process"
+        },
+        "exhibit_label": {
+          "type": "string",
+          "description": "Label for exhibit (A, B, C, etc.)",
+          "enum": ["A", "B", "C", "D", "E"]
+        },
+        "output_format": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pdf", "docx"]
+          },
+          "description": "Output formats to generate (default: [\"pdf\", \"docx\"])",
+          "default": ["pdf", "docx"]
+        },
+        "header_footer_style": {
+          "type": "string",
+          "description": "Header/footer style. Style B: black header, gold footer",
+          "enum": ["A", "B"],
+          "default": "B"
+        }
+      },
+      "required": ["document_type", "client_name"]
+    },
+    "returns": {
+      "type": "object",
+      "properties": {
+        "documents": {
+          "type": "array",
+          "description": "Array of generated document objects with file paths and URLs"
+        },
+        "status": {
+          "type": "string",
+          "description": "Generation status"
+        }
+      }
+    },
+    "mcp_tool": "mcp.pdf.generate / mcp.docx.generate",
+    "api_endpoint": "POST /api/legal-documents/generate"
+  }
+}
