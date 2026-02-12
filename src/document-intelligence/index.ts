@@ -9,6 +9,7 @@
 export { DocumentProcessor } from './DocumentProcessor';
 export { CommercialInstrumentParser } from './CommercialInstrumentParser';
 export { AFVNotationDetector } from './AFVNotationDetector';
+export { DocumentService } from './DocumentService';
 
 export {
   DocumentType,
