@@ -1,0 +1,31 @@
+{
+  "type": "function",
+  "function": {
+    "name": "process_document",
+    "description": "Process a legal document using the Document Intelligence Module. Detects AFV (Accepted for Value) notation, assesses discharge eligibility based on 30-day rule, extracts entities (parties, dates, amounts, references), and classifies document type. Returns comprehensive analysis including AFV status and compliance information.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The full text content of the document to process (required)"
+        },
+        "document_type": {
+          "type": "string",
+          "description": "Optional document type hint. If not provided, will be automatically classified. Valid types: 'bill', 'invoice', 'notice', 'summons', 'complaint', 'contract', 'promissory_note', 'unknown'",
+          "enum": ["bill", "invoice", "notice", "summons", "complaint", "contract", "promissory_note", "unknown"]
+        },
+        "beneficiary_id": {
+          "type": "string",
+          "description": "Optional UUID of the beneficiary to associate this document with"
+        }
+      },
+      "required": ["content"]
+    },
+    "returns": {
+      "type": "object",
+      "description": "Comprehensive document processing result including document type classification, extracted entities, AFV status, and discharge eligibility assessment"
+    },
+    "api_endpoint": "POST /api/documents/process"
+  }
+}
