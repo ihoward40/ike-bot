@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase';
+import { DocumentService } from '../document-intelligence/DocumentService';
 
 /**
  * Handle webhooks from Make.com automation scenarios
@@ -33,6 +34,9 @@ export const handleMakeWebhook = async (req: Request, res: Response) => {
         break;
       case 'billing_alert':
         await handleBillingAlert(payload);
+        break;
+      case 'process_document':
+        await handleProcessDocument(payload);
         break;
       default:
         console.log(`Unknown Make.com action: ${payload.action}`);
@@ -95,3 +99,15 @@ async function handleBillingAlert(payload: any) {
     metadata: data,
   });
 }
+
+async function handleProcessDocument(payload: any) {
+  const { data } = payload;
+  const documentService = new DocumentService();
+  
+  await documentService.processAndStore(
+    data.content,
+    data.document_type,
+    data.beneficiary_id
+  );
+}
+
