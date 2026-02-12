@@ -36,13 +36,14 @@ export class AFVNotationDetector {
    * @returns AFVNotation result with detection details
    */
   public detectAFVNotation(documentContent: string): AFVNotation {
-    let afvMatch: RegExpMatchArray | null = null;
+    let afvMatch: RegExpExecArray | null = null;
     let matchedPattern = '';
     
     // Try each AFV pattern
     for (const pattern of this.afvPatterns) {
-      const match = documentContent.match(pattern);
-      if (match && match.index !== undefined) {
+      pattern.lastIndex = 0; // Reset regex state
+      const match = pattern.exec(documentContent);
+      if (match) {
         afvMatch = match;
         matchedPattern = match[0];
         break;
@@ -50,7 +51,7 @@ export class AFVNotationDetector {
     }
 
     // If no AFV notation found
-    if (!afvMatch || afvMatch.index === undefined) {
+    if (!afvMatch) {
       return {
         present: false,
         notation: '',
@@ -59,12 +60,13 @@ export class AFVNotationDetector {
     }
 
     // Check for exemption from levy
-    let exemptMatch: RegExpMatchArray | null = null;
+    let exemptMatch: RegExpExecArray | null = null;
     let exemptFromLevy = false;
     
     for (const pattern of this.exemptionPatterns) {
-      const match = documentContent.match(pattern);
-      if (match && match.index !== undefined) {
+      pattern.lastIndex = 0; // Reset regex state
+      const match = pattern.exec(documentContent);
+      if (match) {
         exemptMatch = match;
         exemptFromLevy = true;
         break;
@@ -82,7 +84,7 @@ export class AFVNotationDetector {
       },
       notation: matchedPattern,
       exemptFromLevy,
-      exemptLocation: exemptMatch && exemptMatch.index !== undefined ? {
+      exemptLocation: exemptMatch ? {
         start: exemptMatch.index,
         end: exemptMatch.index + exemptMatch[0].length
       } : undefined,
