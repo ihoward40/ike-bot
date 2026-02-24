@@ -1,0 +1,22 @@
+{
+  "type": "function",
+  "function": {
+    "name": "get_discharge_eligible_documents",
+    "description": "Find all documents that are eligible for discharge based on the 30-day AFV rule. Returns documents where AFV notation is present and at least 30 days have passed since issuance date. Optionally filter by beneficiary.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "beneficiary_id": {
+          "type": "string",
+          "description": "Optional UUID to filter discharge-eligible documents for a specific beneficiary"
+        }
+      },
+      "required": []
+    },
+    "returns": {
+      "type": "array",
+      "description": "Array of documents eligible for discharge, sorted by discharge date (earliest first)"
+    },
+    "api_endpoint": "GET /api/documents/discharge-eligible"
+  }
+}
