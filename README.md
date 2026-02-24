@@ -1,15 +1,28 @@
 # IKE BOT – Trust Automation Engine
+## SintraPrime Orchestration Router v1-v8 with Foundation Intelligence Layer
 
-A comprehensive backend API for trust automation, enforcement actions, and beneficiary management.
+A comprehensive enforcement automation system with complete operational intelligence for trust protection, beneficiary defense, and multi-agency regulatory coordination.
 
-## Features
+## 🚀 Production-Ready Features
 
+### Complete 8-Layer Intelligence Stack
+- **Router v1-v7**: Full enforcement pipeline (normalization → routing → countermeasures → timelines → execution → self-design)
+- **Router v8**: Foundation intelligence layer (telemetry, health monitoring, command center dashboard)
+- **Enhancement Modules**: Case linking (v11B), influence weighting (v11C), live stream processing (v12A)
+
+### Operational Capabilities
 - 🔐 **Full CRUD APIs** - Beneficiaries and credit disputes with validation
 - 📊 **Supabase Integration** - PostgreSQL database with migrations
 - 🔗 **Webhook Hub** - Stripe, Make.com, SendGrid, Postmark integrations
 - 🤖 **OpenAI Agent-Ready** - Tool definitions for AI agent integration
-- 📝 **Audit Logging** - Complete request/response logging with trace IDs
+- 📝 **Audit Logging** - Complete request/response logging with trace IDs + telemetry
 - ⚡ **Production-Ready** - Error handling, pagination, filtering, sorting
+- 🎯 **Real-time Dashboard** - Command Center with case prioritization
+- 📈 **System Health Monitoring** - Performance metrics and alerting foundation
+- 🔗 **Intelligent Case Linking** - Automatic relationship discovery (creditor, beneficiary, timeline, template)
+- 🏆 **Priority Scoring** - 6-factor influence weighting for smart case prioritization
+- 📱 **Daily Briefings** - Automated Slack digests with top priority cases
+- 📁 **Evidence Organization** - Auto-filing in structured case folders
 
 ## Setup
 
@@ -370,6 +383,136 @@ ike-bot/
 - SQL injection protection via Supabase client
 - CORS enabled
 - Request logging and audit trails
+
+## Make.com Integration
+
+IKE-BOT integrates with Make.com for advanced workflow automation.
+
+### 📚 Make.com Scenario Guides
+
+🚀 **[Current Status & Activation Guide](./docs/SINTRAPRIME_STATUS.md)** ← **Start Here**
+
+See what's working now:
+- ✅ Active webhook endpoint (`/webhooks/make`)
+- ✅ 4 working action handlers
+- ✅ Database integration
+- ✅ Complete test examples
+
+📖 **[SintraPrime Orchestration Router v1](./docs/SINTRAPRIME_ROUTER_SETUP.md)**
+
+Event routing hub:
+- 9 intelligent routing branches
+- Notion logging integration
+- Escalation alerts
+- Testing protocols
+- Exportable JSON blueprint
+
+📧 **[Gmail Enforcement Scanner](./docs/GMAIL_ENFORCEMENT_SCANNER.md)**
+
+Automated email monitoring:
+- Gmail inbox monitoring
+- AI-powered legal analysis (OpenAI)
+- Multi-path categorization (Verizon, IRS, Banking, etc.)
+- Notion logging with AI insights
+- Slack alerts
+- SintraPrime webhook integration
+
+🔧 **[SintraPrime Router v1 Upgrades](./docs/SINTRAPRIME_ROUTER_V1_UPGRADES.md)**
+
+Advanced enhancements:
+- Gmail OAuth connection helper
+- Message normalizer function
+- Expanded trigger conditions (7 creditors)
+- Structured JSON routing logic
+- Error handling with retry & DLQ
+- Security guardrails (tokens, sanitization, rate limiting)
+- SintraPrime intelligence hooks (dishonor prediction, beneficiary protection, case linking)
+
+⚡ **[Router Microservice](./docs/SINTRAPRIME_ROUTER_MICROSERVICE.md)** ← **Production Ready**
+
+Gmail → Normalizer → Router → Make.com pipeline:
+- Express microservice with REST API
+- Gmail message normalization
+- Intelligent routing engine (6 creditors + fallback)
+- Risk scoring & dishonor prediction
+- Beneficiary impact detection
+- **NEW: Notion case auto-linking**
+- Batch processing support
+- Railway/Render deployment ready
+
+**Quick Start:**
+```bash
+npm run router:dev    # Development mode
+npm run router:start  # Production mode
+npm run router:test   # Run tests
+npm run notion:test   # Test Notion linker
+```
+
+**Endpoints:**
+- `GET /health` - Health check
+- `POST /route-email` - Route single Gmail message (+ auto-link to Notion)
+- `POST /route-email/batch` - Batch processing
+- `POST /test-router` - Test routing logic
+
+📚 **[Router Usage Guide](./docs/SINTRAPRIME_ROUTER_USAGE.md)**
+
+Integration examples and code samples
+
+🔥 **[Notion Case Auto-Linker](./docs/NOTION_CASE_LINKER.md)**
+
+Automatic case management in Notion:
+- Smart case matching (creditor + thread similarity)
+- Auto-create new cases with full metadata
+- Intelligent updates (only upgrade risk/dishonor levels)
+- Tag merging and summary appending
+- Notion database schema guide
+- Make.com integration
+- Testing & monitoring guide
+
+🎯 **[Router v4 Countermeasure Engine](./docs/COUNTERMEASURE_ENGINE.md)**
+
+Tactical enforcement planning:
+- Priority & posture decision logic (low→critical, observe→emergency)
+- Track selection (ADMIN, REGULATOR, IRS_PROCEDURE, LITIGATION, MONITOR)
+- Creditor-specific regulator mapping (FCC, CFPB, OCC, TAS, FTC)
+- Action plan builder with template keys and timeframes
+- Timeline calculator with deadline management
+- Human review requirement detection
+- Full integration with Router v2 + Router v3 (persona)
+
+⚡ **[Template Automation System](./docs/TEMPLATE_AUTOMATION.md)** ← **NEW**
+
+Master Template Key Map & Automation Engine:
+- **30+ enforcement templates** organized by creditor/category
+- **4 automation channels**: Google Docs, Notion, Make.com, Google Drive
+- **Automatic execution** of Router v4 countermeasure plans
+- **Complete integration** with full Router v1-v4 pipeline
+
+**Categories:**
+- Verizon (6 templates): Disputes, FCC/BPU complaints, TRO
+- IRS (5 templates): Responses, appeals, TAS, CDP, penalty abatement
+- Wells Fargo (4 templates): Disputes, CFPB/OCC/FDIC complaints
+- Chase/EWS (3 templates): Disputes, EWS report, CFPB
+- Dakota Financial (3 templates): Equipment finance disputes
+- TikTok (2 templates): Account appeals, FTC complaints
+- General (5 templates): Credit bureaus, FCRA, State AG, litigation, TRO
+
+**Quick Start:**
+```bash
+npm run template:test   # Test template registry
+```
+
+**API Example:**
+```javascript
+const { executeCountermeasurePlan } = require('./src/utils/template-automation');
+
+// Automatically generate documents, trigger Make.com, create Notion pages
+const results = await executeCountermeasurePlan(countermeasurePlan, {
+  caseId: 'CASE-VRZ-20251207-ABC123',
+  creditor: 'Verizon',
+  templateData: { account_number: '123', ... }
+});
+```
 
 ## Future Enhancements
 
