@@ -382,6 +382,33 @@ ike-bot/
 - [ ] Email notifications
 - [ ] Unit and integration tests
 
+## 📦 BinderOutbox Pipeline
+
+The BinderOutbox system provides automated binder PDF publishing, ingestion, and ops recovery.
+
+**Architecture:** PowerShell (local) → Google Drive (file handoff) → Make (automation) → Notion (ops dashboard)
+
+### Key Features
+- ✅ Court-grade "no false-ready" publishing ritual
+- ✅ Idempotent ingestion (won't double-log)
+- ✅ One-click error recovery via Notion buttons
+- ✅ Deduped ops queue (button-mash proof)
+- ✅ Auto-sync config from FieldMap.json to Notion
+
+### Documentation
+- **[📋 Complete System Spec](docs/BINDER_SYSTEM_SPEC.md)** — architecture, schemas, Make modules, test plan
+- **[🔑 Config Sync Keys](docs/FIELD_MAP_KEYS.md)** — FieldMap.json → Notion mirror reference
+
+### Quick Start
+1. Set up Notion databases (see [BINDER_SYSTEM_SPEC.md](docs/BINDER_SYSTEM_SPEC.md) section 4)
+2. Create FieldMap.json in Drive (see section 2)
+3. Build Make scenarios in order: Phase 1 → 2 → 3 → 4 (see section 9)
+4. Test with provided test plan (see section 8)
+
+**Time to build:** ~3.5 hours  
+**Time saved per week:** ~2 hours  
+**ROI:** Pays for itself in 2 weeks
+
 ## License
 
 MIT
