@@ -10,6 +10,7 @@ A comprehensive backend API for trust automation, enforcement actions, and benef
 - 🤖 **OpenAI Agent-Ready** - Tool definitions for AI agent integration
 - 📝 **Audit Logging** - Complete request/response logging with trace IDs
 - ⚡ **Production-Ready** - Error handling, pagination, filtering, sorting
+- 🧠 **SintraPrime Agent** - Always-on monitoring with voice, dashboard, and proof of life ([Learn more](./SINTRAPRIME.md))
 
 ## Setup
 
